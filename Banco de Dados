@@ -45,7 +45,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `mm_stock`.`produto` (
   `id_produto` INT NOT NULL,
-  `descricao` INT NULL,
+  `descricao` VARCHAR(80) NULL,
   `cor` VARCHAR(50) NULL,
   `tamanho` VARCHAR(50) NULL,
   `tipo_material` VARCHAR(50) NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `mm_stock`.`movimentacao` (
   `quantidade` INT NULL DEFAULT NULL COMMENT 'qtde de produto que entrou ou saiu do estoque',
   `num_pedido` INT NULL COMMENT 'é o número do pedido de venda para o cliente que gerou a movimentação de saída do estoque',
   `id_cliente` INT NULL COMMENT 'id do cliente que levou o produto que saiu do estoque',
-  `obs` TEXT NULL COMMENT 'texto de observacao/comentario sorbe a movimentacao',
+  `obs` TEXT NULL COMMENT 'texto de observacao/comentario sobre a movimentacao',
   PRIMARY KEY (`id_movimentacao`),
   CONSTRAINT `id_produto`
     FOREIGN KEY (`id_produto`)

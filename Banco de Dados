@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `mm_stock`.`fornecedor` (
   `numero` INT NULL,
   `complemento` VARCHAR(45) NULL,
   `cidade` VARCHAR(45) NULL,
-  `uf` VARCHAR(10) NULL,
+  `uf` CHAR(2) NULL,
   PRIMARY KEY (`id_fornecedor`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4

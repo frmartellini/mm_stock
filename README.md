@@ -6,7 +6,7 @@
 <p>Este projeto visa trazer uma solução de incentivo ao pequeno empreendedor e realizar a demanda do Projeto Integrador da Univesp</p>
 
 ## Tecnologias
-<p>- Angular 17.3</p>
+<p>- Angular 17.3.4</p>
 <p>- Bootstrap 5.3.3</p>
 <p>- node 20.12.2</p>
 <p>- MySQL</p>

@@ -485,7 +485,7 @@ app.get('/search/fornecedor/:name', (req, res) => {
 app.get('/search/movimentacao/:value', (req, res) => {
   const value = '%' + req.params.value + '%'; // Adicionando wildcards para buscar em qualquer parte do valor
   const query = `SELECT * FROM movimentacao WHERE id_movimentacao LIKE ? OR data_hora LIKE ? OR tipo_mov LIKE ? OR quantidade LIKE ? OR num_pedido LIKE ? OR obs LIKE ?`;
-  const values = Array(8).fill(value); // Repetindo o valor para todos os campos
+  const values = Array(6).fill(value); // Repetindo o valor para todos os campos
   db.query(query, values, (err, result) => {
     if (err) {
       console.error(err);

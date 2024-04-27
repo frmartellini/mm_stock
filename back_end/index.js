@@ -318,7 +318,7 @@ app.delete('/fornecedor/:id', (req, res) => {
 // 
 
 app.get('/movimentacao', (req, res) => {
-  db.query('SELECT m.*, c.nome AS nome_cliente, p.nome AS nome_produto FROM movimentacao m INNER JOIN cliente c ON m.id_cliente = c.id_cliente INNER JOIN produto p ON m.id_produto = p.id_produto', (err, results) => {
+  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m INNER JOIN cliente c ON m.id_cliente = c.id_cliente INNER JOIN produto p ON m.id_produto = p.id_produto', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -484,7 +484,7 @@ app.get('/search/fornecedor/:name', (req, res) => {
 
 app.get('/search/movimentacao/:value', (req, res) => {
   const value = '%' + req.params.value + '%'; // Adicionando wildcards para buscar em qualquer parte do valor
-  const query = `SELECT * FROM movimentacao WHERE id_movimentacao LIKE ? OR data_hora LIKE ? OR id_produto LIKE ? OR tipo_mov LIKE ? OR quantidade LIKE ? OR num_pedido LIKE ? OR id_cliente LIKE ? OR obs LIKE ?`;
+  const query = `SELECT * FROM movimentacao WHERE id_movimentacao LIKE ? OR data_hora LIKE ? OR tipo_mov LIKE ? OR quantidade LIKE ? OR num_pedido LIKE ? OR obs LIKE ?`;
   const values = Array(8).fill(value); // Repetindo o valor para todos os campos
   db.query(query, values, (err, result) => {
     if (err) {

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const bcrypt = require('bcryptjs');
   
 const app = express();
 const port = 3000; // 4200 padrão do Angular
@@ -317,7 +318,7 @@ app.delete('/fornecedor/:id', (req, res) => {
 // 
 
 app.get('/movimentacao', (req, res) => {
-  db.query('SELECT * FROM movimentacao', (err, results) => {
+  db.query('SELECT m.*, c.nome AS nome_cliente, p.nome AS nome_produto FROM movimentacao m INNER JOIN cliente c ON m.id_cliente = c.id_cliente INNER JOIN produto p ON m.id_produto = p.id_produto', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -494,6 +495,52 @@ app.get('/search/movimentacao/:value', (req, res) => {
     }
   });
   console.log('get /search/movimentacao/' + req.params.value + ' executado. Movimentação retornada com sucesso!');
+});
+
+// 
+
+//
+// Config table - WIP 
+//
+
+app.get('/config', (req, res) => {
+  db.query('SELECT * FROM CONFIG', (err, results) => {
+    if (err) {
+      res.status(500).send('Error fetching posts');
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /config executado. Configurações retornadas com sucesso!');
+});
+
+
+/* Update a post */
+app.put('/config/:value', (req, res) => {
+  const { value } = req.body;
+  // Hashing to store on the database
+  bcrypt.hash(value, 10, (err, hashedPassword) => {
+    if (err) {
+      res.status(500).send('Error occured while hashing');
+      return;
+    }
+    const query = `UPDATE CONFIG SET CFG01 = ?`;
+    const values = [hashedPassword];
+    db.query(query, values, err => {
+      if (err) {
+        res.status(500).send('Error updating post');
+        return;
+      }
+      db.query('SELECT * FROM config', (err, result) => {
+        if (err) {
+          res.status(500).send('Error fetching updated post');
+          return;
+        }
+        res.json(result[0]);
+      });
+    });
+  });
+  console.log('put /config/ executado. Configuração atualizada com sucesso!');
 });
 
 //

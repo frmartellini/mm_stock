@@ -7,7 +7,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
   
 const app = express();
-const port = 3000;
+const port = 3000; // 4200 padrão do Angular
 
 // get the environment variables for the database connection
 dotenv.config();

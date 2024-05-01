@@ -9,22 +9,32 @@ import { FornecedorListComponent } from './fornecedor-list/fornecedor-list.compo
 import { FornecedorDetComponent } from './fornecedor-det/fornecedor-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
 import { ProdutoDetComponent } from './produto-det/produto-det.component';
+import { LoginComponent } from './login/login.component';
+import { UsuarioNaoAutenticadoGuard } from './services/guards/usuario-nao-autenticado.guard';
+import { UsuarioAutenticadoGuard } from './services/guards/usuario-autenticado.guard';
 
 const routes: Routes = [
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' } //default route
-  ,{ path: 'home', component: HomeComponent }
-  ,{ path: 'produto-list', component: ProdutoListComponent }
-  ,{ path: 'cliente-list', component: ClienteListComponent }
-  ,{ path: 'fornecedor-list', component: FornecedorListComponent }
-  ,{ path: 'produto-det/:id', component: ProdutoDetComponent }
-  ,{ path: 'cliente-det/:id', component: ClienteDetComponent }
-  ,{ path: 'fornecedor-det/:id', component: FornecedorDetComponent }
+  { path: 'login', component: LoginComponent, canActivate: [UsuarioNaoAutenticadoGuard]},
 
-  ,{ path: 'produto-entrada', component: HomeComponent }
-  ,{ path: 'produto-saida', component: HomeComponent }
-  ,{ path: 'cs-mov-estq', component: HomeComponent }
-  ,{ path: 'config', component: HomeComponent }
+  { path: '', pathMatch: 'full' , canActivate: [UsuarioAutenticadoGuard] ,
+    children: [
+      { path: '', component: HomeComponent }
+    ]
+  } //default route
+  ,{ path: 'home', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'produto-list', component: ProdutoListComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'cliente-list', component: ClienteListComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'fornecedor-list', component: FornecedorListComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'produto-det/:id', component: ProdutoDetComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'cliente-det/:id', component: ClienteDetComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'fornecedor-det/:id', component: FornecedorDetComponent , canActivate: [UsuarioAutenticadoGuard] }
+
+  ,{ path: 'produto-entrada', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'produto-saida', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'cs-mov-estq', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'config', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  
   
 
 ];

@@ -517,7 +517,7 @@ app.get('/config', (req, res) => {
 
 /* Update a post */
 /*
-para testar com o postman, usar o comadno PUT com a url "http://localhost:3000/config/123" e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
+para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/123" e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
 { "value":"12345" }
 */
 app.put('/config/:value', (req, res) => {

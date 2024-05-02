@@ -504,7 +504,7 @@ app.get('/search/movimentacao/:value', (req, res) => {
 //
 
 app.get('/config', (req, res) => {
-  db.query('SELECT * FROM CONFIG', (err, results) => {
+  db.query('SELECT * FROM config', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -516,16 +516,22 @@ app.get('/config', (req, res) => {
 
 
 /* Update a post */
+/*
+para testar com o postman, usar o comadno PUT com a url "http://localhost:3000/config/123" e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
+{ "value":"12345" }
+*/
 app.put('/config/:value', (req, res) => {
   const { value } = req.body;
+  console.log('put /config/ value=' + value);
   // Hashing to store on the database
   bcrypt.hash(value, 10, (err, hashedPassword) => {
     if (err) {
       res.status(500).send('Error occured while hashing');
       return;
     }
-    const query = `UPDATE CONFIG SET CFG01 = ?`;
+    const query = `UPDATE config SET CFG01 = ?`;
     const values = [hashedPassword];
+    console.log('put /config/ values=' + values);
     db.query(query, values, err => {
       if (err) {
         res.status(500).send('Error updating post');
@@ -533,7 +539,7 @@ app.put('/config/:value', (req, res) => {
       }
       db.query('SELECT * FROM config', (err, result) => {
         if (err) {
-          res.status(500).send('Error fetching updated post');
+          res.status(500).send('Error fetching updated post. ' + err);
           return;
         }
         res.json(result[0]);

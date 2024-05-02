@@ -4,9 +4,42 @@
 
 @import  "./sticky-footer-navbar.css";
 
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 .ContentDivClass {
 
   width: 100%;
 
+}
+
+.LoginDiv {
+
+  /* apenas para testes */
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+
+  padding: 5px;
+
+}
+
+.ConfigDiv {
+
+  width: 50px;
+  height: 40px;
+
+}
+
+.LogoutDiv {
+
+  /* apenas para testes */
+  /*
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
+  */
+  
+  width: 50px;
+  height: 40px;
+  
 }

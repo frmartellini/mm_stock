@@ -1,0 +1,22 @@
+
+<form (ngSubmit)="login()">
+  
+  <div class="form-group col-md-3    LoginDiv mx-auto" >
+
+    <div class="row justify-content-center mb-3" style="margin: 0px;">
+      <img src="../assets/images/Logo_da_Empresa.jpg" alt="logo da empresa"  style="width: 272px; height: 272px; padding: 0px;" >
+    </div>
+
+    <label class="form-label" for="username">Nome de usuário:</label>
+    <input class="form-control" type="text" id="username" name="username" [(ngModel)]="username" required>
+    <label class="form-label" for="password">Senha:</label>
+    <input class="form-control" type="password" id="password" name="password" [(ngModel)]="password" required>
+    
+    <div class="row mt-2">
+      <div class="col text-center">
+        <button class="btn btn-primary " type="submit">Login</button>
+      </div>
+    </div>
+  </div>
+  
+</form>

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +12,7 @@ import { FornecedorListComponent } from './fornecedor-list/fornecedor-list.compo
 import { FornecedorDetComponent } from './fornecedor-det/fornecedor-det.component';
 import { ProdutoDetComponent } from './produto-det/produto-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +24,14 @@ import { ClienteDetComponent } from './cliente-det/cliente-det.component';
     FornecedorDetComponent,
     ProdutoDetComponent,
     ClienteDetComponent
-    ,
+    ,LoginComponent
     
   ],
   imports: [
     BrowserModule
+    ,FormsModule
     ,AppRoutingModule
-
+    ,HttpClientModule
   ],
   providers: [
     provideClientHydration()

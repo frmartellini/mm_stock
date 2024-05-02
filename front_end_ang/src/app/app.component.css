@@ -1,8 +1,13 @@
 
 nav a {
-  padding: 1rem;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
   text-decoration: none;
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
   display: inline-block;
   background-color: #e8e8e8;
   color: #3d3d3d;

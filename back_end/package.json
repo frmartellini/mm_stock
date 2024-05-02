@@ -1,5 +1,5 @@
 {
-    "name": "mm_stock-rest-api",
+    "name": "back_end",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {

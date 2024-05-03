@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 
 import * as bcrypt from 'bcryptjs';
 
+import { ToastrService } from 'ngx-toastr';
+
 import { CONFIG } from "../CONFIG";
 
 @Component({
@@ -21,6 +23,7 @@ export class LoginComponent {
   constructor(private http: HttpClient
               ,private router: Router
               ,private authService: AuthenticationService
+              ,private toastr: ToastrService
             ) { 
 
     this.username = "";
@@ -31,9 +34,14 @@ export class LoginComponent {
   // &todo& a verificacao do usuario e senah devem ser feitas dentro de uma rotina do back-end para nao ser uma falha de seguranca
   login() {
 
-    if ( this.username.toLocaleLowerCase() != "admin") {
+    if ( this.username.toLowerCase() != "admin") {
       //console.error("login invalido");
-      window.alert('Usuário inválido!');
+      
+      this.toastr.error('Usuário inválido!' , '', {
+        timeOut: 5000
+        ,positionClass: 'toast-top-center'
+      });
+
       return;
     }
 
@@ -53,12 +61,21 @@ export class LoginComponent {
             (isCorrect) => { 
               //console.log("isCorrect=" + isCorrect);
               if ( isCorrect ) {
+
+                this.toastr.success('Login efetuado!' , '', {
+                  timeOut: 3000
+                  ,positionClass: 'toast-top-center'
+                });
+
                 // Se a senha estah correta, redirecione para a página principal
                 this.authService.logar(); 
               }
               else {
                 //console.error("login nao foi realizado");
-                window.alert('Usuário ou senha inválidos!');
+                this.toastr.error('Usuário ou senha inválidos!' , '', {
+                  timeOut: 5000
+                  ,positionClass: 'toast-top-center'
+                });
               }
             }
           );

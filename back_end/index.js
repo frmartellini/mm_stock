@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
   
 const app = express();
-const port = 3000; // 4200 padrão do Angular
+const port = 4200; // 4200 padrão do Angular e 3000 é a padrão do Node
 
 // get the environment variables for the database connection
 dotenv.config();

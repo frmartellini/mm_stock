@@ -5,10 +5,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
   
 const app = express();
-const port = 4200; // 4200 padrão do Angular e 3000 é a padrão do Node
+const port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
 
 // get the environment variables for the database connection
 dotenv.config();
@@ -71,7 +71,7 @@ app.post('/produto/create', (req, res) => {
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM produto WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM produto WHERE id_produto = ?', postId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching created post');
         return;
@@ -85,7 +85,7 @@ app.post('/produto/create', (req, res) => {
 /* Get a specific post */
 app.get('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
-  db.query('SELECT * FROM produto WHERE id = ?', produtoId, (err, result) => {
+  db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
     if (err) {
       res.status(500).send('Error fetching post');
       return;
@@ -111,7 +111,7 @@ app.put('/produto/:id', (req, res) => {
       res.status(500).send('Error updating post');
       return;
     }
-    db.query('SELECT * FROM produto WHERE id = ?', produtoId, (err, result) => {
+    db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated post');
         return;
@@ -125,7 +125,7 @@ app.put('/produto/:id', (req, res) => {
 /* Delete a post */
 app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
-  db.query('DELETE FROM produto WHERE id = ?', produtoId, err => {
+  db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
       res.status(500).send('Error deleting post');
       return;
@@ -161,7 +161,7 @@ app.post('/cliente/create', (req, res) => {
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM cliente WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM cliente WHERE id_cliente = ?', postId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching created post');
         return;
@@ -175,7 +175,7 @@ app.post('/cliente/create', (req, res) => {
 /* Get a specific post */
 app.get('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
-  db.query('SELECT * FROM cliente WHERE id = ?', clienteId, (err, result) => {
+  db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
     if (err) {
       res.status(500).send('Error fetching post');
       return;
@@ -200,7 +200,7 @@ app.put('/cliente/:id', (req, res) => {
       res.status(500).send('Error updating post');
       return;
     }
-    db.query('SELECT * FROM cliente WHERE id = ?', clienteId, (err, result) => {
+    db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated post');
         return;
@@ -214,7 +214,7 @@ app.put('/cliente/:id', (req, res) => {
 /* Delete a post */
 app.delete('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
-  db.query('DELETE FROM cliente WHERE id = ?', clienteId, err => {
+  db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
       res.status(500).send('Error deleting post');
       return;
@@ -250,7 +250,7 @@ app.post('/fornecedor/create', (req, res) => {
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM fornecedor WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', postId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching created post');
         return;
@@ -264,7 +264,7 @@ app.post('/fornecedor/create', (req, res) => {
 /* Get a specific post */
 app.get('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  db.query('SELECT * FROM fornecedor WHERE id = ?', fornecedorId, (err, result) => {
+  db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
     if (err) {
       res.status(500).send('Error fetching post');
       return;
@@ -289,7 +289,7 @@ app.put('/fornecedor/:id', (req, res) => {
       res.status(500).send('Error updating post');
       return;
     }
-    db.query('SELECT * FROM fornecedor WHERE id = ?', fornecedorId, (err, result) => {
+    db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated post');
         return;
@@ -303,7 +303,7 @@ app.put('/fornecedor/:id', (req, res) => {
 /* Delete a post */
 app.delete('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  db.query('DELETE FROM fornecedor WHERE id = ?', fornecedorId, err => {
+  db.query('DELETE FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, err => {
     if (err) {
       res.status(500).send('Error deleting post');
       return;
@@ -339,7 +339,7 @@ app.post('/movimentacao/create', (req, res) => {
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM movimentacao WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', postId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching created post');
         return;
@@ -353,7 +353,7 @@ app.post('/movimentacao/create', (req, res) => {
 /* Get a specific post */
 app.get('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  db.query('SELECT * FROM movimentacao WHERE id = ?', movimentacaoId, (err, result) => {
+  db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
     if (err) {
       res.status(500).send('Error fetching post');
       return;
@@ -378,7 +378,7 @@ app.put('/movimentacao/:id', (req, res) => {
       res.status(500).send('Error updating post');
       return;
     }
-    db.query('SELECT * FROM movimentacao WHERE id = ?', movimentacaoId, (err, result) => {
+    db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
       if (err) {
         res.status(500).send('Error fetching updated post');
         return;
@@ -392,7 +392,7 @@ app.put('/movimentacao/:id', (req, res) => {
 /* Delete a post */
 app.delete('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  db.query('DELETE FROM movimentacao WHERE id = ?', movimentacaoId, err => {
+  db.query('DELETE FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, err => {
     if (err) {
       res.status(500).send('Error deleting post');
       return;
@@ -517,7 +517,7 @@ app.get('/config', (req, res) => {
 
 /* Update a post */
 /*
-para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/123" e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
+para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/123" para testar localmente ou "179.145.6.125:3000/config/123" para testar no servidor e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
 { "value":"12345" }
 */
 app.put('/config/:value', (req, res) => {

@@ -241,9 +241,9 @@ app.get('/fornecedor', (req, res) => {
    
 /* Create a new post */
 app.post('/fornecedor/create', (req, res) => {
-    const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf } = req.body;
-    const query = `INSERT INTO fornecedor (nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf];
+    const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf } = req.body;
+    const query = `INSERT INTO fornecedor (nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Error creating post');
@@ -281,9 +281,9 @@ app.get('/fornecedor/:id', (req, res) => {
 /* Update a post */
 app.put('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf } = req.body;
-  const query = `UPDATE fornecedor SET nome_fornecedor = ?, nome_responsavel = ?, contato_telefonico = ?, redes_sociais = ?, materiais_fornecidos = ?, endereco = ?, complemento = ?, cidade = ?, uf = ? WHERE id_fornecedor = ?`;
-  const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf, id, fornecedorId];
+  const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf } = req.body;
+  const query = `UPDATE fornecedor SET nome_fornecedor = ?, nome_responsavel = ?, contato_telefonico = ?, redes_sociais = ?, materiais_fornecidos = ?, cnpj = ?, endereco = ?, numero = ?, complemento = ?, cidade = ?, uf = ? WHERE id_fornecedor = ?`;
+  const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf, id, fornecedorId];
     db.query(query, values, err => {
     if (err) {
       res.status(500).send('Error updating post');

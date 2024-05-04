@@ -197,7 +197,7 @@ app.put('/cliente/:id', (req, res) => {
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf, clienteId];
     db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      res.status(500).send('Error updating post' + err);
       return;
     }
     db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {

@@ -515,39 +515,95 @@ app.get('/config', (req, res) => {
 });
 
 
-/* Update a post */
 /*
-para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/123" para testar localmente ou "179.145.6.125:3000/config/123" para testar no servidor e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
-{ "value":"12345" }
+Alterar a senha de acesso do sistema que fica gravada na tabela "CONFIG" no campo "CFG01".
+Precisa passar a nova senah e também a senha atual porque serah feita a verificacao se a senah atual bate com a senha gravada no BD.
 */
-app.put('/config/:value', (req, res) => {
-  const { value } = req.body;
-  console.log('put /config/ value=' + value);
-  // Hashing to store on the database
-  bcrypt.hash(value, 10, (err, hashedPassword) => {
+/*
+para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/alter" para testar localmente ou "179.145.6.125:3000/config/alter" para testar no servidor e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
+{ "senha_nova":"12345", "senha_atual":"12345" }
+*/
+app.put('/config/alter', (req, res) => {
+  const { senha_nova, senha_atual } = req.body;
+  console.log('put /config/ senha_nova=' + senha_nova);
+  console.log('put /config/ senha_atual=' + senha_atual);
+  
+  // verificar se q senha atual recebida bate com a senha gravada atualmente no BD
+
+  db.query('SELECT CFG01 FROM config', (err, result) => {
     if (err) {
-      res.status(500).send('Error occured while hashing');
+      res.status(500).send('Erro no select que pega a senha atual do bd para verificar. ' + err);
       return;
     }
-    const query = `UPDATE config SET CFG01 = ?`;
-    const values = [hashedPassword];
-    console.log('put /config/ values=' + values);
-    db.query(query, values, err => {
-      if (err) {
-        res.status(500).send('Error updating post');
-        return;
-      }
-      db.query('SELECT * FROM config', (err, result) => {
-        if (err) {
-          res.status(500).send('Error fetching updated post. ' + err);
-          return;
-        }
-        res.json(result[0]);
-      });
-    });
-  });
-  console.log('put /config/ executado. Configuração atualizada com sucesso!');
-});
+
+    // aqui result contem um array de objetos e cada objeto tem como props os campos da tabela CONFIG
+
+    // se foi obtido ao menos um registro da tabela CONFIG
+    if ( result.length ) {
+
+      senha_atual_do_bd = result[0].CFG01;
+      console.log('senha_atual_do_bd=' + senha_atual_do_bd);
+
+      bcrypt.compare(senha_atual, senha_atual_do_bd).then(
+
+        function(isCorrect) { 
+          //console.log("isCorrect=" + isCorrect);
+          
+          // se a senha atual enviada pelo usuario bate com a senha gravada no bd
+          if ( isCorrect ) {
+            console.log("senha atual informada pelo usuario bate com senha gravada no bd");
+
+            console.log("antes de obter o hash da nova senha");
+    
+            // Hashing to store on the database
+            bcrypt.hash(senha_nova, 10, (err, hashedPassword) => {
+              if (err) {
+                res.status(500).send('Error occured while hashing the new password. ' + err);
+                return;
+              }
+              const query = `UPDATE config SET CFG01 = ?`;
+              const values = [hashedPassword];
+              console.log('put /config/ values=' + values);
+              db.query(query, values, err => {
+                if (err) {
+                  res.status(500).send('erro no update da tabeal CONFIG. ' + err);
+                  return;
+                }
+                db.query('SELECT * FROM config', (err, result) => {
+                  if (err) {
+                    res.status(500).send('Erro no select da tabela CONFIG depois do update. ' + err);
+                    return;
+                  }
+                  res.json(result[0]);
+                }); // db.query
+              }); // db.query
+            }); // bcrypt.hash
+
+            console.log('put /config/ executado. Configuração atualizada com sucesso!');
+
+          }
+          // se a senha atual enviada pelo usuario NAO bate com a senha gravada no bd
+          else {
+            console.log("senha atual informada pelo usuario NAO bate com senha gravada no bd");
+            res.status(500).send('senha atual incorreta.');
+            return;
+          }
+
+        } // function(isCorrect)
+
+      ); // bcrypt.compare.....then
+
+    } // if ( result.length )
+    else {
+      console.log("nao foi encontrado registro da tabela CONFIG");
+      res.status(500).send('nao foi encontrado registro da tabela CONFIG.');
+      return;
+    }
+
+  }); // db.query
+  
+}); // function
+
 
 //
   

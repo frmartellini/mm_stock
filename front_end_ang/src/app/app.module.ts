@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +17,7 @@ import { FornecedorDetComponent } from './fornecedor-det/fornecedor-det.componen
 import { ProdutoDetComponent } from './produto-det/produto-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
 import { LoginComponent } from './login/login.component';
+import { ConfigComponent } from './config/config.component';
 
 @NgModule({
   declarations: [
@@ -28,11 +30,13 @@ import { LoginComponent } from './login/login.component';
     ProdutoDetComponent,
     ClienteDetComponent
     ,LoginComponent
+    ,ConfigComponent
     
   ],
   imports: [
     BrowserModule
     ,FormsModule
+    ,ReactiveFormsModule
     ,AppRoutingModule
     ,HttpClientModule
 

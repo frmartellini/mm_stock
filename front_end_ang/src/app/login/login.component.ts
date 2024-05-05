@@ -7,7 +7,7 @@ import * as bcrypt from 'bcryptjs';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { CONFIG } from "../CONFIG";
+import Utils from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -31,57 +31,42 @@ export class LoginComponent {
 
   }
 
-  // &todo& a verificacao do usuario e senah devem ser feitas dentro de uma rotina do back-end para nao ser uma falha de seguranca
+  // funcao executada quando ha sucesso no login
+  OnLoginSuccess_CallBackFunction() {
+
+    console.log(Utils.getDateTimeString() + " OnLoginSuccess_CallBackFunction foi executada");
+
+    this.toastr.success('Login efetuado!' , '', {
+      timeOut: 3000
+      ,positionClass: 'toast-top-center'
+    });
+
+    // Se a senha estah correta, redirecione para a página principal
+    this.authService.logar(); 
+
+  } // OnLoginSuccess_CallBackFunction
+
+  // funcao executada quando ha falha no login
+  OnLoginFail_CallBackFunction() {
+
+    console.log(Utils.getDateTimeString() + " OnLoginFail_CallBackFunction foi executada");
+
+    //console.error("login nao foi realizado");
+    this.toastr.error('Usuário ou senha inválidos!' , '', {
+      timeOut: 5000
+      ,positionClass: 'toast-top-center'
+    });
+  
+  } // OnLoginFail_CallBackFunction
+
+  // funcao executada pelo botao submit do form deste component do login
   login() {
 
-    if ( this.username.toLowerCase() != "admin") {
-      //console.error("login invalido");
-      
-      this.toastr.error('Usuário inválido!' , '', {
-        timeOut: 5000
-        ,positionClass: 'toast-top-center'
-      });
-
-      return;
-    }
-
-    this.http.get<CONFIG[]>('http://localhost:3000/config')
-      .subscribe( 
-
-        configs => {
-          var cfg = configs[0];
-          //console.log("login()  - this.configs=" + JSON.stringify(cfg));
-          //console.log("this.password=" + this.password);
-
-          const hashedPassword = bcrypt.hashSync(this.password, 10);
-
-          //console.log("hashedPassword=" + hashedPassword);
-
-          bcrypt.compare(this.password, cfg.CFG01).then(
-            (isCorrect) => { 
-              //console.log("isCorrect=" + isCorrect);
-              if ( isCorrect ) {
-
-                this.toastr.success('Login efetuado!' , '', {
-                  timeOut: 3000
-                  ,positionClass: 'toast-top-center'
-                });
-
-                // Se a senha estah correta, redirecione para a página principal
-                this.authService.logar(); 
-              }
-              else {
-                //console.error("login nao foi realizado");
-                this.toastr.error('Usuário ou senha inválidos!' , '', {
-                  timeOut: 5000
-                  ,positionClass: 'toast-top-center'
-                });
-              }
-            }
-          );
-          
-        }
-      );
+    this.authService.login(this.username.toLowerCase()
+                           ,this.password
+                           ,this.OnLoginSuccess_CallBackFunction.bind(this)
+                           ,this.OnLoginFail_CallBackFunction.bind(this)
+                          );
 
   } // login
 

@@ -73,7 +73,7 @@ export class AuthenticationService {
     );
   }
 
-  // alterar a senah do usuario admin no bd
+  // alterar a senha do usuario admin no bd
   updatePassword(pNewPW: string
                  ,pOldPW : string
                  ,pOnPwChangeSuccess_CallBackFunction: () => void
@@ -105,5 +105,58 @@ export class AuthenticationService {
     });
     
   } // updatePassword
+
+
+  // chama a api post do back-end para validar o login/senha informado pelo usuario
+  login_http(pLogin: string
+              ,pSenha : string
+              ): Observable<any> {
+
+                console.log(Utils.getDateTimeString() + " login_http - pLogin=" + pLogin);
+    console.log(Utils.getDateTimeString() + " login_http - pSenha=" + pSenha);
+    
+    // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
+    const obj = JSON.parse('{ "login":"' + pLogin  + '", "senha":"' + pSenha +'" }');
+
+    // montar a chamada PUT para enviar o obj com a nova senha
+    return this.http.post(ENV.REST_API_URL+'/config/login', JSON.stringify(obj), this.httpOptions).pipe(
+    //tap(_ => console.log(`senha foi alterada`))
+    );
+
+  } // login_http
+
+  // alterar a senha do usuario admin no bd
+  login(pLogin: string
+        ,pSenha : string
+        ,pOnLoginSuccess_CallBackFunction: () => void
+        ,pOnLoginFail_CallBackFunction: () => void
+        ) : void {
+
+    console.log(Utils.getDateTimeString() + " login - pLogin=" + pLogin);
+    console.log(Utils.getDateTimeString() + " senha - pSenha=" + pSenha);
+
+    // executar a rotina que vai realmente enviar pro back-end a nova senha que deve ser gravada passando as tres callback functions 
+    // que serao executadas conforme necessario
+    this.login_http(pLogin, pSenha).subscribe( {
+
+      next: response => {
+        console.log(Utils.getDateTimeString() + " login - response recebido=" + JSON.stringify( response ));
+      },
+
+      error: error => {
+        console.log(Utils.getDateTimeString() + " login - falha no login. " + JSON.stringify(error) );
+        console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginFail_CallBackFunction");
+        pOnLoginFail_CallBackFunction();
+      },
+
+      complete() {
+        //window.alert('Nova senha gravada com sucesso!');
+        console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginSuccess_CallBackFunction");
+        pOnLoginSuccess_CallBackFunction();
+      },
+
+    }); // this.login_http
+
+  } // login
 
 } // class

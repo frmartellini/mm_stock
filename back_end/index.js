@@ -514,10 +514,80 @@ app.get('/config', (req, res) => {
   console.log('get /config executado. Configurações retornadas com sucesso!');
 });
 
+//
+// verificacao de login (usuario e senha) que o front-end chama para validar o login do usuario
+//
+// para testar com o postman, usar o body raw json :    { "login":"admin","senha":"123" }
+//
+app.post('/config/login', (req, res) => {
+
+  console.log('get /config/login - inicio');
+  
+  const { login, senha } = req.body;
+  console.log('login=' + login.toLowerCase());
+  console.log('senha=' + senha);
+
+  var senha_atual_do_bd = "";
+
+  if ( login.toLowerCase() == "admin") {
+
+    db.query('SELECT CFG01 FROM config', (err, results) => {
+      console.log('results=' + JSON.stringify(results));
+      
+      if (err) {
+        res.status(500).send('Erro no select da tabela CONFIG');
+        return;
+      }
+      else {
+
+        senha_atual_do_bd = results[0].CFG01;
+        console.log('senha_atual_do_bd=' +senha_atual_do_bd);
+
+        if ( senha_atual_do_bd != "" ) {
+
+          console.log("senha_atual_do_bd NAO estah vazia");
+      
+          // verificar se a senha recebida pro login bate com a senha gravada no BD
+          bcrypt.compare(senha, senha_atual_do_bd).then(
+    
+            function(isCorrect) { 
+              console.log("isCorrect=" + isCorrect);
+              // se a senha atual enviada pelo usuario bate com a senha gravada no bd
+              if ( isCorrect ) {
+                console.log("senha informada pelo usuario bate com senha gravada no bd");
+                res.status(200).json('{ "Status":"OK" }');
+              }
+              // se a senha atual enviada pelo usuario NAO bate com a senha gravada no bd
+              else {
+                console.log("senha informada pelo usuario NAO bate com senha gravada no bd");
+                res.status(401).json('{ "Status":"INVALIDO" }');
+              }
+    
+            } // function(isCorrect)
+    
+          ); // bcrypt.compare.....then
+
+        } // if ( senha_atual_do_bd != "" )
+        // se a senha gravada no bd estiver vazia
+        else {
+          console.log("senha gravada no bdestah vazia");
+          res.status(500).send("senha gravada no bd estah vazia");
+        } // else
+
+      } // else
+      
+    }); // db.query select
+
+  } // if login == admin
+  else {
+    res.status(401).json('{ "Status":"INVALIDO" }'); // login nao eh "admin"
+  }
+
+}); // post /config/login
 
 /*
 Alterar a senha de acesso do sistema que fica gravada na tabela "CONFIG" no campo "CFG01".
-Precisa passar a nova senah e também a senha atual porque serah feita a verificacao se a senah atual bate com a senha gravada no BD.
+Precisa passar a nova senha e também a senha atual porque serah feita a verificacao se a senha atual bate com a senha gravada no BD.
 */
 /*
 para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/alter" para testar localmente ou "179.145.6.125:3000/config/alter" para testar no servidor e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:

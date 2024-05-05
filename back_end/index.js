@@ -335,9 +335,9 @@ app.get('/movimentacao', (req, res) => {
 
 /* Create a new post */
 app.post('/movimentacao/create', (req, res) => {
-  const { id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
-  const query = `INSERT INTO movimentacao (id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-  const values = [id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
+  const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
+  const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Error creating post');
@@ -375,9 +375,9 @@ app.get('/movimentacao/:id', (req, res) => {
 /* Update a post */
 app.put('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  const { id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
-  const query = `UPDATE movimentacao SET id_movimentacao = ?, data_hora = ?, id_produto = ?, tipo_mov = ?, quantidade = ?, num_pedido = ?, id_cliente = ?, obs = ? WHERE id_movimentacao = ?`;
-  const values = [id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
+  const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
+  const query = `UPDATE movimentacao SET data_hora = ?, id_produto = ?, tipo_mov = ?, quantidade = ?, num_pedido = ?, id_cliente = ?, obs = ? WHERE id_movimentacao = ?`;
+  const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
   db.query(query, values, err => {
     if (err) {
       res.status(500).send('Error updating post' + err);

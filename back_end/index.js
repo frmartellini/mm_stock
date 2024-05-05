@@ -162,7 +162,7 @@ app.post('/cliente/create', (req, res) => {
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Error creating post' + err);
       return;
     }
     const postId = result.insertId;
@@ -380,7 +380,7 @@ app.put('/movimentacao/:id', (req, res) => {
   const values = [id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
   db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      res.status(500).send('Error updating post' + err);
       return;
     }
     db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {

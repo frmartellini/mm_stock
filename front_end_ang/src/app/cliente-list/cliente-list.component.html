@@ -1,10 +1,141 @@
-
 <h2>Cadastro de Clientes</h2>
 
 <p>&todo&<br />
 vai exibir a lista de clientes usando um table que serah configurado com o Datatable do Bootstrap, que vai ativar a paginacao e a busca<br />
 vai ter uma coluna com icone para editar o registro atual chamando o component cliente-det<br />
 vai ter uma coluna com icone para excluir o registro atual</p>
+<!-- Filtro-->
+<mat-form-field>
+  <mat-label>Filtro</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+<!--Tabela-->
+<div class="mat-elevation-z8">
+  <table mat-table [ dataSource ]="dataSource">
+    <ng-container matColumnDef="id_cliente">
+        <th mat-header-cell *matHeaderCellDef>
+             Id do Cliente
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{element.id_cliente}}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nome_completo">
+        <th mat-header-cell *matHeaderCellDef>
+               Nome
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.nome_completo}}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="telefone">
+        <th mat-header-cell *matHeaderCellDef>
+              Telefone
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.telefone }}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>
+              Email
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.email }}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nome_loja">
+      <th mat-header-cell *matHeaderCellDef>
+              Nome da Loja
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.nome_loja }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cnpj">
+      <th mat-header-cell *matHeaderCellDef>
+              CNPJ
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.cnpj }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cpf">
+      <th mat-header-cell *matHeaderCellDef>
+             CPF
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.cpf }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipo_cliente">
+      <th mat-header-cell *matHeaderCellDef>
+            Tipo de Cliente
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.tipo_cliente }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endereco">
+      <th mat-header-cell *matHeaderCellDef>
+              Endereço
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.endereco }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef>
+             Número
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.numero }}
+        </td>
+    </ng-container>
+
+     <ng-container matColumnDef="complemento">
+      <th mat-header-cell *matHeaderCellDef>
+              Complemento
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.complemento }}
+        </td>
+    </ng-container>
+
+      <ng-container matColumnDef="cidade">
+        <th mat-header-cell *matHeaderCellDef>
+                Cidade
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.cidade }}
+          </td>
+       </ng-container>
+
+        <ng-container matColumnDef="uf">
+          <th mat-header-cell *matHeaderCellDef>
+                  UF
+            </th>
+          <td mat-cell *matCellDef="let element">
+                {{ element.uf }}
+            </td>
+       </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
+  </table>
+<!--Paginador-->
+  <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" aria-label="Select page of users"></mat-paginator>
+</div>
+
 
 <a routerLink="/cliente-det/000">
   Incluir novo

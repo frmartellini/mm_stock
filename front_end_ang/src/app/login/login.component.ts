@@ -24,7 +24,7 @@ export class LoginComponent {
               ,private router: Router
               ,private authService: AuthenticationService
               ,private toastr: ToastrService
-            ) { 
+            ) {
 
     this.username = "";
     this.password = "";
@@ -42,7 +42,7 @@ export class LoginComponent {
     });
 
     // Se a senha estah correta, redirecione para a página principal
-    this.authService.logar(); 
+    this.authService.logar();
 
   } // OnLoginSuccess_CallBackFunction
 
@@ -56,7 +56,7 @@ export class LoginComponent {
       timeOut: 5000
       ,positionClass: 'toast-top-center'
     });
-  
+
   } // OnLoginFail_CallBackFunction
 
   // funcao executada pelo botao submit do form deste component do login

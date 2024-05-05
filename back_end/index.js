@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
   
 const app = express();
-const port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
+var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
 
 // get the environment variables for the database connection
 dotenv.config();
@@ -19,6 +19,11 @@ const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
   
+// se a config "BACKEND_PORT" do arquivo .env estiver configurada, vai usar a porta indicada nesta config "BACKEND_PORT" do .env
+if ( process.env.BACKEND_PORT ) {
+  port = process.env.BACKEND_PORT;
+}
+
 /* MySQL Connection */
 const db = mysql.createConnection({
   host: dbHost,

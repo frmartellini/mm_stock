@@ -1,0 +1,54 @@
+
+<div class="form-group col-md-6  mx-auto" >
+  
+  <h2>Entrada de Produto</h2>
+
+  <!-- <div>id: {{movimentacao.id_movimentacao}}</div> -->
+
+  <!--
+  <label for="id_produto ">ID Produto</label>
+  <input [(ngModel)]="movimentacao.id_produto" type="text" class="form-control" id="id_produto">
+  -->
+
+  <mat-form-field appearance="fill" style="width: 100%">
+    <mat-label>Produto</mat-label> 
+    <mat-select [(value)]="movimentacao.id_produto" [disabled]="IsInViewMode()">
+      <mat-option *ngFor="let produto of produtos" 
+        [value]="produto.id_produto" >                  
+        {{produto.descricao}}
+      </mat-option>
+    </mat-select> 
+  </mat-form-field> 
+
+  <br />
+  
+  <!-- <label for="quantidade ">Quantidade</label>
+    <input [(ngModel)]="movimentacao.quantidade" type="text" class="form-control" id="quantidade"> -->
+
+  <mat-form-field class="" style="width: 20%">
+    <mat-label>Quantidade</mat-label>
+    <input matInput placeholder="" value="" [(ngModel)]="movimentacao.quantidade" [disabled]="IsInViewMode()" />
+  </mat-form-field>
+
+  <!-- <label for="obs ">Observação</label>
+  <input [(ngModel)]="movimentacao.obs" type="text" class="form-control" id="obs"> -->
+
+  <br />
+
+  <mat-form-field class="" style="width: 100%">
+    <mat-label>Observação</mat-label>
+    <textarea matInput placeholder="" [(ngModel)]="movimentacao.obs" rows="3" [disabled]="IsInViewMode()"></textarea>
+  </mat-form-field>
+
+  <br />
+
+  <button *ngIf="id == 0" type="button" (click)="confirmar()" class="btn btn-primary ">Confirmar</button>
+  &nbsp;&nbsp;
+  <button type="button" (click)="voltar()" class="btn btn-primary ">Voltar</button>
+
+  <!-- <div class="form-group col-md-6 mb-3  ">
+    <label for="data_hora ">Data/hora</label>
+    <input [(ngModel)]="movimentacao.data_hora" type="text" class="form-control" id="data_hora">
+  </div> -->
+
+</div>

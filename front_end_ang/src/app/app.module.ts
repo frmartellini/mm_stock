@@ -21,6 +21,9 @@ import { LoginComponent } from './login/login.component';
 import { ConfigComponent } from './config/config.component';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatSelectModule }  from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -33,8 +36,8 @@ import { MatTableModule } from '@angular/material/table';
     ,ClienteDetComponent
     ,LoginComponent
     ,ConfigComponent
-
-
+    ,ProdutoEntradaComponent
+    
   ],
   imports: [
     BrowserModule
@@ -46,18 +49,19 @@ import { MatTableModule } from '@angular/material/table';
     ,MatInputModule
     ,MatFormFieldModule
     ,MatPaginatorModule
-    ,MatFormFieldModule
     ,MatTableModule
     ,ToastrModule.forRoot()
     ,BrowserAnimationsModule
     ,ClienteListComponent
     ,MatSort
-
+    ,MatSelectModule
 
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

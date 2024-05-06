@@ -522,7 +522,7 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
       console.error(err);
       return false;
     }
-    const quantidade_atual = result[0].quantidade;
+    const quantidade_atual = result[0].quantidade_atual;
     let nova_quantidade;
     if (tipo_mov === 'Entrada') 
       nova_quantidade = quantidade_atual + quantidade; 

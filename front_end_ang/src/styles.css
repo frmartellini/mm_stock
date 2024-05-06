@@ -6,7 +6,16 @@
 
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
- @import "../node_modules/ngx-toastr/toastr.css";
+@import "../node_modules/ngx-toastr/toastr.css";
+
+/* tema de cores selecionado para o angular material
+outras opcoes:
+deeppurple-amber.css
+indigo-pink.css
+pink-bluegrey.css
+purple-green.css
+*/
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 .ContentDivClass {
 
@@ -45,5 +54,3 @@
   height: 40px;
   
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -24,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSelectModule }  from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,7 @@ import { MatSelectModule }  from '@angular/material/select';
     ,ClienteListComponent
     ,MatSort
     ,MatSelectModule
-
+    ,MatButtonModule
   ],
   providers: [
     provideClientHydration(),

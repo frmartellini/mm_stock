@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +9,8 @@ import { MovimentacaoService } from '../services/movimentacao.service';
 import Utils from '../utils';
 import { ProdutoService } from '../services/produto.service';
 import { PRODUTO } from '../PRODUTO';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-produto-entrada',
@@ -17,7 +19,7 @@ import { PRODUTO } from '../PRODUTO';
   
 })
 
-export class ProdutoEntradaComponent {
+export class ProdutoEntradaComponent implements OnInit {
 
   @Input() movimentacao: MOVIMENTACAO;
 
@@ -27,6 +29,16 @@ export class ProdutoEntradaComponent {
   // lista de produtos para exibir o controle Select
   public produtos: PRODUTO[] = [];
 
+  //formfieldControl = new FormControl( '', [Validators.required] );
+
+  form: FormGroup = new FormGroup({
+    ProdutoSelect: new FormControl(''),
+    QuantidadeInput: new FormControl(''),
+    ObsTextArea: new FormControl('')
+  });
+  submitted = false;
+
+
   constructor(
     private route: ActivatedRoute
     ,private location: Location
@@ -34,7 +46,7 @@ export class ProdutoEntradaComponent {
     ,private router: Router
     ,private movservice: MovimentacaoService
     ,private prodservice: ProdutoService
-    
+    ,private formBuilder: FormBuilder
     )
   {
 
@@ -53,11 +65,25 @@ export class ProdutoEntradaComponent {
 
   ngOnInit(): void {
     
+    this.form = this.formBuilder.group(
+      {
+        ProdutoSelect: ['', Validators.required]
+        ,QuantidadeInput: ['', Validators.required]
+        ,ObsTextArea: ['', ]
+      }
+    );
+
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.getMovimentacao();
 
     this.getAllProdutos();
+
+    if ( this.IsInViewMode() ) {
+      this.form.get("ProdutoSelect")?.disable();
+      this.form.get("QuantidadeInput")?.disable();
+      this.form.get("ObsTextArea")?.disable();
+    }
 
   }
 
@@ -71,11 +97,13 @@ export class ProdutoEntradaComponent {
     }
   }
 
-  confirmar(): void {
+  onSubmit(pFormValues: any): void {
 
     var local_toastr = this.toastr;
 
     var local_router = this.router;
+
+    //console.log("post param=" + JSON.stringify(pFormValues));
 
     // funcao executada quando ha sucesso
     function OnSaveSuccess_CallBackFunction() {

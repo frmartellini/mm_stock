@@ -19,21 +19,21 @@ import { ProdutoDetComponent } from './produto-det/produto-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
 import { LoginComponent } from './login/login.component';
 import { ConfigComponent } from './config/config.component';
-import { MatSortModule } from '@angular/material/sort';
-
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    AppComponent,
-    ClienteListComponent,
-    ProdutoListComponent,
-    FornecedorListComponent,
-    FornecedorDetComponent,
-    ProdutoDetComponent,
-    ClienteDetComponent
+    HomeComponent
+    ,AppComponent
+    ,ProdutoListComponent
+    ,FornecedorListComponent
+    ,FornecedorDetComponent
+    ,ProdutoDetComponent
+    ,ClienteDetComponent
     ,LoginComponent
     ,ConfigComponent
+
 
   ],
   imports: [
@@ -42,13 +42,17 @@ import { MatSortModule } from '@angular/material/sort';
     ,ReactiveFormsModule
     ,AppRoutingModule
     ,HttpClientModule
-
+    ,MatSortModule
     ,MatInputModule
     ,MatFormFieldModule
     ,MatPaginatorModule
-
+    ,MatFormFieldModule
+    ,MatTableModule
     ,ToastrModule.forRoot()
     ,BrowserAnimationsModule
+    ,ClienteListComponent
+    ,MatSort
+
 
   ],
   providers: [

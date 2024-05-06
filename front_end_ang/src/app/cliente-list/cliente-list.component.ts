@@ -1,39 +1,79 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { ENV } from '../env';
-import {MatPaginator, } from '@angular/material/paginator';
-import {MatSort,} from '@angular/material/sort';
 import { HttpClient } from '@angular/common/http';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSort, MatSortModule, } from '@angular/material/sort';
+import {MatTableModule, MatTableDataSource} from '@angular/material/table';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
+export interface clienteData{
+  id_cliente: number;
+  nome_completo: string;
+  telefone: string;
+  email: string;
+  nome_loja: string;
+  cnpj: string;
+  cpf: string;
+  tipo_cliente: string;
+  endereco:string;
+  numero:number;
+  complemento:string;
+  cidade:string;
+  uf:string;
+
+}
+
+let CLIENT_DATA: clienteData[] = [];
 
 
 @Component({
   selector: 'app-cliente-list',
   templateUrl: './cliente-list.component.html',
   styleUrl: './cliente-list.component.css',
+  standalone: true,
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
 })
-export class ClienteListComponent {
-  public dataSource: any = [];
+export class ClienteListComponent implements AfterViewInit, OnInit {
+  dataSource = new MatTableDataSource(CLIENT_DATA);
   public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','endereco','numero','complemento','cidade','uf'];
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient){}
-  //Paginador
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  //Inicialização dos dados na tabela
+  constructor(private http: HttpClient,){}
+    //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
+    this.dataSource.sort = this.sort;
+    console.log(this.sort)
+    this.dataSource.paginator = this.paginator;
+    console.log("paginador",this.paginator);
+
+
+  }
+  ngOnChanges(){
+    this.dataSource.sort = this.sort;
+    console.log(this.sort)
+    this.dataSource.paginator = this.paginator;
+    console.log("paginador",this.paginator);
+
   }
   // Obtenção dos Dados da API
     fetchData(): void {
     this.http.get(ENV.REST_API_URL+'/cliente').subscribe(
         (response: any) =>
-          {this.dataSource = response;
-          console.table(this.dataSource)
+          {CLIENT_DATA = response;this.dataSource= response;
+            setTimeout(() => {
+              console.log(this.sort) //not undefined
+              this.dataSource.sort = this.sort;
+            })
 
       })
+
+  }
+  //Paginador
+  ngAfterViewInit() {
+
 
   }
   //filtro
@@ -45,4 +85,5 @@ export class ClienteListComponent {
       this.dataSource.paginator.firstPage();
     }
   }
+
 }

@@ -534,7 +534,7 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
         console.error('Quantidade insuficiente em estoque!'); // tratar de forma melhor no front end
         return false;
     }}
-    db.query('UPDATE produto SET quantidade = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
+    db.query('UPDATE produto SET quantidade_atual = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
       if (err) {
         console.error(err);
         return false;

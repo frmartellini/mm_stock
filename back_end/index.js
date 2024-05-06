@@ -517,7 +517,7 @@ app.get('/search/movimentacao/:value', (req, res) => {
 // function to update the quantity of a product after a movimentation
 function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
 {
-  db.query('SELECT quantidade FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
+  db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
     if (err) {
       console.error(err);
       return false;

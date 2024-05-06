@@ -336,7 +336,7 @@ app.get('/movimentacao', (req, res) => {
 /* Create a new post */
 app.post('/movimentacao/create', (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
-  const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
   if (atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)) {
     db.query(query, values, (err, result) => {

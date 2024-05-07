@@ -1,11 +1,10 @@
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { ENV } from '../env';
 import { HttpClient } from '@angular/common/http';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSort, MatSortModule, } from '@angular/material/sort';
-import {MatTableModule, MatTableDataSource} from '@angular/material/table';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatPaginator,} from '@angular/material/paginator';
+import {MatSort, } from '@angular/material/sort';
+import { MatTableDataSource} from '@angular/material/table';
+
 
 export interface clienteData{
   id_cliente: number;
@@ -31,8 +30,7 @@ let CLIENT_DATA: clienteData[] = [];
   selector: 'app-cliente-list',
   templateUrl: './cliente-list.component.html',
   styleUrl: './cliente-list.component.css',
-  standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
+
 })
 export class ClienteListComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource(CLIENT_DATA);
@@ -48,7 +46,6 @@ export class ClienteListComponent implements AfterViewInit, OnInit {
     console.log(this.sort)
     this.dataSource.paginator = this.paginator;
     console.log("paginador",this.paginator);
-
 
   }
   ngOnChanges(){
@@ -73,6 +70,10 @@ export class ClienteListComponent implements AfterViewInit, OnInit {
   }
   //Paginador
   ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    console.log(this.sort)
+    this.dataSource.paginator = this.paginator;
+    console.log("paginador",this.paginator);
 
 
   }

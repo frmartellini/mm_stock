@@ -2,6 +2,132 @@
 <h2>Cadastro de Fornecedores</h2>
 
 <p>fornecedor-list works!</p>
+<mat-form-field>
+  <mat-label>Filtro</mat-label>
+  <input matInput (keyup)="applyFilter($event)" #input>
+</mat-form-field>
+<!--Tabela-->
+<div class="table-responsive">
+  <table class="table" mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id_fornecedor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+             Id do Fornecedor
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{element.id_fornecedor}}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nome_fornecedor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+               Nome do Fornecedor
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.nome_fornecedor}}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nome_responsavel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Nome do Responsável
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.nome_responsavel }}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="contato_telefonico">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Contato Telefonico
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.contato_telefonico }}
+          </td>
+    </ng-container>
+
+    <ng-container matColumnDef="redes_sociais">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+           Redes Sociais
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.redes_sociais }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="materiais_fornecidos">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Materiais Fornecidos
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.materiais_fornecidos }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cnpj">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              CNPJ
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.cnpj }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endereco">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Endereço
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.endereco }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+             Número
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.numero }}
+        </td>
+    </ng-container>
+
+     <ng-container matColumnDef="complemento">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Complemento
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.complemento }}
+        </td>
+    </ng-container>
+
+      <ng-container matColumnDef="cidade">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Cidade
+          </th>
+        <td mat-cell *matCellDef="let element">
+              {{ element.cidade }}
+          </td>
+       </ng-container>
+
+        <ng-container matColumnDef="uf">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  UF
+            </th>
+        <td mat-cell *matCellDef="let element">
+                {{ element.uf }}
+            </td>
+       </ng-container>
+
+        <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+
+    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
+  </table>
+<!--Paginador-->
+  <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" ></mat-paginator>
+</div>
 
 <a routerLink="/fornecedor-det/000">
     Incluir novo

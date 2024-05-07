@@ -36,11 +36,12 @@ import { MatButtonModule } from '@angular/material/button';
     ,FornecedorDetComponent
     ,ProdutoDetComponent
     ,ClienteDetComponent
+    ,ClienteListComponent
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
     ,ProdutoSaidaComponent
-    
+
   ],
   imports: [
     BrowserModule
@@ -55,7 +56,6 @@ import { MatButtonModule } from '@angular/material/button';
     ,MatTableModule
     ,ToastrModule.forRoot()
     ,BrowserAnimationsModule
-    ,ClienteListComponent
     ,MatSort
     ,MatSelectModule
     ,MatButtonModule

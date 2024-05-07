@@ -323,7 +323,7 @@ app.delete('/fornecedor/:id', (req, res) => {
 // 
 
 app.get('/movimentacao', (req, res) => {
-  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m INNER JOIN cliente c ON m.id_cliente = c.id_cliente INNER JOIN produto p ON m.id_produto = p.id_produto', (err, results) => {
+  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m LEFT OUTER JOIN (cliente c ON m.id_cliente = c.id_cliente) INNER JOIN (produto p ON m.id_produto = p.id_produto)', (err, results) => {
     if (err) {
       res.status(500).send('Error fetching posts');
       return;
@@ -539,9 +539,9 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
         console.error(err);
         return false;
       }
-    });   
-  return true;
+    });     
   });
+  return true;
 }
 
 //

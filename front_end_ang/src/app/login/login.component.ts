@@ -41,8 +41,8 @@ export class LoginComponent {
       ,positionClass: 'toast-top-center'
     });
 
-    // Se a senha estah correta, redirecione para a página principal
-    this.authService.logar();
+    // Se a senha estah correta, executar o metodo "logar"que vai processar o login do usuario no sistema
+    this.authService.logar(this.username.toLowerCase());
 
   } // OnLoginSuccess_CallBackFunction
 

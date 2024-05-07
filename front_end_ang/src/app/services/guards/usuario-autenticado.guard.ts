@@ -10,24 +10,25 @@ import { AuthenticationService } from '../authentication.service';
 
 export class UsuarioAutenticadoGuard implements CanActivate{
     
-  constructor(
-      
-    private authenticationService: AuthenticationService,
-    
-    private router: Router) { }
-    
-    canActivate() {
+  constructor(private authenticationService: AuthenticationService
+              ,private router: Router
+              )
+  {
 
-      if (this.authenticationService.IsLogado()) {
-        //console.log("executou o UsuarioAutenticadoGuard.canActivate e vai retornar true");
-        return true;
-      }
-      
-      //console.log("executou o UsuarioAutenticadoGuard.canActivate e vai retornar false");
+  }
+    
+  canActivate() {
 
-      this.router.navigate(['login']);
-      
-      return false;
+    if (this.authenticationService.IsLogado()) {
+      //console.log("executou o UsuarioAutenticadoGuard.canActivate e vai retornar true");
+      return true;
     }
+    
+    //console.log("executou o UsuarioAutenticadoGuard.canActivate e vai retornar false");
+
+    this.router.navigate(['login']);
+    
+    return false;
+  }
 
 }

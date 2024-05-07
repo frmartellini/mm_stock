@@ -3,9 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { inject } from "@angular/core"
 import { Observable, of, throwError } from 'rxjs';
+import * as bcrypt from "bcryptjs";
 
 import Utils from "../utils";
 import { ENV } from '../env';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,29 +24,82 @@ export class AuthenticationService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private http: HttpClient) { 
-    console.log("AuthenticationService.constructor");
+  constructor(private http: HttpClient
+              ,private localStorageService: LocalStorageService
+              )
+  { 
+    //console.log("AuthenticationService.constructor");
     this.isLogado = false;
   }
 
   public IsLogado() : boolean {
 
-    //console.log(" IsLogado() foi executado e vai retornar "+ this.isLogado);
+    if ( this.isLogado ) {
+      return this.isLogado;
+    }
+    else {
 
-    return this.isLogado;
+      let status = false;
+
+      if (this.localStorageService.getItem('isLogado') == "true") {
+
+        var login_localstorage: string = "";
+        login_localstorage = this.localStorageService.getItem('login') ?? "";
+        //console.log("login_localstorage="+ login_localstorage);
+
+        var token_localstorage: string = "";
+        token_localstorage = this.localStorageService.getItem('token') ?? "";
+        //console.log("token_localstorage="+ token_localstorage);
+
+        //console.log("antes do bcrypt.compareSync");
+        if ( bcrypt.compareSync(login_localstorage.toString(), token_localstorage.toString()) ) {
+
+          //console.log("dentro do then bcrypt.compareSync");
+
+          this.isLogado = true;
+
+          status = true;
+
+        }
+        else {
+          //console.log("dentro do else bcrypt.compareSync");
+          status = false;
+        }
+      }
+      else {
+        status = false;
+      }
+
+      //console.log(" IsLogado() foi executado e vai retornar "+ status);
+
+      return status;
+    }
   }
 
-  setLogado() {
+  setLogado(pLogin: string) {
     this.isLogado = true;
+
+    var token: string = "";
+    
+    token = bcrypt.hashSync(pLogin,10);
+
+    this.localStorageService.setItem("isLogado", this.isLogado.toString());
+    this.localStorageService.setItem("login", pLogin);
+    this.localStorageService.setItem("token", token);
+    //console.log("setLogado() executado e gravou no localStorage isLogado="+ this.isLogado);
   }
 
   setDeslogado() {
     this.isLogado = false;
+    this.localStorageService.setItem("isLogado", this.isLogado.toString());
+    this.localStorageService.setItem("login", "");
+    this.localStorageService.setItem("token", "");
+    //console.log("setDeslogado() executado e gravou no localStorage isLogado="+ this.isLogado);
   }
   
-  logar() {
+  logar(pLogin: string) {
 
-    this.setLogado();
+    this.setLogado(pLogin);
 
     this.router.navigate(['']);
 

@@ -33,7 +33,7 @@ let CLIENT_DATA: clienteData[] = [];
 
 })
 export class ClienteListComponent implements AfterViewInit, OnInit {
-  dataSource = new MatTableDataSource(CLIENT_DATA);
+  public dataSource : any;
   public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','endereco','numero','complemento','cidade','uf'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
@@ -59,13 +59,16 @@ export class ClienteListComponent implements AfterViewInit, OnInit {
     fetchData(): void {
     this.http.get(ENV.REST_API_URL+'/cliente').subscribe(
         (response: any) =>
-          {CLIENT_DATA = response;this.dataSource= response;
+          {
+            CLIENT_DATA = response;
+            this.dataSource = new MatTableDataSource(CLIENT_DATA);
             setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
             })
 
-      })
+          }
+    )
 
   }
   //Paginador

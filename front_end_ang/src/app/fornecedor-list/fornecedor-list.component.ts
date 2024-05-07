@@ -28,7 +28,7 @@ let FORNECEDOR_DATA: fornecedorData[]=[];
   styleUrl: './fornecedor-list.component.css'
 })
 export class FornecedorListComponent implements AfterViewInit, OnInit {
-  dataSource = new MatTableDataSource(FORNECEDOR_DATA);
+  dataSource : any;
   public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','endereco','numero','complemento','cidade','uf'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
@@ -47,13 +47,16 @@ export class FornecedorListComponent implements AfterViewInit, OnInit {
   fetchData(): void {
     this.http.get(ENV.REST_API_URL+'/fornecedor').subscribe(
         (response: any) =>
-          {FORNECEDOR_DATA = response;this.dataSource= response;
+          {
+            FORNECEDOR_DATA = response;
+            this.dataSource = new MatTableDataSource(FORNECEDOR_DATA);
             setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
             })
 
-      })
+          }
+    )
   }
 
   //Paginador

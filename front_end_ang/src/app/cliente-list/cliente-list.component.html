@@ -11,8 +11,8 @@ vai ter uma coluna com icone para excluir o registro atual</p>
   <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>
 <!--Tabela-->
-
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
+<div class="table-responsive">
+  <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_cliente">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
              Id do Cliente
@@ -140,7 +140,7 @@ vai ter uma coluna com icone para excluir o registro atual</p>
   </table>
 <!--Paginador-->
   <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" ></mat-paginator>
-
+</div>
 
 
 <a routerLink="/cliente-det/000">

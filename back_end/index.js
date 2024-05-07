@@ -555,7 +555,7 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
         }
       });     
     });
-    resolve(true);
+    resolve();
   });
 }
 

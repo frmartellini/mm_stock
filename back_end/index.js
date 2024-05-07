@@ -323,9 +323,9 @@ app.delete('/fornecedor/:id', (req, res) => {
 // 
 
 app.get('/movimentacao', (req, res) => {
-  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m LEFT OUTER JOIN (cliente c ON m.id_cliente = c.id_cliente) INNER JOIN (produto p ON m.id_produto = p.id_produto)', (err, results) => {
+  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) INNER JOIN produto p ON (m.id_produto = p.id_produto)', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Error fetching posts' + err);
       return;
     }
     res.json(results);
@@ -338,8 +338,23 @@ app.post('/movimentacao/create', async (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
   const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
+
   try {
+    if (tipo_mov === 'S') {
+      // Se for uma saída, verificar se a quantidade em estoque é suficiente
+      const quantidadeEmEstoque = await obterQuantidadeEmEstoque(id_produto);
+
+      if (quantidadeEmEstoque < quantidade) {
+        // Se a quantidade em estoque for inferior à quantidade a ser movimentada, retornar erro
+        res.status(400).send('Quantidade em estoque insuficiente para a movimentação.');
+        return;
+      }
+    }
+
+    // Atualizar a quantidade do produto
     await atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov);
+
+    // Criar a movimentação
     db.query(query, values, (err, result) => {
       if (err) {
         res.status(500).send('Error creating post');
@@ -353,11 +368,10 @@ app.post('/movimentacao/create', async (req, res) => {
         }
         res.status(201).json(result[0]);
       });
-      
-      console.log('post executado. Movimentação criada com sucesso!');
+      console.log('Post executado. Movimentação criada com sucesso!');
     });
   } catch (error) {
-    res.status(400).send('Error creating post, invalid quantity'); // envia mensagem para o front dizendo que a quantidade em estoque é insuficiente
+    res.status(400).send('Error creating post, invalid quantity');
     return;
   }
 });
@@ -527,17 +541,12 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
       }
       const quantidade_atual = result[0].quantidade_atual;
       let nova_quantidade;
-      if (tipo_mov === 'E') 
+      if (tipo_mov === 'E') {
         nova_quantidade = quantidade_atual + quantidade; 
+      }
       else { // Se não é entrada, é saída, são as duas únicas opções
-        if (quantidade_atual >= quantidade) {
-          nova_quantidade = quantidade_atual - quantidade;
-        }
-        else {
-          console.error('Quantidade insuficiente em estoque!'); // tratar de forma melhor no front end
-          reject('Quantidade insuficiente em estoque!');
-          return;
-      }}
+        nova_quantidade = quantidade_atual - quantidade;        
+      }
       db.query('UPDATE produto SET quantidade_atual = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
         if (err) {
           console.error(err);
@@ -547,6 +556,20 @@ function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
       });     
     });
     resolve(true);
+  });
+}
+
+function obterQuantidadeEmEstoque(id_produto) {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+        return;
+      }
+      const quantidade_atual = result[0].quantidade_atual;
+      resolve(quantidade_atual);
+    });
   });
 }
 

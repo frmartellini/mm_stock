@@ -334,11 +334,12 @@ app.get('/movimentacao', (req, res) => {
 });
 
 /* Create a new post */
-app.post('/movimentacao/create', (req, res) => {
+app.post('/movimentacao/create', async (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
   const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
-  if (atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)) {
+  try {
+    await atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov);
     db.query(query, values, (err, result) => {
       if (err) {
         res.status(500).send('Error creating post');
@@ -355,7 +356,7 @@ app.post('/movimentacao/create', (req, res) => {
       
       console.log('post executado. Movimentação criada com sucesso!');
     });
- } else {
+  } catch (error) {
     res.status(400).send('Error creating post, invalid quantity'); // envia mensagem para o front dizendo que a quantidade em estoque é insuficiente
     return;
   }
@@ -514,34 +515,39 @@ app.get('/search/movimentacao/:value', (req, res) => {
 // auxiliar functions
 //
 
-// function to update the quantity of a product after a movimentation
+// function to update the quantity of a product after a movimentation, with promise to wait for the update to finish due to the async nature of the db query on  javascript
 function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
 {
-  db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
-    if (err) {
-      console.error(err);
-      return false;
-    }
-    const quantidade_atual = result[0].quantidade_atual;
-    let nova_quantidade;
-    if (tipo_mov === 'Entrada') 
-      nova_quantidade = quantidade_atual + quantidade; 
-    else { // Se não é entrada, é saída, são as duas únicas opções
-      if (quantidade_atual >= quantidade) {
-        nova_quantidade = quantidade_atual - quantidade;
-      }
-      else {
-        console.error('Quantidade insuficiente em estoque!'); // tratar de forma melhor no front end
-        return false;
-    }}
-    db.query('UPDATE produto SET quantidade_atual = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
       if (err) {
         console.error(err);
-        return false;
+        reject(err);
+        return;
       }
-    });     
+      const quantidade_atual = result[0].quantidade_atual;
+      let nova_quantidade;
+      if (tipo_mov === 'E') 
+        nova_quantidade = quantidade_atual + quantidade; 
+      else { // Se não é entrada, é saída, são as duas únicas opções
+        if (quantidade_atual >= quantidade) {
+          nova_quantidade = quantidade_atual - quantidade;
+        }
+        else {
+          console.error('Quantidade insuficiente em estoque!'); // tratar de forma melhor no front end
+          reject('Quantidade insuficiente em estoque!');
+          return;
+      }}
+      db.query('UPDATE produto SET quantidade_atual = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
+        if (err) {
+          console.error(err);
+          reject(err);
+          return;
+        }
+      });     
+    });
+    resolve(true);
   });
-  return true;
 }
 
 //

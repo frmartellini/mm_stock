@@ -14,6 +14,7 @@ import { UsuarioNaoAutenticadoGuard } from './services/guards/usuario-nao-autent
 import { UsuarioAutenticadoGuard } from './services/guards/usuario-autenticado.guard';
 import { ConfigComponent } from './config/config.component';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
+import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 
 const routes: Routes = [
 
@@ -34,7 +35,8 @@ const routes: Routes = [
 
   ,{ path: 'produto-entrada', component: ProdutoEntradaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-entrada/:id', component: ProdutoEntradaComponent , canActivate: [UsuarioAutenticadoGuard] }
-  ,{ path: 'produto-saida', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'produto-saida', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'produto-saida/:id', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'cs-mov-estq', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
   

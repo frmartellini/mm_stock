@@ -22,6 +22,7 @@ import { ConfigComponent } from './config/config.component';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
+import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSelectModule }  from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,6 +39,7 @@ import { MatButtonModule } from '@angular/material/button';
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
+    ,ProdutoSaidaComponent
     
   ],
   imports: [

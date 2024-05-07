@@ -24,6 +24,16 @@ export class HomeComponent {
     
   }
 
+  consultar_mov_saida(): void {
+  
+    var id :string = "";
+
+    id = (<HTMLInputElement>document.getElementById("id_mov_saida")).value;
+
+    this.router.navigate(["/produto-saida/" + id]);
+    
+  }
+
 }
 
 

@@ -25,7 +25,7 @@ let PRODUTO_DATA: produtoData[]=[];
 
 })
 export class ProdutoListComponent implements AfterViewInit, OnInit {
-  dataSource = new MatTableDataSource(PRODUTO_DATA);
+  public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
@@ -45,15 +45,18 @@ export class ProdutoListComponent implements AfterViewInit, OnInit {
    fetchData(): void {
     this.http.get(ENV.REST_API_URL+'/produto').subscribe(
         (response: any) =>
-          {PRODUTO_DATA = response;this.dataSource= response;
+          {
+            PRODUTO_DATA = response;
+            this.dataSource = new MatTableDataSource(PRODUTO_DATA);
             setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
             })
-
-      })
-
+ 
+          }
+    )
   }
+
   //Paginador
   ngAfterViewInit() {
    this.dataSource.sort = this.sort;

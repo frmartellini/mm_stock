@@ -1,7 +1,6 @@
 
 <h2>Cadastro de Produtos</h2>
 
-<p>produto-list works!</p>
 <!-- Filtro-->
 <mat-form-field>
   <mat-label>Filtro</mat-label>
@@ -75,7 +74,7 @@
 
 <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
     </tr>
 
     <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>

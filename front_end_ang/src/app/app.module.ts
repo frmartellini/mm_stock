@@ -26,6 +26,7 @@ import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSelectModule }  from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
-    ,ProdutoSaidaComponent
+    ,ProdutoSaidaComponent, ClientInclusionComponent
 
   ],
   imports: [

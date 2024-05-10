@@ -28,7 +28,7 @@ let MOVIMENTACAO_DATA: movimentacaoData[]=[];
 export class MovimentacaoCsComponent implements AfterViewInit, OnInit {
 
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
-  public displayColumn: string[] = ['id_movimentacao','data_hora','id_produtor','tipo_mov','quantidade','num_pedido','id_cliente','obs'];
+  public displayColumn: string[] = ['id_movimentacao','data_hora','id_produtor','tipo_mov','quantidade','num_pedido','id_cliente','obs','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 

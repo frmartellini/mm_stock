@@ -26,7 +26,7 @@ let PRODUTO_DATA: produtoData[]=[];
 })
 export class ProdutoListComponent implements AfterViewInit, OnInit {
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
-  public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual'];
+  public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
@@ -52,7 +52,7 @@ export class ProdutoListComponent implements AfterViewInit, OnInit {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
             })
- 
+
           }
     )
   }

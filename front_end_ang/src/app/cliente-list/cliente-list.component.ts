@@ -34,7 +34,7 @@ let CLIENT_DATA: clienteData[] = [];
 })
 export class ClienteListComponent implements AfterViewInit, OnInit {
   public dataSource : any;
-  public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','endereco','numero','complemento','cidade','uf'];
+  public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','endereco','numero','complemento','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 

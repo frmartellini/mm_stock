@@ -9,18 +9,18 @@
 
 <header id="Header" >
 
-  <div *ngIf="ShowDeslogarBtn()" id="LogoutDiv" class="float-end text-center LogoutDiv" >
+  <div *ngIf="logado" id="LogoutDiv" class="float-end text-center LogoutDiv" >
      <button name="DeslogarBtn" id="DeslogarBtn" (click)="deslogar()" class="btn"><i class="bi bi-box-arrow-right" style="font-size: 18px;"></i></button>
   </div>
 
-  <div *ngIf="ShowDeslogarBtn()" id="ConfigDiv" class="float-end text-center ConfigDiv" >
+  <div *ngIf="logado" id="ConfigDiv" class="float-end text-center ConfigDiv" >
     <a routerLink="/config">
       <button name="ConfigBtn" id="ConfigBtn" class="btn"><i class="bi bi-gear" style="font-size: 18px;" ></i></button>
     </a>
  </div>
 
- <nav *ngIf="ShowDeslogarBtn()" navbar navbar-expand-md navbar-dark fixed-top bg-dark>
-    <a routerLink="/"><img src="../assets/images/logo-home-small.jpg" alt="logo do sistema"   ></a>
+ <nav *ngIf="logado" navbar navbar-expand-md navbar-dark fixed-top bg-dark>
+    <a routerLink="/home"><img src="../assets/images/logo-home-small.jpg" alt="logo do sistema"   ></a>
     <a routerLink="/cliente-list">Cadastro de Clientes</a>
     <a routerLink="/fornecedor-list">Cadastro de Fornecedores</a>
     <a routerLink="/produto-list">Cadastro de Produtos</a>
@@ -28,20 +28,20 @@
     <a routerLink="/produto-entrada">Entrada de Produto</a>
     <a routerLink="/produto-saida">Saída de Produto</a>
 
-    <a routerLink="/cs-mov-estq">Consulta de Movimentação do Estoque</a>
+    <a routerLink="/movimentacao-cs">Consulta de Movimentação do Estoque</a>
 
   </nav>
-  
+
 </header>
 
 <main id="Main" role="main" class="main">
-  
+
   <div id="ContentDiv" class="ContentDivClass">
 
       <router-outlet />
 
-  </div>  
-  
+  </div>
+
 </main>
 
 <footer id="Footer" class="footer">

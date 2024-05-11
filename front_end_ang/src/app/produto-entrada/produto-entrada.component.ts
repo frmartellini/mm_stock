@@ -101,7 +101,7 @@ export class ProdutoEntradaComponent implements OnInit {
 
     var local_toastr = this.toastr;
 
-    var local_router = this.router;
+    //var local_router = this.router;
 
     //console.log("post param=" + JSON.stringify(pFormValues));
 
@@ -113,7 +113,7 @@ export class ProdutoEntradaComponent implements OnInit {
         ,positionClass: 'toast-top-center'
       });
   
-      local_router.navigate(['']);
+      location.reload();
 
     } // OnSaveSuccess_CallBackFunction
 

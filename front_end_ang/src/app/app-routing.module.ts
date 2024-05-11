@@ -15,6 +15,7 @@ import { UsuarioAutenticadoGuard } from './services/guards/usuario-autenticado.g
 import { ConfigComponent } from './config/config.component';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
+import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 
 const routes: Routes = [
 
@@ -37,10 +38,10 @@ const routes: Routes = [
   ,{ path: 'produto-entrada/:id', component: ProdutoEntradaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-saida', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-saida/:id', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
-  ,{ path: 'cs-mov-estq', component: HomeComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'movimentacao-cs', component: MovimentacaoCsComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
-  
-  
+
+
 
 ];
 
@@ -50,7 +51,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes)
 
   ],
-  
+
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,7 +1,5 @@
+<h2>Consulta de Movimentação</h2>
 
-<h2>Cadastro de Produtos</h2>
-
-<!-- Filtro-->
 <mat-form-field>
   <mat-label>Filtro</mat-label>
   <input matInput (keyup)="applyFilter($event)" #input>
@@ -9,69 +7,77 @@
 <!--Tabela-->
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="id_produto">
+    <ng-container matColumnDef="id_movimentacao">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-             Id do Produto
+             Id da Movimentação
           </th>
         <td mat-cell *matCellDef="let element">
-              {{element.id_produto}}
+              {{element.id_movimentacao}}
           </td>
     </ng-container>
 
-    <ng-container matColumnDef="descricao">
+    <ng-container matColumnDef="data_hora">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-               Descrição
+               Data da Movimentação
           </th>
         <td mat-cell *matCellDef="let element">
-              {{ element.descricao}}
+              {{ element.data_hora}}
           </td>
     </ng-container>
 
-    <ng-container matColumnDef="cor">
+    <ng-container matColumnDef="id_produtor">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Cor
+              Id do Produto
           </th>
         <td mat-cell *matCellDef="let element">
-              {{ element.cor }}
+              {{ element.id_produtor }}
           </td>
     </ng-container>
 
-    <ng-container matColumnDef="tamanho">
+    <ng-container matColumnDef="tipo_mov">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tamanho
+              Tipo de Movimentação
           </th>
         <td mat-cell *matCellDef="let element">
-              {{ element.tamanho }}
+              {{ element.tipo_mov }}
           </td>
     </ng-container>
 
-    <ng-container matColumnDef="tipo_material">
+    <ng-container matColumnDef="quantidade">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tipo de Material
+           Quantidade
         </th>
       <td mat-cell *matCellDef="let element">
-            {{ element.tipo_material }}
+            {{ element.quantidade }}
         </td>
     </ng-container>
 
-    <ng-container matColumnDef="preco_venda">
+    <ng-container matColumnDef="num_pedido">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Preço de Venda
+            Número do Pedido
         </th>
       <td mat-cell *matCellDef="let element">
-            {{ element.preco_venda }}
+            {{ element.num_pedido }}
         </td>
     </ng-container>
 
-    <ng-container matColumnDef="quantidade_atual">
+    <ng-container matColumnDef="id_cliente">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-             Quantidade Atual
+              Id do Cliente
         </th>
       <td mat-cell *matCellDef="let element">
-            {{ element.quantidade_atual }}
+            {{ element.id_cliente }}
         </td>
     </ng-container>
 
+    <ng-container matColumnDef="obs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Observações
+        </th>
+      <td mat-cell *matCellDef="let element">
+            {{ element.obs }}
+        </td>
+    </ng-container>
 <!-- Botões Editar e Exlcuir-->
     <ng-container  matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
@@ -88,7 +94,6 @@
             </div>
           </td>
       </ng-container>
-
 <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
@@ -101,7 +106,3 @@
   <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" ></mat-paginator>
 </div>
 
-
-<a routerLink="/produto-det/000">
-  Incluir novo
-</a>

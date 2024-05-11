@@ -6,27 +6,29 @@ import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 
 
-export interface produtoData{
+export interface movimentacaoData{
 
-  id_produto: number;
-  descricao: string;
-  cor: string;
-  tamanho: string;
-  tipo_material: string;
-  preco_venda: number;
-  quantidade_atual: number;
+  id_movimentacao: number;
+  data_hora: string;
+  id_produtor: number;
+  tipo_mov: string;
+  quantidade: number;
+  num_pedido: number;
+  id_cliente: number;
+  obs: string;
 }
 
-let PRODUTO_DATA: produtoData[]=[];
-@Component({
-  selector: 'app-produto-list',
-  templateUrl: './produto-list.component.html',
-  styleUrl: './produto-list.component.css',
+let MOVIMENTACAO_DATA: movimentacaoData[]=[];
 
+@Component({
+  selector: 'app-movimentacao-cs',
+  templateUrl: './movimentacao-cs.component.html',
+  styleUrl: './movimentacao-cs.component.css'
 })
-export class ProdutoListComponent implements AfterViewInit, OnInit {
+export class MovimentacaoCsComponent implements AfterViewInit, OnInit {
+
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
-  public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual','actions'];
+  public displayColumn: string[] = ['id_movimentacao','data_hora','id_produtor','tipo_mov','quantidade','num_pedido','id_cliente','obs','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
@@ -43,11 +45,11 @@ export class ProdutoListComponent implements AfterViewInit, OnInit {
   }
    // Obtenção dos Dados da API
    fetchData(): void {
-    this.http.get(ENV.REST_API_URL+'/produto').subscribe(
+    this.http.get(ENV.REST_API_URL+'/movimentacao').subscribe(
         (response: any) =>
           {
-            PRODUTO_DATA = response;
-            this.dataSource = new MatTableDataSource(PRODUTO_DATA);
+            MOVIMENTACAO_DATA = response;
+            this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
             setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;

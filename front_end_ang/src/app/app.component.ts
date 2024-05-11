@@ -9,9 +9,10 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent {
   title = 'Controle de Estoque';
+  logado;
 
   constructor(private authenticationService: AuthenticationService) { 
-
+    this.logado = this.ShowDeslogarBtn();
   }
 
   deslogar(){

@@ -26,6 +26,7 @@ import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSelectModule }  from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
 
 @NgModule({
@@ -41,6 +42,7 @@ import { ClientInclusionComponent } from './client-inclusion/client-inclusion.co
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
+    ,ProdutoSaidaComponent, MovimentacaoCsComponent
     ,ProdutoSaidaComponent, ClientInclusionComponent
 
   ],

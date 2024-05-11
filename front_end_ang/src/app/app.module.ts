@@ -28,6 +28,7 @@ import { MatSelectModule }  from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 
+
 @NgModule({
   declarations: [
     HomeComponent
@@ -41,7 +42,9 @@ import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.compo
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
-    ,ProdutoSaidaComponent, MovimentacaoCsComponent
+    ,ProdutoSaidaComponent
+    ,MovimentacaoCsComponent
+
 
   ],
   imports: [
@@ -60,10 +63,12 @@ import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.compo
     ,MatSort
     ,MatSelectModule
     ,MatButtonModule
+
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+
   ],
   bootstrap: [AppComponent]
 })

@@ -82,7 +82,7 @@
             <button mat-stroked-button class="m-2" color="accent">
               Editar
             </button>
-           <button mat-stroked-button class="m-2"  color="warn">
+           <button mat-stroked-button class="m-2" (click)="excluirItem(row.id_produto)"  color="warn">
               Excluir
             </button>
             </div>
@@ -98,10 +98,11 @@
     <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
   </table>
 <!--Paginador-->
-  <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" ></mat-paginator>
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" ></mat-paginator>
 </div>
 
-
+<button mat-stroked-button class="m-2" color="accent">
 <a routerLink="/produto-det/000">
   Incluir novo
 </a>
+</button>

@@ -139,7 +139,7 @@ vai ter uma coluna com icone para excluir o registro atual</p>
                 <button mat-stroked-button class="m-2" color="accent">
                   Editar
                 </button>
-               <button mat-stroked-button class="m-2"  color="warn">
+                <button mat-stroked-button class="m-2" (click)="excluirCliente(row.id_cliente)"  color="warn">
                   Excluir
                 </button>
                 </div>
@@ -158,7 +158,8 @@ vai ter uma coluna com icone para excluir o registro atual</p>
   <mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" ></mat-paginator>
 </div>
 
-
+<button mat-stroked-button class="m-2" color="accent">
 <a routerLink="/cliente-det/000">
   Incluir novo
 </a>
+</button>

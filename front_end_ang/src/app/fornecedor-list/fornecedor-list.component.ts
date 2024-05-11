@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {MatPaginator,} from '@angular/material/paginator';
 import {MatSort, } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
-
+import { FornecedorService } from '../services/fornecedor.service';
 export interface fornecedorData{
   id_fornecedor: number;
   nome_fornecedor: string;
@@ -27,20 +27,17 @@ let FORNECEDOR_DATA: fornecedorData[]=[];
   templateUrl: './fornecedor-list.component.html',
   styleUrl: './fornecedor-list.component.css'
 })
-export class FornecedorListComponent implements AfterViewInit, OnInit {
+export class FornecedorListComponent implements OnInit {
   dataSource : any;
   public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','endereco','numero','complemento','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient,){}
+  constructor(private http: HttpClient, private fornecedorService: FornecedorService){}
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
+
 
   }
   // Obtenção dos Dados da API
@@ -50,23 +47,27 @@ export class FornecedorListComponent implements AfterViewInit, OnInit {
           {
             FORNECEDOR_DATA = response;
             this.dataSource = new MatTableDataSource(FORNECEDOR_DATA);
-            setTimeout(() => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+           /* setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
-            })
+            })*/
 
           }
     )
   }
 
-  //Paginador
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
+  //Deletar cadastro
+  excluirFornecedor(id_fornecedor: number) {
+    if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
+      this.fornecedorService.excluirFornecedor(id_fornecedor).subscribe(() => {
+        this.fetchData(); // Recarregar os itens após a exclusão
+      });
+    }
   }
-  //filtro
+
+   //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

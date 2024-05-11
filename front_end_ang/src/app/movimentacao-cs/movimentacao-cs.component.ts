@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
+import { MovimentacaoService } from '../services/movimentacao.service';
 
 
 export interface movimentacaoData{
@@ -25,14 +26,14 @@ let MOVIMENTACAO_DATA: movimentacaoData[]=[];
   templateUrl: './movimentacao-cs.component.html',
   styleUrl: './movimentacao-cs.component.css'
 })
-export class MovimentacaoCsComponent implements AfterViewInit, OnInit {
+export class MovimentacaoCsComponent implements OnInit {
 
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   public displayColumn: string[] = ['id_movimentacao','data_hora','id_produtor','tipo_mov','quantidade','num_pedido','id_cliente','obs','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient,){}
+  constructor(private http: HttpClient, private movimentacaoService: MovimentacaoService){}
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
@@ -50,21 +51,25 @@ export class MovimentacaoCsComponent implements AfterViewInit, OnInit {
           {
             MOVIMENTACAO_DATA = response;
             this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
-            setTimeout(() => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          /*  setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
-            })
+            })*/
 
           }
     )
   }
 
-  //Paginador
-  ngAfterViewInit() {
-   this.dataSource.sort = this.sort;
-   console.log(this.sort)
-   this.dataSource.paginator = this.paginator;
-   console.log("paginador",this.paginator);
+  //Deletar Movimentação
+  excluirMovimentacao(id_movimentacao: number) {
+    if (confirm('Tem certeza que deseja excluir esta Movimentação?')) {
+        this.movimentacaoService.excluirMovimentacao(id_movimentacao).subscribe(() => {
+        this.fetchData(); // Recarregar os itens após a exclusão
+
+      });
+    }
   }
 
   //filtro

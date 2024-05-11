@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
+import { ProdutoService } from '../services/produto.service';
+
+
 
 
 export interface produtoData{
@@ -24,13 +27,15 @@ let PRODUTO_DATA: produtoData[]=[];
   styleUrl: './produto-list.component.css',
 
 })
-export class ProdutoListComponent implements AfterViewInit, OnInit {
+export class ProdutoListComponent implements OnInit {
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient,){}
+
+
+  constructor(private http: HttpClient, private produtoService: ProdutoService){}
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
@@ -48,22 +53,28 @@ export class ProdutoListComponent implements AfterViewInit, OnInit {
           {
             PRODUTO_DATA = response;
             this.dataSource = new MatTableDataSource(PRODUTO_DATA);
-            setTimeout(() => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+           /* setTimeout(() => {
               console.log(this.sort) //not undefined
               this.dataSource.sort = this.sort;
-            })
+            })*/
 
           }
     )
   }
 
-  //Paginador
-  ngAfterViewInit() {
-   this.dataSource.sort = this.sort;
-   console.log(this.sort)
-   this.dataSource.paginator = this.paginator;
-   console.log("paginador",this.paginator);
+  //Deletar cadastro
+  excluirItem(id_produto: number) {
+    if (confirm('Tem certeza que deseja excluir este item?')) {
+      this.produtoService.excluirItem(id_produto).subscribe(() => {
+        this.fetchData(); // Recarregar os itens após a exclusão
+      });
+    }
   }
+
+
+
 
   //filtro
   applyFilter(event: Event) {

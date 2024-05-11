@@ -18,7 +18,7 @@ export class MovimentacaoService {
   constructor(private http: HttpClient
               )
   {
-    
+
   }
 
   /* obter uma movimentacao pelo id */
@@ -33,6 +33,10 @@ export class MovimentacaoService {
   createMovimentacao_http(mov: MOVIMENTACAO): Observable<any> {
     return this.http.post(ENV.REST_API_URL+'/movimentacao/create', JSON.stringify(mov), this.httpOptions).pipe(
     );
+  }
+  excluirMovimentacao(id: number) {
+    return this.http.delete(ENV.REST_API_URL + '/movimentacao/'+id);
+
   }
 
 }

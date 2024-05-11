@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {MatPaginator,} from '@angular/material/paginator';
 import {MatSort, } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
+import { ClienteService } from '../services/cliente.service';
 
 
 export interface clienteData{
@@ -38,7 +39,7 @@ export class ClienteListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient,){}
+  constructor(private http: HttpClient, private clienteService: ClienteService){}
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
@@ -51,7 +52,7 @@ export class ClienteListComponent implements OnInit {
             CLIENT_DATA = response;
             this.dataSource = new MatTableDataSource(CLIENT_DATA);
             this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;       
+            this.dataSource.paginator = this.paginator;
             // setTimeout(() => {
             //   console.log(this.sort) //not undefined
             //   this.dataSource.sort = this.sort;
@@ -59,8 +60,17 @@ export class ClienteListComponent implements OnInit {
 
           }
     )
+ }
 
+   //Deletar cadastro
+   excluirCliente(id_cliente: number) {
+    if (confirm('Tem certeza que deseja excluir este cliente?')) {
+      this.clienteService.excluirCliente(id_cliente).subscribe(() => {
+        this.fetchData(); // Recarregar os itens após a exclusão
+      });
+    }
   }
+
   //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

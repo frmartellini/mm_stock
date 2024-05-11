@@ -18,7 +18,8 @@ export class ClienteDetComponent {
     endereco: new FormControl(''),
     numero: new FormControl(''),
     complemento: new FormControl(''),
-    cidade_uf: new FormControl(''),
+    cidade: new FormControl(''),
+    uf: new FormControl(''),
   });
 
 }

@@ -22,5 +22,11 @@ export class ClienteDetComponent {
     uf: new FormControl(''),
   });
 
+  public getInputs() {  
+    //return this.cliente_form.value;
+    console.log(this.cliente_form.value);
+  }
+
+
 }
 ///nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf

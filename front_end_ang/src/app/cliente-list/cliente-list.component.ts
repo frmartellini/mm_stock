@@ -32,7 +32,7 @@ let CLIENT_DATA: clienteData[] = [];
   styleUrl: './cliente-list.component.css',
 
 })
-export class ClienteListComponent implements AfterViewInit, OnInit {
+export class ClienteListComponent implements OnInit {
   public dataSource : any;
   public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','endereco','numero','complemento','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -42,18 +42,6 @@ export class ClienteListComponent implements AfterViewInit, OnInit {
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
-
-  }
-  ngOnChanges(){
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
-
   }
   // Obtenção dos Dados da API
     fetchData(): void {
@@ -62,22 +50,15 @@ export class ClienteListComponent implements AfterViewInit, OnInit {
           {
             CLIENT_DATA = response;
             this.dataSource = new MatTableDataSource(CLIENT_DATA);
-            setTimeout(() => {
-              console.log(this.sort) //not undefined
-              this.dataSource.sort = this.sort;
-            })
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;       
+            // setTimeout(() => {
+            //   console.log(this.sort) //not undefined
+            //   this.dataSource.sort = this.sort;
+            // })
 
           }
     )
-
-  }
-  //Paginador
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
-
 
   }
   //filtro

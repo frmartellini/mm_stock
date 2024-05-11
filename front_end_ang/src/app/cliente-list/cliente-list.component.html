@@ -129,7 +129,7 @@ vai ter uma coluna com icone para excluir o registro atual</p>
                 {{ element.uf }}
             </td>
        </ng-container>
-<!-- Botões Editar e Exlcuir-->
+<!-- Botões Editar e Excluir-->
         <ng-container  matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
                   Ações
@@ -155,7 +155,7 @@ vai ter uma coluna com icone para excluir o registro atual</p>
     <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
   </table>
 <!--Paginador-->
-  <mat-paginator [pageSizeOptions]="[1, 5, 10, 25]" ></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" ></mat-paginator>
 </div>
 
 

@@ -113,7 +113,11 @@ app.put('/produto/:id', (req, res) => {
 
   db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(500).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro alterando produto: ' + err);
+      }
       return;
     }
     db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
@@ -132,7 +136,11 @@ app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
-      res.status(500).send('Error deleting post ' + err);
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(500).send('Erro deletando produto: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro deletando produto: ' + err);
+      }
       return;
     }
     res.status(200).json({ msg: 'Post deleted successfully' });
@@ -202,7 +210,11 @@ app.put('/cliente/:id', (req, res) => {
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf, clienteId];
     db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post' + err);
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(500).send('Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro alterando cliente: ' + err);
+      }
       return;
     }
     db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
@@ -221,7 +233,11 @@ app.delete('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
   db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
-      res.status(500).send('Error deleting post: ' + err);
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(500).send('Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro deletando cliente: ' + err);
+      }
       return;
     }
     res.status(200).json({ msg: 'Post deleted successfully' });

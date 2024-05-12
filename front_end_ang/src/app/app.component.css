@@ -1,5 +1,5 @@
 
-nav a {
+/* nav a {
   padding-top: 3px;
   padding-bottom: 3px;
   padding-left: 8px;
@@ -12,7 +12,7 @@ nav a {
   background-color: #e8e8e8;
   color: #3d3d3d;
   border-radius: 4px;
-}
+} */
 
 :host {
   
@@ -53,27 +53,36 @@ main {
   position: relative;
 
 
-  /* apenas para testes */
+  /* apenas para testes
   border-color: red;
   border-width: 2px;
-  border-style: solid;
+  border-style: solid; */
 }
 
+/* #Header {
 
-#Header {
-
-  /* apenas para testes */
+  apenas para testes
   border-color: blue;
   border-width: 2px;
   border-style: solid;
-}
+} */
 
 #Footer {
 
-/* apenas para testes */
+  background-color: #333;
+/* apenas para testes
 border-color: lime;
 border-width: 2px;
-border-style: solid;
+border-s
+
+tyle: solid; */
+}
+
+#Footer p {
+
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
 }
 
 .content {
@@ -92,7 +101,70 @@ border-style: solid;
   margin-top: 1.5rem;
 }
 
+/* estilo da barra de navegação */
 
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+.logo img {
+  width: 40px;
+  height: auto;
+}
+
+.admin-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.admin-nav ul li {
+  margin-right: 20px;
+}
+
+.admin-nav ul li:last-child {
+  margin-right: 0;
+}
+
+.admin-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.admin-actions button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Estilo dos links quando estão ativos */
+.admin-nav ul li a.active {
+  color: #007bff; /* Azul */
+}
+
+/* Animação de transição */
+.admin-nav ul li a {
+  transition: color 0.3s ease;
+}
+
+/* Estilos para tornar o menu responsivo */
+@media screen and (max-width: 768px) {
+  .admin-nav {
+    display: none;
+  }
+
+  .admin-actions button {
+    margin-left: 0;
+  }
+}
 
 
 /*

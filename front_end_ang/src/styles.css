@@ -54,3 +54,13 @@ purple-green.css
   height: 40px;
   
 }
+
+/* Estilo dos links quando estão ativos */
+.admin-nav ul li a.active {
+  color: #007bff; /* Azul */
+}
+
+/* Animação de transição */
+.admin-nav ul li a {
+  transition: color 0.3s ease;
+}

@@ -7,20 +7,21 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<header id="Header" >
+<!-- <header id="Header">
 
-  <div *ngIf="logado" id="LogoutDiv" class="float-end text-center LogoutDiv" >
-     <button name="DeslogarBtn" id="DeslogarBtn" (click)="deslogar()" class="btn"><i class="bi bi-box-arrow-right" style="font-size: 18px;"></i></button>
+  <div *ngIf="logado" id="LogoutDiv" class="float-end text-center LogoutDiv">
+    <button name="DeslogarBtn" id="DeslogarBtn" (click)="deslogar()" class="btn"><i class="bi bi-box-arrow-right"
+        style="font-size: 18px;"></i></button>
   </div>
 
-  <div *ngIf="logado" id="ConfigDiv" class="float-end text-center ConfigDiv" >
+  <div *ngIf="logado" id="ConfigDiv" class="float-end text-center ConfigDiv">
     <a routerLink="/config">
-      <button name="ConfigBtn" id="ConfigBtn" class="btn"><i class="bi bi-gear" style="font-size: 18px;" ></i></button>
+      <button name="ConfigBtn" id="ConfigBtn" class="btn"><i class="bi bi-gear" style="font-size: 18px;"></i></button>
     </a>
- </div>
+  </div>
 
- <nav *ngIf="logado" navbar navbar-expand-md navbar-dark fixed-top bg-dark>
-    <a routerLink="/home"><img src="../assets/images/logo-home-small.jpg" alt="logo do sistema"   ></a>
+  <nav *ngIf="logado" navbar navbar-expand-md navbar-dark fixed-top bg-dark>
+    <a routerLink="/home"><img src="../assets/images/logo-home-small.jpg" alt="logo do sistema"></a>
     <a routerLink="/cliente-list">Cadastro de Clientes</a>
     <a routerLink="/fornecedor-list">Cadastro de Fornecedores</a>
     <a routerLink="/produto-list">Cadastro de Produtos</a>
@@ -32,22 +33,54 @@
 
   </nav>
 
+</header> -->
+
+<header *ngIf="menu" class="admin-header">
+  <a routerLink="/home">
+    <div class="logo">
+      <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
+      <img src="../assets/images/logo-mm-stock.jpg" alt="Logo">
+    </div>
+  </a>
+  <nav class="admin-nav">
+    <ul>
+      <li><a routerLink="/cliente-list" ng-click="setActive('cliente-list')" ng-class="{ 'active': activeTab === 'cliente-list' }">Cadastro de Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" ng-click="setActive('fornecedor-list')" ng-class="{ 'active': activeTab === 'fornecedor-list' }">Cadastro de Fornecedores</a></li>
+      <li><a routerLink="/produto-list" ng-click="setActive('produto-list')" ng-class="{ 'active': activeTab === 'produto-list' }">Cadastro de Produtos</a></li>
+
+      <li><a routerLink="/produto-entrada" ng-click="setActive('produto-entrada')" ng-class="{ 'active': activeTab === 'produto-entrada' }">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" ng-click="setActive('produto-saida')" ng-class="{ 'active': activeTab === 'produto-saida' }">Saída de Produto</a></li>
+
+      <li><a routerLink="/movimentacao-cs" ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'movimentacao-cs' }">Consulta de Movimentação do Estoque</a></li>
+    </ul>
+  </nav>
+  <div class="admin-actions">
+    <button mat-icon-button (click)="deslogar()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="/config">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
 </header>
+
 
 <main id="Main" role="main" class="main">
 
   <div id="ContentDiv" class="ContentDivClass">
 
-      <router-outlet />
+    <router-outlet (activate)="showMenu($event)"/>
 
   </div>
 
 </main>
 
 <footer id="Footer" class="footer">
-  <div class="container">
-    <span class="text-muted">conteudo do rodape</span>
-  </div>
+  <p class="p">&copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</p>
+  <!-- <div class="container">
+    
+    <span class="text-muted">© 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</span>
+  </div> -->
 </footer>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
@@ -57,6 +90,3 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-

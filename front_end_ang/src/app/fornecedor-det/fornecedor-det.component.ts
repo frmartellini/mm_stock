@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { FornecedorService } from '../services/fornecedor.service';
+
 
 @Component({
   selector: 'app-fornecedor-det',
@@ -7,6 +9,8 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrl: './fornecedor-det.component.css'
 })
 export class FornecedorDetComponent {
+
+  private readonly fornecedoresApiService = inject(FornecedorService)
 
   public fornecedor_form: FormGroup = new FormGroup({
     nome_fornecedor: new FormControl(''),
@@ -22,9 +26,24 @@ export class FornecedorDetComponent {
     uf: new FormControl(''),
   });
 
+  public getInputs() {  
+    //return this.cliente_form.value;
+    console.log(this.fornecedor_form.value);
+  }
+
+  public postFornecedor():void {
+    const fornecedor = this.fornecedor_form.value;
+    this.fornecedoresApiService.criarNovoFornecedor(fornecedor).subscribe({
+      next: (response) => console.log(response),
+      //error: (err) => console.log(err)
+    });
+    //this.cliente_service.criarNovoCliente(this.cliente_form.value).subscribe();
+    //console.log(this.cliente_form.value);
+  }
+
 }
 
 
 
 
-//nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf }
+

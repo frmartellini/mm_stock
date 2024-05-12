@@ -5,6 +5,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PRODUTO } from '../PRODUTO';
 import { ENV } from '../env';
 
+
+interface Iproduto {
+  nome_produto: string;
+  descricao: string;
+  preco: string;
+  quantidade: string;
+  fornecedor: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,5 +39,9 @@ export class ProdutoService {
 
   excluirItem(id_produto: number) {
     return this.http.delete(ENV.REST_API_URL + '/produto/'+id_produto);
+  }
+
+  public criarNovoProduto(produto: Iproduto): Observable<any> {
+    return this.http.post<any>(ENV.REST_API_URL + '/produto/create', produto, this.httpOptions);
   }
 }

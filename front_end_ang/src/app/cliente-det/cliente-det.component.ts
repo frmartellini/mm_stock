@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ClienteService } from '../services/cliente.service';
+import { response } from 'express';
 
 @Component({
   selector: 'app-cliente-det',
@@ -7,6 +9,8 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrl: './cliente-det.component.css'
 })
 export class ClienteDetComponent {
+
+  private readonly clientsApiService = inject(ClienteService)
 
   public cliente_form: FormGroup = new FormGroup({
     nome_completo: new FormControl(''),
@@ -26,7 +30,15 @@ export class ClienteDetComponent {
     //return this.cliente_form.value;
     console.log(this.cliente_form.value);
   }
-
+  public postCliente():void {
+    const cliente = this.cliente_form.value;
+    this.clientsApiService.criarNovoCliente(cliente).subscribe({
+      next: (response) => console.log(response),
+      //error: (err) => console.log(err)
+    });
+    //this.cliente_service.criarNovoCliente(this.cliente_form.value).subscribe();
+    //console.log(this.cliente_form.value);
+  }
 
 }
 ///nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf

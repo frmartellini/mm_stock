@@ -3,8 +3,8 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -24,8 +24,9 @@ import { MatTableModule } from '@angular/material/table';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MatSelectModule }  from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
 
@@ -49,21 +50,21 @@ import { ClientInclusionComponent } from './client-inclusion/client-inclusion.co
   ],
   imports: [
     BrowserModule
-    ,FormsModule
-    ,ReactiveFormsModule
-    ,AppRoutingModule
-    ,HttpClientModule
-    ,MatSortModule
-    ,MatInputModule
-    ,MatFormFieldModule
-    ,MatPaginatorModule
-    ,MatTableModule
-    ,ToastrModule.forRoot()
-    ,BrowserAnimationsModule
-    ,MatSort
-    ,MatSelectModule
-    ,MatButtonModule
-
+    , FormsModule
+    , ReactiveFormsModule
+    , AppRoutingModule
+    , HttpClientModule
+    , MatSortModule
+    , MatInputModule
+    , MatIconModule
+    , MatFormFieldModule
+    , MatPaginatorModule
+    , MatTableModule
+    , ToastrModule.forRoot()
+    , BrowserAnimationsModule
+    , MatSort
+    , MatSelectModule
+    , MatButtonModule
   ],
   providers: [
     provideClientHydration(),

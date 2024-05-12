@@ -57,7 +57,7 @@ app.use(cors());
 app.get('/produto', (req, res) => {
   db.query('SELECT * FROM produto', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;
     }
     res.json(results);
@@ -72,19 +72,19 @@ app.post('/produto/create', (req, res) => {
   const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual];
   db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro criando produto: ' + err);
       return;
     }
     const postId = result.insertId;
     db.query('SELECT * FROM produto WHERE id_produto = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando produto criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
     });
   });
-  console.log('post executado, produto criado com sucesso!');
+  console.log('post executado, produto criado com sucesso! ' + err);
 });
   
 /* Get a specific post */
@@ -92,11 +92,11 @@ app.get('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando produto: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Produto não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -114,7 +114,7 @@ app.put('/produto/:id', (req, res) => {
   db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(500).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação de produto.');
       } else {
         res.status(500).send('Erro alterando produto: ' + err);
       }
@@ -122,7 +122,7 @@ app.put('/produto/:id', (req, res) => {
     }
     db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando o produto alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -137,13 +137,13 @@ app.delete('/produto/:id', (req, res) => {
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(500).send('Erro deletando produto: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro deletando produto: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
       } else {
         res.status(500).send('Erro deletando produto: ' + err);
       }
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Produto deletado com sucesso' });
   });
   console.log('delete /produto/' + produtoId + ' executado. Produto deletado com sucesso!');
 });
@@ -155,7 +155,7 @@ app.delete('/produto/:id', (req, res) => {
 app.get('/cliente', (req, res) => {
   db.query('SELECT * FROM cliente', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro recuperando clientes: ' + err);
       return;
     }
     res.json(results);
@@ -170,13 +170,13 @@ app.post('/cliente/create', (req, res) => {
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post' + err);
+      res.status(500).send('Erro criando cliente: ' + err);
       return;
     }
     const postId = result.insertId;
     db.query('SELECT * FROM cliente WHERE id_cliente = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando cliente criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
@@ -190,11 +190,11 @@ app.get('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
   db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando cliente: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Cliente não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -211,7 +211,7 @@ app.put('/cliente/:id', (req, res) => {
     db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(500).send('Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.');
       } else {
         res.status(500).send('Erro alterando cliente: ' + err);
       }
@@ -219,7 +219,7 @@ app.put('/cliente/:id', (req, res) => {
     }
     db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando cliente alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -234,13 +234,13 @@ app.delete('/cliente/:id', (req, res) => {
   db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(500).send('Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
       } else {
         res.status(500).send('Erro deletando cliente: ' + err);
       }
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Cliente deletado com sucesso' });
   });
   console.log('delete /cliente/' + clienteId + ' executado. Cliente deletado com sucesso!');
 });
@@ -252,7 +252,7 @@ app.delete('/cliente/:id', (req, res) => {
 app.get('/fornecedor', (req, res) => {
   db.query('SELECT * FROM fornecedor', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro retornando fornecedores: ' + err);
       return;
     }
     res.json(results);
@@ -267,13 +267,13 @@ app.post('/fornecedor/create', (req, res) => {
     const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro criando fornecedor: ' + err);
       return;
     }
     const postId = result.insertId;
     db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando fornecedor criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
@@ -287,11 +287,11 @@ app.get('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
   db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando fornecedor: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Fornecedor não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -307,12 +307,12 @@ app.put('/fornecedor/:id', (req, res) => {
   const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf, fornecedorId];
     db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      res.status(500).send('Erro alterando fornecedor: ' + err);
       return;
     }
     db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando fornecedor alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -326,10 +326,10 @@ app.delete('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
   db.query('DELETE FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Erro deletando fornecedor: ' + err);
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Fornecedor deletado com sucesso' });
   });
   console.log('delete /fornecedor/' + fornecedorId + ' executado. Fornecedor deletado com sucesso!');
 });
@@ -341,7 +341,7 @@ app.delete('/fornecedor/:id', (req, res) => {
 app.get('/movimentacao', (req, res) => {
   db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) INNER JOIN produto p ON (m.id_produto = p.id_produto)', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts' + err);
+      res.status(500).send('Erro retornando movimentações: ' + err);
       return;
     }
     res.json(results);
@@ -373,13 +373,13 @@ app.post('/movimentacao/create', async (req, res) => {
     // Criar a movimentação
     db.query(query, values, (err, result) => {
       if (err) {
-        res.status(500).send('Error creating post');
+        res.status(500).send('Erro criando movimentação: ' + err);
         return;
       }
       const postId = result.insertId;
       db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', postId, (err, result) => {
         if (err) {
-          res.status(500).send('Error fetching created post');
+          res.status(500).send('Erro recuperando movimentação criada: ' + err);
           return;
         }
         res.status(201).json(result[0]);
@@ -387,7 +387,7 @@ app.post('/movimentacao/create', async (req, res) => {
       console.log('Post executado. Movimentação criada com sucesso!');
     });
   } catch (error) {
-    res.status(400).send('Error creating post, invalid quantity');
+    res.status(400).send('Erro criando movimentação, quantidade inválida!');
     return;
   }
 });
@@ -397,11 +397,11 @@ app.get('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
   db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando movimentação: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Movimentação não encontrada: ' + err);
       return;
     }
     res.json(result[0]);
@@ -417,12 +417,12 @@ app.put('/movimentacao/:id', (req, res) => {
   const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
   db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post' + err);
+      res.status(500).send('Erro alterando movimentação: ' + err);
       return;
     }
     db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando movimentação alterada: ' + err);
         return;
       }
       res.json(result[0]);
@@ -436,10 +436,10 @@ app.delete('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
   db.query('DELETE FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Erro deletando movimentação: ' + err);
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Movimentação deletada com sucesso' });
   });
   console.log('delete /movimentacao/' + movimentacaoId + ' executado. Movimentação deletada com sucesso!');
 });
@@ -451,8 +451,7 @@ app.delete('/movimentacao/:id', (req, res) => {
 app.get('/produtos/names', (req, res) => {
   db.query('SELECT id_produto, descricao FROM produto', (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
-      return;
+      res.status(500).send('Erro recuperando nomes dos produtos');
     }
     res.json(result);
   });
@@ -464,7 +463,7 @@ app.get('/produtos/names', (req, res) => {
 app.get('/clientes/names', (req, res) => {
   db.query('SELECT id_cliente, nome_completo FROM cliente', (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando nomes dos clientes');
       return;
     }
     res.json(result);
@@ -596,7 +595,7 @@ function obterQuantidadeEmEstoque(id_produto) {
 app.get('/config', (req, res) => {
   db.query('SELECT * FROM config', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro recuperando configurações: ' + err);
       return;
     }
     res.json(results);

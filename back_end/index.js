@@ -132,7 +132,7 @@ app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Error deleting post ' + err);
       return;
     }
     res.status(200).json({ msg: 'Post deleted successfully' });
@@ -221,7 +221,7 @@ app.delete('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
   db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Error deleting post: ' + err);
       return;
     }
     res.status(200).json({ msg: 'Post deleted successfully' });

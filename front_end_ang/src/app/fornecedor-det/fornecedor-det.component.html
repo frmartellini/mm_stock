@@ -1,5 +1,82 @@
-<p>fornecedor-det works!</p>
+<h2>Incluir Fornecedor</h2>
 
-<a routerLink="/fornecedor-det/000">
-  Incluir novo
-</a>
+<form [formGroup]="fornecedor_form">
+  <div class="form-group col-md-6 mb-3  ">
+    <label for="Cad_Fornecedor_Nome ">Nome do Fornecedor</label>
+    <input formControlName="nome_fornecedor" type="text" class="form-control" id="Cad_Fornecedor_Nome">
+  </div>
+  <div class="form-group col-md-6 mb-3 ">
+    <label for="Cad_Fornecedor_nome_responsavel">Nome do Responsável</label>
+    <input formControlName="nome_responsavel" type="text" class="form-control" id="Cad_Fornecedor_nome_responsavel">
+  </div>
+  <div class="form-group col-md-3 mb-3 ">
+    <label for="Cad_Fornecedor_contato_telefonico">Telefone</label>
+    <input formControlName="contato_telefonico" type="text" class="form-control" id="Cad_Fornecedor_contato_telefonico">
+  </div>
+  <div class="form-group col-md-6 mb-3  ">
+    <label for="Cad_Fornecedor_redes_sociais">Redes Sociais</label>
+    <input formControlName="redes_sociais" type="text" class="form-control" id="Cad_Fornecedor_redes_sociais">
+  </div>    
+  <div class="form-group col-md-3 mb-3  ">
+    <label for="Cad_Fornecedor_CNPJ">CNPJ</label>
+    <input formControlName="materiais_fornecidos" type="text" class="form-control" id="Cad_Fornecedor_materiais_fornecidos"> 
+  </div>                                 
+  <div class="form-group col-md-3 mb-3 offset-md-0">
+      <label for="Cad_Fornecedor_cidade">Cidade</label>
+      <input formControlName="cidade" type="text" class="form-control" id="Cad_fornecedor_cidade">
+  </div>                
+  <div class="form-group col-md-1 mb-3  ">
+      <label for="Cad_fornecedor_Estado">Estado</label>
+  <select formControlName="uf" id="Cad_fornecedor_Estado" class="form-control">
+      <option selected>...</option>
+      <option>Acre (AC)</option>
+      <option>Alagoas (AL)</option>
+      <option>Amapá (AP)</option>
+      <option>Amazonas (AM)</option>
+      <option>Bahia (BA)</option>
+      <option>Ceará (CE)</option>
+      <option>Distrito Federal (DF)</option>
+      <option>Espírito Santo (ES)</option>
+      <option>Goiás (GO)</option>
+      <option>Maranhão (MA)</option>
+      <option>Mato Grosso (MT)</option>
+      <option>Mato Grosso do Sul (MS)</option>
+      <option>Minas Gerais (MG)</option>
+      <option>Pará (PA)</option>
+      <option>Paraíba (PB)</option>
+      <option>Paraná (PR)</option>
+      <option>Pernambuco (PE)</option>
+      <option>Piauí (PI)</option>
+      <option>Rio de Janeiro (RJ)</option>
+      <option>Rio Grande do Norte (RN)</option>
+      <option>Rio Grande do Sul (RS)</option>
+      <option>Rondônia (RO)</option>
+      <option>Roraima (RR)</option>
+      <option>Santa Catarina (SC)</option>
+      <option>São Paulo (SP)</option>
+      <option>Sergipe (SE)</option>
+      <option>Tocantins (TO)</option>
+  </select>            
+  </div>
+  <div class="form-group col-md-6 mb-3  ">
+    <label for="Cad_fornecedor_Endereco">Endereço</label>
+    <input formControlName="endereco" type="text" class="form-control" id="Cad_fornecedor_Endereco">
+</div>                  
+<div class="form-group col-md-3 mb-3  ">
+    <label for="Cad_fornecedor_Numero">Numero</label>
+    <input formControlName="numero" type="text" class="form-control" id="Cad_fornecedor_Numero">
+</div>
+<div class="form-group col-md-3 mb-3 offset-md-0">
+    <label for="Cad_fornecedor_Complemento">Complemento</label>
+    <input formControlName="complemento" type="text" class="form-control" id="Cad_fornecedor_Complemento">
+</div>    
+<div>
+
+    
+    <button  class="btn btn-primary " type="submit">
+        <span>Incluir</span>
+    </button>
+</div>
+
+
+</form>

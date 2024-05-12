@@ -6,42 +6,42 @@
     talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
 
 <br />
-<form [formGroup]="cliente_form">
+
   <div class="form-group col-md-6 mb-3  ">
     <label for="Cad_Cliente_Nome ">Nome Completo</label>
-    <input formControlName="nome_completo" type="text" class="form-control" id="Cad_Cliente_Nome">
+    <input type="text" class="form-control" id="Cad_Cliente_Nome">
   </div>
   <div class="form-group col-md-6 mb-3 ">
     <label for="Cad_Cliente_Email">Email</label>
-    <input formControlName="email" type="email" class="form-control" id="Cad_Cliente_Email">
+    <input type="email" class="form-control" id="Cad_Cliente_Email">
   </div>
   <div class="form-group col-md-3 mb-3 ">
     <label for="Cad_Cliente_Telefone">Telefone</label>
-    <input formControlName="telefone" type="text" class="form-control" id="Cad_Cliente_Telefone">
+    <input type="text" class="form-control" id="Cad_Cliente_Telefone">
   </div>
   <div class="form-group col-md-6 mb-3  ">
     <label for="Cad_Cliente_Nome_Loja">Nome da Loja</label>
-    <input formControlName="nome_loja" type="text" class="form-control" id="Cad_Cliente_Nome-Loja">
+    <input type="text" class="form-control" id="Cad_Cliente_Nome-Loja">
   </div>                
     <div class="form-group col-md-3 mb-3  ">
         <label for="Cad_Cliente_CPF">CPF</label>
-        <input formControlName="cpf" type="text" class="form-control" id="Cad_Cliente_CPF">
+        <input type="text" class="form-control" id="Cad_Cliente_CPF">
     </div>
     <div class="form-group col-md-3 mb-3 offset-md-0">
         <label for="Cad_Cliente_CNPJ">CNPJ</label>
-        <input formControlName="cnpj" type="text" class="form-control" id="Cad_Cliente_CNPJ">
+        <input type="text" class="form-control" id="Cad_Cliente_CNPJ">
     </div>                
     <div class="form-group col-md-3 mb-3  ">
         <label for="Cad_Cliente_Tipo">Tipo de Cliente</label>
-        <input formControlName="tipo_cliente" type="text" class="form-control" id="Cad_Cliente_Tipo">
+        <input type="text" class="form-control" id="Cad_Cliente_Tipo">
     </div>                                   
         <div class="form-group col-md-3 mb-3 offset-md-0">
             <label for="Cad_Cliente_Cidade">Cidade</label>
-            <input formControlName="cidade" type="text" class="form-control" id="Cad_Cliente_Cidade">
+            <input type="text" class="form-control" id="Cad_Cliente_Cidade">
         </div>                
         <div class="form-group col-md-1 mb-3  ">
             <label for="Cad_Cliente_Estado">Estado</label>
-        <select formControlName="uf" id="Cad_Cliente_Estado" class="form-control">
+        <select id="Cad_Cliente_Estado" class="form-control">
             <option selected>...</option>
             <option>Acre (AC)</option>
             <option>Alagoas (AL)</option>
@@ -74,22 +74,20 @@
     </div>                                       
     <div class="form-group col-md-6 mb-3  ">
         <label for="Cad_Cliente_Endereco">Endereço</label>
-        <input formControlName="endereco" type="text" class="form-control" id="Cad_Cliente_Endereco">
+        <input type="text" class="form-control" id="Cad_Cliente_Endereco">
     </div>                  
     <div class="form-group col-md-3 mb-3  ">
         <label for="Cad_Cliente_Numero">Numero</label>
-        <input formControlName="numero" type="text" class="form-control" id="Cad_Cliente_Numero">
+        <input type="text" class="form-control" id="Cad_Cliente_Numero">
     </div>
     <div class="form-group col-md-3 mb-3 offset-md-0">
         <label for="Cad_Cliente_Complemento">Complemento</label>
-        <input formControlName="complemento" type="text" class="form-control" id="Cad_Cliente_Complemento">
+        <input type="text" class="form-control" id="Cad_Cliente_Complemento">
     </div>    
     <div>
 
         
-        <button  class="btn btn-primary " type="submit" (click)="getInputs()">
+        <button  class="btn btn-primary " type="submit">
             <span>Incluir</span>
         </button>
     </div>
-
-</form>

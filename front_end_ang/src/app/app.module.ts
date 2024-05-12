@@ -27,6 +27,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatSelectModule }  from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
+import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
 
 
 @NgModule({
@@ -42,9 +43,8 @@ import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.compo
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
-    ,ProdutoSaidaComponent
-    ,MovimentacaoCsComponent
-
+    ,ProdutoSaidaComponent, MovimentacaoCsComponent
+    ,ProdutoSaidaComponent, ClientInclusionComponent
 
   ],
   imports: [

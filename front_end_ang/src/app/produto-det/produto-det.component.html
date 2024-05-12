@@ -1,2 +1,40 @@
-<p>produto-det works!</p>
+<h2>Incluir Produto</h2>
 
+<form [formGroup]="produto_form">
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_descricao">Descrição</label>
+        <input formControlName="descricao" type="text" class="form-control" id="descricao">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_cor">Cor</label>
+        <input formControlName="cor" type="text" class="form-control" id="cor">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_tamanho">Tamanho</label>
+        <input formControlName="tamanho" type="text" class="form-control" id="tamanho">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_tipo_material">Tipo de Material</label>
+        <input formControlName="tipo_material" type="text" class="form-control" id="tipo_material">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_preco_venda">Preço de Venda</label>
+        <input formControlName="preco_venda" type="text" class="form-control" id="preco_venda">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">
+        <label for="Cad_prod_quantidade_atual">Quantidade Atual</label>
+        <input formControlName="quantidade_atual" type="text" class="form-control" id="quantidade_atual">
+    </div>
+    <div class=" form-group col-md-6 mb-3 ">    
+        <button  class="btn btn-primary " type="submit">
+            <span>Incluir</span>
+        </button>
+    </div>
+</form>
+    
+
+
+
+   <!--
+    //descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual
+   --> 

@@ -1,11 +1,10 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { ClienteService } from '../services/cliente.service';
-import { response } from 'express';
 import { clienteData } from '../CLIENTEDATA';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cliente-det',
@@ -24,30 +23,17 @@ export class ClienteDetComponent implements OnInit {
 
   private readonly clientsApiService = inject(ClienteService)
 
-  public cliente_form: FormGroup = new FormGroup({
-    nome_completo: new FormControl(''),
-    email: new FormControl(''),
-    telefone: new FormControl(''),
-    nome_loja: new FormControl(''),
-    cpf: new FormControl(''),
-    cnpj: new FormControl(''),
-    tipo_cliente: new FormControl(''),
-    endereco: new FormControl(''),
-    numero: new FormControl(''),
-    complemento: new FormControl(''),
-    cidade: new FormControl(''),
-    uf: new FormControl(''),
-  });
+  public cliente_form: any;
+
+  public PageTitle: String = "Incluindo ou editando cliente"; 
+  public SubmitButtonText: String = "Confirmar";
 
   constructor(
     private route: ActivatedRoute
     ,private location: Location
     ,private toastr: ToastrService
     ,private router: Router
-    /*,private movservice: MovimentacaoService
-    ,private prodservice: ProdutoService
     ,private formBuilder: FormBuilder
-    */
     )
   {
 
@@ -57,29 +43,87 @@ export class ClienteDetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("this.route.snapshot.params[mode]=" +this.route.snapshot.params["mode"]);
+    this.cliente_form = this.formBuilder.group(
+      {
+        Cad_Cliente_Nome: ['', Validators.required]
+        ,Cad_Cliente_Email: ['', Validators.required]
+        ,Cad_Cliente_Telefone: ['', ]
+        ,Cad_Cliente_Nome_Loja: ['', ]
+        ,Cad_Cliente_Tipo: ['', ]
+        ,Cad_Cliente_CPF: ['', ]
+        ,Cad_Cliente_CNPJ: ['', ]
+        ,Cad_Cliente_Endereco: ['', ]
+        ,Cad_Cliente_Numero: ['', ]
+        ,Cad_Cliente_Complemento: ['', ]
+        ,Cad_Cliente_Cidade: ['', ]
+        ,Cad_Cliente_Estado: ['', ]
+      }
+    ); // this.formBuilder.group
 
+    //console.log("this.route.snapshot.params[mode]=" +this.route.snapshot.params["mode"]);
+
+    // obter os params da url e guardar nas vars do obj desta tela
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     //this.mode = String(this.route.snapshot.params["mode"]); // nao funciona
     this.mode = String(this.route.snapshot.queryParamMap.get('mode'));
     //console.log("this.id=" + this.id);
     //console.log("this.mode inicial=" + this.mode);
-    if ( this.id == 0) {
+    
+    // se o param id recebido nao for um numero, vai forcar que seja 0 para forcar a tela no modo inclusao
+    if ( Number.isNaN(this.id) ) {
+      this.id = 0;
+    }
+
+    // se o id recebido eh 0, entao vai usar a tela no modo inclusao
+    if (this.id == 0) {
       this.mode = "I";
     }
-    else {
+    // se o id for maior que 0
+    else if (this.id > 0) {
       //this.mode = String(this.route.snapshot.params["mode"]);
       if ( (this.mode != "E") && (this.mode != "V") ) {
         this.mode = "V";
       }
     }
 
+    //console.log("this.id final=" + this.id);
     //console.log("this.mode final=" + this.mode);
 
     // carregar os dados do cliente se foi recebido um id na url
     this.getCliente();
 
-  }
+    // desativar os campos se estiver no modo de visualizacao
+    if ( this.IsInViewMode() ) {
+      this.cliente_form.get("Cad_Cliente_Nome")?.disable();
+      this.cliente_form.get("Cad_Cliente_Email")?.disable();
+      this.cliente_form.get("Cad_Cliente_Telefone")?.disable();
+      this.cliente_form.get("Cad_Cliente_Nome_Loja")?.disable();
+      this.cliente_form.get("Cad_Cliente_Tipo")?.disable();
+      this.cliente_form.get("Cad_Cliente_CPF")?.disable();
+      this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
+      this.cliente_form.get("Cad_Cliente_Endereco")?.disable();
+      this.cliente_form.get("Cad_Cliente_Numero")?.disable();
+      this.cliente_form.get("Cad_Cliente_Complemento")?.disable();
+      this.cliente_form.get("Cad_Cliente_Cidade")?.disable();
+      this.cliente_form.get("Cad_Cliente_Estado")?.disable();
+    }
+    else {
+
+      // forcar a execucao desta funcao assim para desativar os dois controles
+      this.on_Cad_Cliente_Tipo_Change("");
+
+      if ( this.GetMode() == "I") {
+        this.SubmitButtonText = "Confirmar Inclusão";
+        this.PageTitle = "Incluindo cliente";
+      }
+      else if ( this.GetMode() == "E") {
+        this.SubmitButtonText = "Confirmar Edição";
+        this.PageTitle = "Editando cliente";
+      }
+
+    }
+
+  } // ngOnInit
 
   // retorna true se estah no modo de visualizacao de um registro
   public IsInViewMode() : boolean {
@@ -94,26 +138,37 @@ export class ClienteDetComponent implements OnInit {
   // obter o dados do cliente conforme o id recebido na url
   getCliente(): void {
     
-    console.log("id=" + this.id);
+    //console.log("id=" + this.id);
 
     if ( this.id ) {
       this.clientsApiService.getCliente_http(this.id)
         .subscribe(cliente => this.cliente = cliente);
+      // &todo& precisa tratar aqui o caso do usuario digitar uma url com um id de cliente que nao existe
+      // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }
   }
 
-  public postCliente():void {
-    const cliente = this.cliente_form.value;
-    this.clientsApiService.criarNovoCliente(cliente).subscribe({
-      next: (response) => console.log(response),
-      //error: (err) => console.log(err)
-    });
-    // &todo& melhorar este tratamento de erro para avisar o usuario
-    
-  }
+  // executado quando o usuario seleciona algum "tipo do cliente" no respectivo select
+  on_Cad_Cliente_Tipo_Change(value :String) {
 
-  //Submit(pFormValues: any): void {
-    Submit(): void {
+    //console.log("on_Cad_Cliente_Tipo_Change - value=" + value);
+
+    // desativar os campos CPF e CNPF
+    this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
+    this.cliente_form.get("Cad_Cliente_CPF")?.disable();
+    // ativar o campo CPF ou CNPJ de acordo com o tipo cliente selecionado pelo usuario
+    if ( value == "Pessoa Física") {
+      this.cliente_form.get("Cad_Cliente_CPF")?.enable();
+    }
+    else if ( value == "Pessoa Jurídica") {
+      this.cliente_form.get("Cad_Cliente_CNPJ")?.enable();
+    }
+
+    return true;
+  } // on_Cad_Cliente_Tipo_Change
+
+  // executado quando o botao type submit eh clicado
+  onSubmit(pFormValues: any): void {
 
     var local_toastr = this.toastr;
 
@@ -121,30 +176,32 @@ export class ClienteDetComponent implements OnInit {
 
     //console.log("post param=" + JSON.stringify(pFormValues));
 
+    // montar a msg que serah exibida se a confirmacao for feita com sucesso
+    var MsgSucesso : string = "";
+    MsgSucesso = this.GetMode() == "I" ? "Cliente incluído com sucesso!" : (this.GetMode() == "E" ? "Cliente alterado com sucesso!" : "");
+
     // funcao executada quando ha sucesso
     function OnSaveSuccess_CallBackFunction() {
 
-      // local_toastr.success('Entrada de produto registrada!' , '', {
-      //   timeOut: 3000
-      //   ,positionClass: 'toast-top-center'
-      // });
-      alert("deu certo");
-      // &todo& revisar e melhorar
-
+      local_toastr.success(MsgSucesso , '', {
+         timeOut: 3000
+         ,enableHtml: true
+         ,positionClass: 'toast-top-center'
+      });
+      
       local_router.navigate(['/cliente-list']);
   
     } // OnSaveSuccess_CallBackFunction
 
     // funcao executada quando ha erro
-    function OnSaveError_CallBackFunction() {
+    function OnSaveError_CallBackFunction(pError : any) {
 
-      // local_toastr.error('Erro ao registrar a entrada de produto!' , '', {
-      //   timeOut: 3000
-      //   ,positionClass: 'toast-top-center'
-      // });
-      alert("deu erro");
-      // &todo& revisar e melhorar
-  
+      local_toastr.error("Erro! <br />" + pError.message + "<br />" + pError.error, '', {
+         disableTimeOut: true
+         ,enableHtml: true
+         ,positionClass: 'toast-top-center'
+      });
+      
     } // OnSaveError_CallBackFunction
 
     //console.log("this.cliente=" + JSON.stringify(this.cliente));
@@ -157,39 +214,29 @@ export class ClienteDetComponent implements OnInit {
 
         if ( this.mode == "I") {
 
-          //this.movimentacao.data_hora = Utils.getCurrentDateTime_forMysql();
-          //this.movimentacao.tipo_mov = "E";
-
           //console.log("this.movimentacao.data_hora=" + this.movimentacao.data_hora);
 
           //console.log("vai executar o this.clientsApiService.postCliente");
 
-          //this.postCliente();
-
-          //const cliente = this.cliente_form.value;
           this.clientsApiService.criarNovoCliente(this.cliente)
             .subscribe({
               //next: (response) => console.log(response),
               next: response => {},
 
               error: error => {
-                OnSaveError_CallBackFunction();
+                OnSaveError_CallBackFunction(error);
               },
 
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
-              //error: (err) => console.log(err)
-            });
+              
+            }); // subscribe
           
-        }
+        } // if
         else if (this.mode == "E") {
 
           //console.log("vai executar o this.clientsApiService.editarCliente");
-
-          // setar os campos que nao pegaram o valro automaticamente nao sei porque
-          this.cliente.tipo_cliente = this.cliente_form.get("tipo_cliente")?.value;
-          this.cliente.uf = this.cliente_form.get("uf")?.value;
 
           this.clientsApiService.editarCliente(this.cliente, this.id)
             .subscribe( {
@@ -197,20 +244,25 @@ export class ClienteDetComponent implements OnInit {
               next: response => {},
 
               error: error => {
-                OnSaveError_CallBackFunction();
+                console.log("error=" + JSON.stringify(error));
+                OnSaveError_CallBackFunction(error);
               },
 
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
     
-            });
+            }); // subscribe
 
-        }
-      }
+        } // else if
+      } // if
 
-    }
+    } // if
 
   } // onSubmit
+
+  voltar(): void {
+    this.location.back();
+  } // voltar()
 
 } // class

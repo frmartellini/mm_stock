@@ -105,7 +105,7 @@
         </div>
       </td>
     </ng-container>
-    
+
 <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
@@ -115,6 +115,6 @@
     <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
   </table>
 <!--Paginador-->
-<mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" ></mat-paginator>
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" ></mat-paginator>
 </div>
 

@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule,MatPaginatorIntl } from '@angular/material/paginator';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -29,6 +29,8 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
+import { CustomPaginator } from './custom-paginator';
+
 
 
 @NgModule({
@@ -44,8 +46,11 @@ import { ClientInclusionComponent } from './client-inclusion/client-inclusion.co
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
-    ,ProdutoSaidaComponent, MovimentacaoCsComponent
-    ,ProdutoSaidaComponent, ClientInclusionComponent
+    ,ProdutoSaidaComponent
+    ,MovimentacaoCsComponent
+    ,ProdutoSaidaComponent
+    ,ClientInclusionComponent
+
 
   ],
   imports: [
@@ -65,10 +70,12 @@ import { ClientInclusionComponent } from './client-inclusion/client-inclusion.co
     , MatSort
     , MatSelectModule
     , MatButtonModule
+
   ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() },
 
   ],
   bootstrap: [AppComponent]

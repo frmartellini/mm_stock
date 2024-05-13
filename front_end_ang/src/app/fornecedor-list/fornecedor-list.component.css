@@ -1,0 +1,11 @@
+.square-button {
+    width: 40px;
+    /* Defina o tamanho desejado para o botão quadrado */
+    height: 40px;
+    /* Defina o tamanho desejado para o botão quadrado */
+}
+
+.divider-cell {
+    border-right: 1px solid #ccc;
+    /* Adiciona uma borda direita */
+}

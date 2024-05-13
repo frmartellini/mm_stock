@@ -1,7 +1,7 @@
 <h2>Incluir Cliente</h2>
 
 <!--&todo&
-    <--!esta tela será usada para ver os detalhes de um cliente, para incluir um novo cliente e para editar um cliente já existente>
+    <--!esta tela será usada para ver os detalhes de um cliente, para incluir um novo cliente e para editar um cliente já existente.
     exibir no titulo "Detalhes do Cliente - Incluindo" ou "Detalhes do Cliente - Editando" conforme o que o usuario estiver fazendo nesta tela
     talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
 
@@ -9,89 +9,91 @@
 <form [formGroup]="cliente_form">
   <div class="form-group col-md-6 mb-3  ">
     <label for="Cad_Cliente_Nome ">Nome Completo</label>
-    <input formControlName="nome_completo" type="text" class="form-control" id="Cad_Cliente_Nome">
+    <input formControlName="nome_completo" type="text" class="form-control" id="Cad_Cliente_Nome" [(ngModel)]="cliente.nome_completo">
   </div>
   <div class="form-group col-md-6 mb-3 ">
     <label for="Cad_Cliente_Email">Email</label>
-    <input formControlName="email" type="email" class="form-control" id="Cad_Cliente_Email">
+    <input formControlName="email" type="email" class="form-control" id="Cad_Cliente_Email" [(ngModel)]="cliente.email">
   </div>
   <div class="form-group col-md-3 mb-3 ">
     <label for="Cad_Cliente_Telefone">Telefone</label>
-    <input formControlName="telefone" type="text" class="form-control" id="Cad_Cliente_Telefone">
+    <input formControlName="telefone" type="text" class="form-control" id="Cad_Cliente_Telefone" [(ngModel)]="cliente.telefone">
   </div>
   <div class="form-group col-md-6 mb-3  ">
     <label for="Cad_Cliente_Nome_Loja">Nome da Loja</label>
-    <input formControlName="nome_loja" type="text" class="form-control" id="Cad_Cliente_Nome-Loja">
+    <input formControlName="nome_loja" type="text" class="form-control" id="Cad_Cliente_Nome-Loja" [(ngModel)]="cliente.nome_loja">
   </div>                
-    <div class="form-group col-md-3 mb-3  ">
-        <label for="Cad_Cliente_CPF">CPF</label>
-        <input formControlName="cpf" type="text" class="form-control" id="Cad_Cliente_CPF">
-    </div>
-    <div class="form-group col-md-3 mb-3 offset-md-0">
-        <label for="Cad_Cliente_CNPJ">CNPJ</label>
-        <input formControlName="cnpj" type="text" class="form-control" id="Cad_Cliente_CNPJ">
-    </div>                
-    <div class="form-group col-md-3 mb-3  ">
-        <label for="Cad_Cliente_Tipo">Tipo de Cliente</label>
-        <input formControlName="tipo_cliente" type="text" class="form-control" id="Cad_Cliente_Tipo">
-    </div>                                   
-        <div class="form-group col-md-3 mb-3 offset-md-0">
-            <label for="Cad_Cliente_Cidade">Cidade</label>
-            <input formControlName="cidade" type="text" class="form-control" id="Cad_Cliente_Cidade">
-        </div>                
-        <div class="form-group col-md-1 mb-3  ">
-            <label for="Cad_Cliente_Estado">Estado</label>
-        <select formControlName="uf" id="Cad_Cliente_Estado" class="form-control">
-            <option>AC</option>
-            <option>AL</option>
-            <option>AP</option>
-            <option>AM</option>
-            <option>BA</option>
-            <option>CE</option>
-            <option>DF</option>
-            <option>ES</option>
-            <option>GO</option>
-            <option>MA</option>
-            <option>MT</option>
-            <option>MS</option>
-            <option>MG</option>
-            <option>PA</option>
-            <option>PB</option>
-            <option>PR</option>
-            <option>PE</option>
-            <option>PI</option>
-            <option>RJ</option>
-            <option>RN</option>
-            <option>RS</option>
-            <option>RO</option>
-            <option>RR</option>
-            <option>SC</option>
-            <option>SP</option>
-            <option>SE</option>
-            <option>TO</option>
-        </select>        
-    </div>                                       
-    <div class="form-group col-md-6 mb-3  ">
-        <label for="Cad_Cliente_Endereco">Endereço</label>
-        <input formControlName="endereco" type="text" class="form-control" id="Cad_Cliente_Endereco">
-    </div>                  
-    <div class="form-group col-md-3 mb-3  ">
-        <label for="Cad_Cliente_Numero">Numero</label>
-        <input formControlName="numero" type="text" class="form-control" id="Cad_Cliente_Numero">
-    </div>
-    <div class="form-group col-md-3 mb-3 offset-md-0">
-        <label for="Cad_Cliente_Complemento">Complemento</label>
-        <input formControlName="complemento" type="text" class="form-control" id="Cad_Cliente_Complemento">
-    </div>    
-<br>
-    <div>
-
-        
-        <button  class="btn btn-primary " type="submit" (click)="postCliente()">
-            <span>Incluir</span>
-        </button>
-    </div>
+  <div class="form-group col-md-3 mb-3  ">
+    <label for="Cad_Cliente_Tipo">Tipo de Cliente</label>
+    <select formControlName="tipo_cliente" id="Cad_Cliente_Tipo" class="form-control"
+            [(value)]="cliente.tipo_cliente" >
+      <option>Pessoa Física</option>
+      <option>Pessoa Jurídica</option>
+    </select> 
+  </div>                                   
+  <div class="form-group col-md-3 mb-3  ">
+      <label for="Cad_Cliente_CPF">CPF</label>
+      <input formControlName="cpf" type="text" class="form-control" id="Cad_Cliente_CPF" [(ngModel)]="cliente.cpf">
+  </div>
+  <div class="form-group col-md-3 mb-3 offset-md-0">
+      <label for="Cad_Cliente_CNPJ">CNPJ</label>
+      <input formControlName="cnpj" type="text" class="form-control" id="Cad_Cliente_CNPJ" [(ngModel)]="cliente.cnpj">
+  </div>                
+  <div class="form-group col-md-3 mb-3 offset-md-0">
+      <label for="Cad_Cliente_Cidade">Cidade</label>
+      <input formControlName="cidade" type="text" class="form-control" id="Cad_Cliente_Cidade" [(ngModel)]="cliente.cidade">
+  </div>                
+  <div class="form-group col-md-1 mb-3  ">
+      <label for="Cad_Cliente_Estado">Estado</label>
+    <select formControlName="uf" id="Cad_Cliente_Estado" class="form-control"
+    [(value)]="cliente.uf" >
+      <option>AC</option>
+      <option>AL</option>
+      <option>AP</option>
+      <option>AM</option>
+      <option>BA</option>
+      <option>CE</option>
+      <option>DF</option>
+      <option>ES</option>
+      <option>GO</option>
+      <option>MA</option>
+      <option>MT</option>
+      <option>MS</option>
+      <option>MG</option>
+      <option>PA</option>
+      <option>PB</option>
+      <option>PR</option>
+      <option>PE</option>
+      <option>PI</option>
+      <option>RJ</option>
+      <option>RN</option>
+      <option>RS</option>
+      <option>RO</option>
+      <option>RR</option>
+      <option>SC</option>
+      <option>SP</option>
+      <option>SE</option>
+      <option>TO</option>
+    </select>        
+  </div>                                       
+  <div class="form-group col-md-6 mb-3  ">
+      <label for="Cad_Cliente_Endereco">Endereço</label>
+      <input formControlName="endereco" type="text" class="form-control" id="Cad_Cliente_Endereco" [(ngModel)]="cliente.endereco">
+  </div>                  
+  <div class="form-group col-md-3 mb-3  ">
+      <label for="Cad_Cliente_Numero">Numero</label>
+      <input formControlName="numero" type="text" class="form-control" id="Cad_Cliente_Numero" [(ngModel)]="cliente.numero">
+  </div>
+  <div class="form-group col-md-3 mb-3 offset-md-0">
+      <label for="Cad_Cliente_Complemento">Complemento</label>
+      <input formControlName="complemento" type="text" class="form-control" id="Cad_Cliente_Complemento" [(ngModel)]="cliente.complemento">
+  </div>    
+  <div>
+    
+    <button  class="btn btn-primary " type="submit" (click)="Submit()">
+          <!-- &todo& esse botao deve mudar de texto conforme a operacao que estiver ocorrendo: vizualizacao, inclusao, edicao -->
+        <span>Confirmar</span>
+    </button>
+  </div>
 
 </form>
-
-<!-- <button type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!form.valid">Confirmar</button> -->

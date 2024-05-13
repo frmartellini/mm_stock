@@ -54,7 +54,7 @@ export class ProdutoEntradaComponent implements OnInit {
 
   };
 
-  // retorna true se estah nomodo de visualizacao de um registro
+  // retorna true se estah no modo de visualizacao de um registro
   IsInViewMode() : boolean {
     return this.id > 0;
   }
@@ -151,7 +151,7 @@ export class ProdutoEntradaComponent implements OnInit {
  
         });
     }
-  }
+  } // onSubmit
 
   voltar(): void {
     this.location.back();

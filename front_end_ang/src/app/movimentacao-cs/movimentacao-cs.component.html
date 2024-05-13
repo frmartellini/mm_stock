@@ -1,5 +1,10 @@
 <h2>Consulta de Movimentação</h2>
 
+<!-- &todo& adicionar um filtro obrigatorio por periodo onde o usuario deverah selecionar a data inicial e a data final e
+     quando clicar no botao "Filtrar por periodo" vai carregar apenas as movimentacoes com data/hora dentro do periodo informado pelo usuario.
+     Vai usar o controle "datepicker" do angular material (https://material.angular.io/components/datepicker/overview)
+-->
+
 <mat-form-field>
   <mat-label>Filtro</mat-label>
   <input matInput (keyup)="applyFilter($event)" #input>
@@ -8,8 +13,8 @@
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_movimentacao">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-             Id da Movimentação
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+             ID
           </th>
         <td mat-cell *matCellDef="let element">
               {{element.id_movimentacao}}
@@ -17,34 +22,34 @@
     </ng-container>
 
     <ng-container matColumnDef="data_hora">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-               Data da Movimentação
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+               Data/hora
           </th>
         <td mat-cell *matCellDef="let element">
-              {{ element.data_hora}}
+              {{ element.data_hora | date:'dd/MM/yyyy HH:mm:ss' }}
           </td>
     </ng-container>
 
-    <ng-container matColumnDef="id_produtor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Id do Produto
+    <ng-container matColumnDef="produto">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+              Produto
           </th>
         <td mat-cell *matCellDef="let element">
-              {{ element.id_produtor }}
+              {{ element.id_produto + " - " + element.descricao }}
           </td>
     </ng-container>
 
     <ng-container matColumnDef="tipo_mov">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tipo de Movimentação
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+              Tipo
           </th>
-        <td mat-cell *matCellDef="let element">
-              {{ element.tipo_mov }}
+        <td  mat-cell *matCellDef="let element" class="mat-column-data-center">
+              {{ getTipoMovText(element.tipo_mov) }}
           </td>
     </ng-container>
 
     <ng-container matColumnDef="quantidade">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
            Quantidade
         </th>
       <td mat-cell *matCellDef="let element">
@@ -53,47 +58,54 @@
     </ng-container>
 
     <ng-container matColumnDef="num_pedido">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Número do Pedido
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+            Núm. Pedido
         </th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" class="mat-column-data-right">
             {{ element.num_pedido }}
         </td>
     </ng-container>
 
-    <ng-container matColumnDef="id_cliente">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Id do Cliente
+    <ng-container matColumnDef="cliente">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+              Cliente
         </th>
       <td mat-cell *matCellDef="let element">
-            {{ element.id_cliente }}
+            {{ element.nome_completo }}
         </td>
     </ng-container>
 
     <ng-container matColumnDef="obs">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Observações
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+              Observação
         </th>
       <td mat-cell *matCellDef="let element">
             {{ element.obs }}
         </td>
     </ng-container>
-<!-- Botões Editar e Exlcuir-->
-    <ng-container  matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
-              Ações
+
+    <!-- Botões Editar e Exlcuir-->
+    <!-- &todo& provavelmente nao vamos ter estas opcoes editar e excluir nesta tela,
+      pois a exclusao ou edicao de uma movimentacao pode ter consequencias na qtde atual do produto envolvido e aih teria que atualizar a qtde atual do produto an tabela produto.
+    -->
+    <ng-container  matColumnDef="actions" >
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header >
+        Ações
       </th>
-          <td mat-cell *matCellDef="let row" class="text-center">
-            <div class="d-flex align-items-center justify-content-center">
-            <button mat-stroked-button class="m-2" color="accent">
-              Editar
-            </button>
-            <button mat-stroked-button class="m-2" (click)="excluirMovimentacao(row.id_movimentacao)"  color="warn">
-              Excluir
-            </button>
-            </div>
-          </td>
-      </ng-container>
+      <td mat-cell *matCellDef="let row" class="text-center">
+        <div class="d-flex align-items-center justify-content-center">
+        <button mat-stroked-button class="" color="primary">
+          <!-- <i class="bi bi-pencil-square" style="font-size: 18px;" ></i> -->
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-stroked-button class="" (click)="excluirMovimentacao(row.id_movimentacao)"  color="warn">
+          <!-- <i class="bi bi-trash" style="font-size: 18px;" ></i> -->
+          <mat-icon>delete</mat-icon>
+        </button>
+        </div>
+      </td>
+    </ng-container>
+    
 <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>

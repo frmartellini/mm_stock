@@ -5,7 +5,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { MovimentacaoService } from '../services/movimentacao.service';
-
+import Utils from '../utils';
 
 export interface movimentacaoData{
 
@@ -17,6 +17,8 @@ export interface movimentacaoData{
   num_pedido: number;
   id_cliente: number;
   obs: string;
+  nome_completo: string;
+  descricao: string;
 }
 
 let MOVIMENTACAO_DATA: movimentacaoData[]=[];
@@ -29,20 +31,18 @@ let MOVIMENTACAO_DATA: movimentacaoData[]=[];
 export class MovimentacaoCsComponent implements OnInit {
 
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
-  public displayColumn: string[] = ['id_movimentacao','data_hora','id_produtor','tipo_mov','quantidade','num_pedido','id_cliente','obs','actions'];
+  // colunas que serao exibidas pelo table
+  public displayColumn: string[] = ['id_movimentacao','data_hora','produto','tipo_mov','quantidade','num_pedido','cliente','obs','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+
+  // "publicar" a funcao que retorna a descricao do tipo de movimentacao para o .html conseguir usar
+  public getTipoMovText = Utils.getTipoMovText;
 
   constructor(private http: HttpClient, private movimentacaoService: MovimentacaoService){}
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-    console.table(this.dataSource);
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
-
   }
    // Obtenção dos Dados da API
    fetchData(): void {
@@ -53,11 +53,6 @@ export class MovimentacaoCsComponent implements OnInit {
             this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-          /*  setTimeout(() => {
-              console.log(this.sort) //not undefined
-              this.dataSource.sort = this.sort;
-            })*/
-
           }
     )
   }

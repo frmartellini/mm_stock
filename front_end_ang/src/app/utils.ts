@@ -16,4 +16,19 @@ export default class Utils {
 
   }
 
+  // retorna o tipo da movimentação "Entrada" ou "Saída" por extenso a partir do tipo de movimentacao abreviado "E" ou "S"
+  static getTipoMovText(pTipoMovAbrev: string) :string {
+
+    if ( pTipoMovAbrev == "E" ) {
+      return "Entrada";
+    }
+    else if ( pTipoMovAbrev == "S" ) {
+      return "Saída";
+    }
+
+    return ""; // retorno default que nunca deve ocorrer
+
+  } // getTipoMovText
+
+
 } // class

@@ -64,3 +64,34 @@ purple-green.css
 .admin-nav ul li a {
   transition: color 0.3s ease;
 }
+
+/* classes para as tabelas do angular material */
+
+.centered-sorted-header {  
+  .mat-sort-header-container {
+    justify-content: center;
+  }
+}
+
+/* diminuir adistancia entre o texto do titulo da coluna e o icone de setinha que indica o sentido da ordenacao */
+.mat-sort-header-arrow {
+  margin-left: 3px !important;
+}
+
+html {
+
+  /* altura padrao da linha do header do table do angular material */
+  --mat-table-header-container-height: 35px;
+
+  /* altura padrao das linhas de dados do table do angular material */
+  --mat-table-row-item-container-height: 32px;
+
+  /* altura do botao quando colocado em uma celula de um table do angular material */
+  --mdc-outlined-button-container-height: 25px;
+
+}
+
+.table {
+  /* diminuir o espaco vertical entre o fim da table do angular material e o inicio da area "mat-paginator" */
+  margin-bottom: 3px;
+}

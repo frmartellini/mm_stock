@@ -23,7 +23,7 @@ export class ProdutoEntradaComponent implements OnInit {
 
   @Input() movimentacao: MOVIMENTACAO;
 
-  // id do registro que estah sendo exibido (eh zero quando abriu a tela para fazer uam nova entrada de material)
+  // id do registro que esta sendo exibido (eh zero quando abriu a tela para fazer uam nova entrada de material)
   public id :number = 0;
 
   // lista de produtos para exibir o controle Select
@@ -101,7 +101,7 @@ export class ProdutoEntradaComponent implements OnInit {
 
     var local_toastr = this.toastr;
 
-    //var local_router = this.router;
+    var local_router = this.router;
 
     //console.log("post param=" + JSON.stringify(pFormValues));
 
@@ -112,8 +112,10 @@ export class ProdutoEntradaComponent implements OnInit {
         timeOut: 3000
         ,positionClass: 'toast-top-center'
       });
-  
-      location.reload();
+
+      local_router.navigate(['/produto-entrada']);  
+      //local_router.navigate(['/produto-list']);
+      //location.reload();
 
     } // OnSaveSuccess_CallBackFunction
 

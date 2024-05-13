@@ -67,6 +67,11 @@ export class ClienteListComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir este cliente?')) {
       this.clienteService.excluirCliente(id_cliente).subscribe(() => {
         this.fetchData(); // Recarregar os itens após a exclusão
+      },
+      (error) => {
+        console.error('Erro ao deletar post:', error.error);
+        // error.error contém a mensagem de erro enviada pelo servidor
+        alert(error.error);
       });
     }
   }
@@ -74,7 +79,7 @@ export class ClienteListComponent implements OnInit {
   editarCliente(cliente: clienteData) {
     console.log('Editar cliente', cliente);
   }
-  
+
 
   //filtro
   applyFilter(event: Event) {

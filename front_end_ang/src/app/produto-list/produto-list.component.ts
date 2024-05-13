@@ -1,4 +1,4 @@
-import { Component,ViewChild,AfterViewInit,OnInit} from '@angular/core';
+import { Component,ViewChild,OnInit} from '@angular/core';
 import { ENV } from '../env';
 import { HttpClient } from '@angular/common/http';
 import {MatPaginator} from '@angular/material/paginator';
@@ -69,6 +69,11 @@ export class ProdutoListComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir este item?')) {
       this.produtoService.excluirItem(id_produto).subscribe(() => {
         this.fetchData(); // Recarregar os itens após a exclusão
+      },
+      (error) => {
+        console.error('Erro ao deletar post:', error.error);
+        // error.error contém a mensagem de erro enviada pelo servidor
+        alert(error.error);
       });
     }
   }

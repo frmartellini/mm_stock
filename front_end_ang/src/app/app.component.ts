@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AuthenticationService } from './services/authentication.service';
+import { LoginComponent } from './login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -9,22 +10,33 @@ import { AuthenticationService } from './services/authentication.service';
 })
 export class AppComponent {
   title = 'Controle de Estoque';
-  logado;
+  //logado;
+  menu:boolean = false;
 
   constructor(private authenticationService: AuthenticationService) { 
-    this.logado = this.ShowDeslogarBtn();
+    //this.logado = this.ShowDeslogarBtn();
   }
 
   deslogar(){
     this.authenticationService.deslogar();
   }
 
-  ShowDeslogarBtn() :boolean {
+  // ShowDeslogarBtn() :boolean {
 
-    //console.log("ShowDeslogarBtn()");
+  //   //console.log("ShowDeslogarBtn()");
     
-    return this.authenticationService.IsLogado();
+  //   return this.authenticationService.IsLogado();
 
+  // }
+
+  showMenu(component: any): void {
+
+    if (component instanceof LoginComponent) {
+      this.menu = false;
+    }
+    else {
+      this.menu = true;
+    }
   }
 
 }

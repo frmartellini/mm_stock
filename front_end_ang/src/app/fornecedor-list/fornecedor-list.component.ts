@@ -63,6 +63,11 @@ export class FornecedorListComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
       this.fornecedorService.excluirFornecedor(id_fornecedor).subscribe(() => {
         this.fetchData(); // Recarregar os itens após a exclusão
+      },
+      (error) => {
+        console.error('Erro ao deletar post:', error.error);
+        // error.error contém a mensagem de erro enviada pelo servidor
+        alert(error.error);
       });
     }
   }

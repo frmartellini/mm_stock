@@ -39,12 +39,6 @@ export class ProdutoListComponent implements OnInit {
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-    console.table(this.dataSource);
-    this.dataSource.sort = this.sort;
-    console.log(this.sort)
-    this.dataSource.paginator = this.paginator;
-    console.log("paginador",this.paginator);
-
   }
    // Obtenção dos Dados da API
    fetchData(): void {

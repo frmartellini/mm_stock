@@ -1,40 +1,60 @@
-<h2>Incluir Produto</h2>
 
-<form [formGroup]="produto_form">
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_descricao">Descrição</label>
-        <input formControlName="descricao" type="text" class="form-control" id="descricao">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_cor">Cor</label>
-        <input formControlName="cor" type="text" class="form-control" id="cor">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_tamanho">Tamanho</label>
-        <input formControlName="tamanho" type="text" class="form-control" id="tamanho">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_tipo_material">Tipo de Material</label>
-        <input formControlName="tipo_material" type="text" class="form-control" id="tipo_material">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_preco_venda">Preço de Venda</label>
-        <input formControlName="preco_venda" type="text" class="form-control" id="preco_venda">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">
-        <label for="Cad_prod_quantidade_atual">Quantidade Atual</label>
-        <input formControlName="quantidade_atual" type="text" class="form-control" id="quantidade_atual">
-    </div>
-    <div class=" form-group col-md-6 mb-3 ">    
-        <button  class="btn btn-primary " type="submit" (click)="postProduto()">
-            <span>Incluir</span>
-        </button>
-    </div>
-</form>
+<div class="form-group col-md-6  mx-auto" >
+  
+  <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
+  
+  <!--&todo& talvez poderia vamos colocar um botao excluir para excluir o produto que o usuario estiver vendo os detalhes (somente se estiver visualizando um produto)-->
+  
+  <form [formGroup]="produto_form" (ngSubmit)="onSubmit(produto_form.value)">
+  
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Descrição</mat-label>
+      <input matInput type="text" id="Cad_Produto_Descricao" name="Cad_Produto_Descricao" formControlName="Cad_Produto_Descricao"
+             [(ngModel)]="produto.descricao" required="true" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Cor</mat-label>
+      <input matInput type="text" id="Cad_Produto_Cor" name="Cad_Produto_Cor" formControlName="Cad_Produto_Cor"
+             [(ngModel)]="produto.cor" required="true" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tamanho</mat-label>
+      <input matInput type="text" id="Cad_Produto_Tamanho" name="Cad_Produto_Tamanho" formControlName="Cad_Produto_Tamanho"
+             [(ngModel)]="produto.tamanho" required="true" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 70%">
+      <mat-label>Tipo Material</mat-label>
+      <input matInput type="text" id="Cad_Produto_Tipo_Material" name="Cad_Produto_Tipo_Material" formControlName="Cad_Produto_Tipo_Material"
+             [(ngModel)]="produto.tipo_material" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 30%">
+      <mat-label>Preço de venda</mat-label>
+      <input type="number" id="Cad_Produto_Preco_Venda" name="Cad_Produto_Preco_Venda" formControlName="Cad_Produto_Preco_Venda"
+             matInput pattern="^[0123456789,]+$" [(ngModel)]="produto.preco_venda" required="true" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 30%">
+      <mat-label>Qtde atual</mat-label>
+      <input type="number" id="Cad_Produto_Quantidade_Atual" name="Cad_Produto_Quantidade_Atual" formControlName="Cad_Produto_Quantidade_Atual"
+             matInput pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required="true" />
+    </mat-form-field>
     
-
-
-
-   <!--
-    //descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual
-   --> 
+    <div class="form-group">
+      <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!produto_form.valid"
+              id="SubmitButton" name="SubmitButton" >
+          <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+          {{ this.SubmitButtonText }}
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+    </div>
+  
+  </form>
+  
+</div>
+  

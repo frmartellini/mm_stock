@@ -13,11 +13,29 @@
       <input matInput type="text" id="Cad_Produto_Descricao" name="Cad_Produto_Descricao" formControlName="Cad_Produto_Descricao"
              [(ngModel)]="produto.descricao" required="true" />
     </mat-form-field>
-    <br />
-    <mat-form-field appearance="fill" class="" style="width: 50%">
+    
+    <!-- 
+      <br />
+      <mat-form-field appearance="fill" class="" style="width: 50%">
       <mat-label>Cor</mat-label>
       <input matInput type="text" id="Cad_Produto_Cor" name="Cad_Produto_Cor" formControlName="Cad_Produto_Cor"
              [(ngModel)]="produto.cor" required="true" />
+    </mat-form-field> -->
+    <br />
+
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Cor</mat-label>
+      <input #CorInput matInput type="text"
+           id="Cad_Produto_Cor_Input" name="Cad_Produto_Cor_Input" formControlName="Cad_Produto_Cor" [(ngModel)]="produto.cor"
+           [matAutocomplete]="Cad_Produto_Cor_auto"
+           (input)="FilterCores(CorInput.value, 'input')"
+           (focus)="FilterCores(CorInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_Cor_auto="matAutocomplete" id="Cad_Produto_Cor_Auto" name="Cad_Produto_Cor_Auto" >
+         @for (cor of filtered_cores; track cor) {
+          <mat-option [value]="cor.cor">{{cor.cor}}</mat-option>
+        }
+      </mat-autocomplete>
     </mat-form-field>
     <br />
     <mat-form-field appearance="fill" class="" style="width: 50%">

@@ -27,6 +27,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { CustomPaginator } from './custom-paginator';
 
@@ -84,6 +85,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatSort
     , MatSelectModule
     , MatButtonModule
+    , MatAutocompleteModule
     , CurrencyMaskModule
 
   ],

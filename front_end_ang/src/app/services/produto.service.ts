@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { PRODUTO } from '../PRODUTO';
 import { ENV } from '../env';
+import { PRODUTO_COR } from '../PRODUTO_COR';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,11 @@ export class ProdutoService {
     );
   }
 
+  // obter as cores dos produtos cadastrados
+  getCoresProdutos_http(): Observable<PRODUTO_COR[]>  {
+    return this.http.get<PRODUTO_COR[]>(ENV.REST_API_URL + '/produto/cores').pipe(
+    );
+  }
 
   excluirItem(id_produto: number) {
     return this.http.delete(ENV.REST_API_URL + '/produto/'+id_produto);

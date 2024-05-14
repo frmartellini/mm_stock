@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { PRODUTO_COR } from '../PRODUTO_COR';
 
 @Component({
   selector: 'app-produto-det',
@@ -14,6 +15,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class ProdutoDetComponent implements OnInit {
 
   @Input() produto: PRODUTO;
+
+  // guarda TODAS as cores dos produtos para exibir o controle Autocomplete
+  public cores: PRODUTO_COR[] = [];
+  // contem apenas as cores dos produtos conforme filtrado pela digitacao do usuario no "Cad_Produto_Cor_Input"
+  public filtered_cores: PRODUTO_COR[] = [];
 
   // id do registro que estah sendo exibido (deve ser zero quando abrir a tela para fazer um novo cadastro)
   public id :number = 0;
@@ -86,6 +92,9 @@ export class ProdutoDetComponent implements OnInit {
     // carregar os dados do produto se foi recebido um id na url
     this.getProduto();
 
+    // obter as cores dos produtos jah existentes
+    this.getCoresProdutos();
+
     // desativar os campos se estiver no modo de visualizacao
     if ( this.IsInViewMode() ) {
       this.produto_form.get("Cad_Produto_Descricao")?.disable();
@@ -134,6 +143,35 @@ export class ProdutoDetComponent implements OnInit {
       // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }
   }
+
+  // obter as cores distintas dos produtos jah cadastrados e setar o "this.cores"
+  getCoresProdutos(): void {
+    this.produtoApiService.getCoresProdutos_http()
+      .subscribe( {
+        next : cores => {
+          //console.log("executou o 'next' do getCoresProdutos(). Abaixo a this.cores.");
+          this.cores = cores; console.table(this.cores); 
+        } ,
+        error: error => { } ,
+        complete() {
+          //console.log("executou o 'complete' do getCoresProdutos()");
+        },
+      }
+      );
+  } // getCoresProdutos
+
+  // executado quando o usuario digita no campo Input do autocomplete do campo "Cor"
+  public FilterCores(value :string, EventName: any): void {
+    //console.log("value="+ value);
+    if( EventName == "input") {
+      this.filtered_cores = this.cores.filter(cor => cor.cor.toLowerCase().includes(value));
+      //console.log("this.filtered_cores abaixo");
+      //console.table(this.filtered_cores);
+    }
+    else if( EventName == "focus") {
+      this.filtered_cores = this.cores;
+    }
+  } // FilterCores
 
   // executado quando o botao type submit eh clicado
   onSubmit(pFormValues: any): void {

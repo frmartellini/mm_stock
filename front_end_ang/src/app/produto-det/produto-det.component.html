@@ -38,16 +38,48 @@
       </mat-autocomplete>
     </mat-form-field>
     <br />
+    <!--
     <mat-form-field appearance="fill" class="" style="width: 50%">
       <mat-label>Tamanho</mat-label>
       <input matInput type="text" id="Cad_Produto_Tamanho" name="Cad_Produto_Tamanho" formControlName="Cad_Produto_Tamanho"
              [(ngModel)]="produto.tamanho" required="true" />
     </mat-form-field>
+    -->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tamanho</mat-label>
+      <input #TamanhoInput matInput type="text"
+           id="Cad_Produto_Tamanho_Input" name="Cad_Produto_Tamanho_Input" formControlName="Cad_Produto_Tamanho" [(ngModel)]="produto.tamanho"
+           [matAutocomplete]="Cad_Produto_Tamanho_auto"
+           (input)="FilterTamanhos(TamanhoInput.value, 'input')"
+           (focus)="FilterTamanhos(TamanhoInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_Tamanho_auto="matAutocomplete" id="Cad_Produto_Tamanho_Auto" name="Cad_Produto_Tamanho_Auto" >
+         @for (tamanho of filtered_tamanhos; track tamanho) {
+          <mat-option [value]="tamanho.tamanho">{{tamanho.tamanho}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
     <br />
+    <!--
     <mat-form-field appearance="fill" class="" style="width: 70%">
       <mat-label>Tipo Material</mat-label>
       <input matInput type="text" id="Cad_Produto_Tipo_Material" name="Cad_Produto_Tipo_Material" formControlName="Cad_Produto_Tipo_Material"
              [(ngModel)]="produto.tipo_material" />
+    </mat-form-field>
+    -->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tipo Material</mat-label>
+      <input #TipoMaterialInput matInput type="text"
+           id="Cad_Produto_Tipo_Material_Input" name="Cad_Produto_Tipo_Material_Input" formControlName="Cad_Produto_Tipo_Material" [(ngModel)]="produto.tipo_material"
+           [matAutocomplete]="Cad_Produto_TipoMaterial_auto"
+           (input)="FilterTiposMaterial(TipoMaterialInput.value, 'input')"
+           (focus)="FilterTiposMaterial(TipoMaterialInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_TipoMaterial_auto="matAutocomplete" id="Cad_Produto_TipoMaterial_Auto" name="Cad_Produto_TipoMaterial_Auto" >
+         @for (tipo of filtered_tipos_material; track tipo) {
+          <mat-option [value]="tipo.tipo_material">{{tipo.tipo_material}}</mat-option>
+        }
+      </mat-autocomplete>
     </mat-form-field>
     <br />
     <mat-form-field appearance="fill" class="" style="width: 30%">

@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PRODUTO } from '../PRODUTO';
 import { ENV } from '../env';
 import { PRODUTO_COR } from '../PRODUTO_COR';
+import { PRODUTO_TAMANHO } from '../PRODUTO_TAMANHO';
+import { PRODUTO_TIPOMATERIAL } from '../PRODUTO_TIPOMATERIAL';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +41,18 @@ export class ProdutoService {
   // obter as cores dos produtos cadastrados
   getCoresProdutos_http(): Observable<PRODUTO_COR[]>  {
     return this.http.get<PRODUTO_COR[]>(ENV.REST_API_URL + '/produto/cores').pipe(
+    );
+  }
+
+  // obter os tamanhos dos produtos cadastrados
+  getTamanhosProdutos_http(): Observable<PRODUTO_TAMANHO[]>  {
+    return this.http.get<PRODUTO_TAMANHO[]>(ENV.REST_API_URL + '/produto/tamanhos').pipe(
+    );
+  }
+
+  // obter os tipos de material dos produtos cadastrados
+  getTiposMaterialProdutos_http(): Observable<PRODUTO_TIPOMATERIAL[]>  {
+    return this.http.get<PRODUTO_TIPOMATERIAL[]>(ENV.REST_API_URL + '/produto/tipos_material').pipe(
     );
   }
 

@@ -35,6 +35,14 @@ export class FornecedorService {
 
   }
 
+  /* obter um fornecedor pelo id */
+  getFornecedor_http(id: number): Observable<FORNECEDOR> {
+    const url = `${ENV.REST_API_URL}/fornecedor/${id}`;
+    console.log(url);
+    return this.http.get<FORNECEDOR>(url).pipe(
+    );
+  }
+
   // obter todos os fornecedores cadastrados
   getAllFornecedores_http(): Observable<FORNECEDOR[]>  {
     return this.http.get<FORNECEDOR[]>(ENV.REST_API_URL + '/fornecedor').pipe(
@@ -46,7 +54,12 @@ export class FornecedorService {
     return this.http.delete(ENV.REST_API_URL + '/fornecedor/'+id_fornecedor);
   }
 
-  public criarNovoFornecedor(fornecedor: Ifornecedor): Observable<any> {
+  public criarNovoFornecedor(fornecedor: FORNECEDOR): Observable<any> {
+    //return this.http.post<any>('${ENV.REST_API_URL}/fornecedor/create', fornecedor);
     return this.http.post<any>(ENV.REST_API_URL + '/fornecedor/create', fornecedor, this.httpOptions);
+  }
+
+  public editarFornecedor(fornecedor: FORNECEDOR, id_fornecedor: number): Observable<any> {
+    return this.http.put<any>(ENV.REST_API_URL + '/fornecedor/'+id_fornecedor, fornecedor, this.httpOptions);
   }
 }

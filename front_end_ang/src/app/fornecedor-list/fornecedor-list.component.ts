@@ -5,23 +5,10 @@ import {MatPaginator,} from '@angular/material/paginator';
 import {MatSort, } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { FornecedorService } from '../services/fornecedor.service';
-export interface fornecedorData{
-  id_fornecedor: number;
-  nome_fornecedor: string;
-  nome_responsavel: string;
-  contato_telefonico: string;
-  redes_sociais: string;
-  materiais_fornecidos: string;
-  cnpj: string;
-  endereco:string;
-  numero:number;
-  complemento:string;
-  cidade:string;
-  uf:string;
+import { FORNECEDOR } from '../FORNECEDOR';
 
-}
 
-let FORNECEDOR_DATA: fornecedorData[]=[];
+let FORNECEDOR_DATA: FORNECEDOR[]=[];
 @Component({
   selector: 'app-fornecedor-list',
   templateUrl: './fornecedor-list.component.html',
@@ -70,6 +57,10 @@ export class FornecedorListComponent implements OnInit {
         alert(error.error);
       });
     }
+  }
+
+  editarFornecedor(fornecedor: FORNECEDOR) {
+    console.log('Editar fornecedor', fornecedor);
   }
 
    //filtro

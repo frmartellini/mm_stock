@@ -123,10 +123,11 @@
           </th>
           <td mat-cell *matCellDef="let row" class="text-center">
             <div fxLayout="row" fxLayoutAlign="center center"> <!-- Flex Layout para centralizar os botões -->
-              <button mat-stroked-button class="m-2 square-button" color="primary" title="Editar" > <!-- (click)="editarCliente(row)" colocar os paâmetros do json -->
+              <button mat-stroked-button class="m-2 square-button" color="primary" title="Editar"  (click)="editarFornecedor(row)" style="display: none;">
                 <!-- Adicione uma classe de estilo para o botão quadrado -->
                 <mat-icon>edit</mat-icon>
               </button>
+              <a href='{{"/fornecedor-det/" + row.id_fornecedor + "?mode=E"}}'><mat-icon>edit</mat-icon></a>
               <button mat-stroked-button class="m-2 square-button" color="warn" title="Deletar" (click)="excluirFornecedor(row.id_fornecedor)">
                 <!-- Adicione uma classe de estilo para o botão quadrado -->
                 <mat-icon>delete</mat-icon>

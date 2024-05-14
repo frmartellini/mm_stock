@@ -64,7 +64,19 @@ app.get('/produto', (req, res) => {
   });
   console.log('get /produto executado. Produtos retornados com sucesso!');
 });
-   
+
+// retorna as cores distintas dos produtos da tabela "produto"
+app.get('/produto/cores', (req, res) => {
+  db.query('SELECT DISTINCT cor FROM produto ORDER BY cor ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar as cores dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/cores executado. Cores distintas dos produtos retornadas com sucesso!');
+});
+
 /* Create a new post */
 app.post('/produto/create', (req, res) => {
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;

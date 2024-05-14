@@ -114,7 +114,7 @@ app.put('/produto/:id', (req, res) => {
   db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação com um cliente.');
       } else {
         res.status(500).send('Erro alterando produto: ' + err);
       }
@@ -137,7 +137,7 @@ app.delete('/produto/:id', (req, res) => {
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro deletando produto: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).send('Erro deletando produto: Não é possível deletar um produto que já esteja envolvido em uma movimentação com um cliente.');
       } else {
         res.status(500).send('Erro deletando produto: ' + err);
       }

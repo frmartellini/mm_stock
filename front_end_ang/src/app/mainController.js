@@ -1,8 +1,8 @@
-angular.module('app.component').controller('mainController', function ($scope) {
-    $scope.activeTab = '';
+// angular.module('app.component').controller('mainController', function ($scope) {
+//     $scope.activeTab = '';
 
-    $scope.setActive = function (tab) {
-        $scope.activeTab = tab;
-    };
+//     $scope.setActive = function (tab) {
+//         $scope.activeTab = tab;
+//     };
 
-});
+// });

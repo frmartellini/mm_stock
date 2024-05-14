@@ -127,7 +127,7 @@ export class ProdutoSaidaComponent implements OnInit {
         ,positionClass: 'toast-top-center'
       });
   
-      local_router.navigate(['']);
+      local_router.navigate(['/produto-saida']);
 
     } // OnSaveSuccess_CallBackFunction
 

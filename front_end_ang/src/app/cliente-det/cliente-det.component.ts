@@ -109,12 +109,12 @@ export class ClienteDetComponent implements OnInit {
     }
     else {
 
-      // forcar a execucao desta funcao assim para desativar os dois controles
-      this.on_Cad_Cliente_Tipo_Change("");
-
       if ( this.GetMode() == "I") {
         this.SubmitButtonText = "Confirmar Inclusão";
         this.PageTitle = "Incluindo cliente";
+        // desativar estes campos porque o campo correto serah ativado quando o usuario seleciona o "tipo do cliente"
+        this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
+        this.cliente_form.get("Cad_Cliente_CPF")?.disable();
       }
       else if ( this.GetMode() == "E") {
         this.SubmitButtonText = "Confirmar Edição";
@@ -159,9 +159,11 @@ export class ClienteDetComponent implements OnInit {
     // ativar o campo CPF ou CNPJ de acordo com o tipo cliente selecionado pelo usuario
     if ( value == "Pessoa Física") {
       this.cliente_form.get("Cad_Cliente_CPF")?.enable();
+      this.cliente_form.get("Cad_Cliente_CNPJ")?.setValue("");
     }
     else if ( value == "Pessoa Jurídica") {
       this.cliente_form.get("Cad_Cliente_CNPJ")?.enable();
+      this.cliente_form.get("Cad_Cliente_CPF")?.setValue("");
     }
 
     return true;

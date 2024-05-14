@@ -23,7 +23,7 @@
   <mat-form-field appearance="fill" class="" style="width: 50%">
     <mat-label>Telefone</mat-label>
     <input matInput type="text" id="Cad_Cliente_Telefone" name="Cad_Cliente_Telefone" formControlName="Cad_Cliente_Telefone"
-           [(ngModel)]="cliente.telefone" pattern="^[0|1|2|3|4|5|6|7|8|9|\(|\)|-]+$" />
+           [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" />
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 100%">
@@ -36,7 +36,7 @@
     <mat-label>Tipo do cliente</mat-label> 
     <mat-select id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
                 [(value)]="cliente.tipo_cliente" required="true"
-                (selectionChange)=on_Cad_Cliente_Tipo_Change($event.value)>
+                (ngModelChange)="on_Cad_Cliente_Tipo_Change($event)" >
       <mat-option value="Pessoa Física">Pessoa Física</mat-option>
       <mat-option value="Pessoa Jurídica">Pessoa Jurídica</mat-option>
     </mat-select> 
@@ -45,13 +45,13 @@
   <mat-form-field appearance="fill" class="" style="width: 70%">
     <mat-label>CPF</mat-label>
     <input matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
-           [(ngModel)]="cliente.cpf" pattern="^[0|1|2|3|4|5|6|7|8|9|\.]+$" />
+           [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" />
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 70%">
     <mat-label>CNPJ</mat-label>
     <input matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
-           [(ngModel)]="cliente.cnpj" pattern="^[0|1|2|3|4|5|6|7|8|9|\.|/|-]+$" />
+           [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" />
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 100%">

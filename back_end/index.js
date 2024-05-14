@@ -84,7 +84,7 @@ app.post('/produto/create', (req, res) => {
       res.status(201).json(result[0]);
     });
   });
-  console.log('post executado, produto criado com sucesso! ' + err);
+  console.log('post executado, produto criado com sucesso! ');
 });
   
 /* Get a specific post */

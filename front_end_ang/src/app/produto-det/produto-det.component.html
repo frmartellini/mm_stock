@@ -34,14 +34,19 @@
     <br />
     <mat-form-field appearance="fill" class="" style="width: 30%">
       <mat-label>Preço de venda</mat-label>
-      <input type="number" id="Cad_Produto_Preco_Venda" name="Cad_Produto_Preco_Venda" formControlName="Cad_Produto_Preco_Venda"
-             matInput pattern="^[0123456789,]+$" [(ngModel)]="produto.preco_venda" required="true" />
+      <!-- input com "mask directive" especial para valores monetarios -->
+      <input matInput id="Cad_Produto_Preco_Venda" name="Cad_Produto_Preco_Venda" formControlName="Cad_Produto_Preco_Venda"
+             [(ngModel)]="produto.preco_venda" currencyMask [min]="0" />
     </mat-form-field>
+
+    <!-- exibir o preco_venda com formato pt-BR para testes -->
+    <!-- {{this.produto.preco_venda | number:'1.2-2':'pt'}} -->
+
     <br />
     <mat-form-field appearance="fill" class="" style="width: 30%">
       <mat-label>Qtde atual</mat-label>
       <input type="number" id="Cad_Produto_Quantidade_Atual" name="Cad_Produto_Quantidade_Atual" formControlName="Cad_Produto_Quantidade_Atual"
-             matInput pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required="true" />
+             matInput min="0" step="1" pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required="true" />
     </mat-form-field>
     
     <div class="form-group">

@@ -30,7 +30,23 @@ import {MatIconModule} from '@angular/material/icon';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { CustomPaginator } from './custom-paginator';
 
+import {HashLocationStrategy, LocationStrategy, registerLocaleData, DecimalPipe} from '@angular/common';
+import { LOCALE_ID } from '@angular/core';
+import locale_pt from '@angular/common/locales/pt';
+registerLocaleData(locale_pt);
 
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
+
+// configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "right",
+  allowNegative: false,
+  decimal: ",",
+  precision: 2,
+  prefix: "R$ ",
+  suffix: "",
+  thousands: "."
+};
 
 @NgModule({
   declarations: [
@@ -68,12 +84,15 @@ import { CustomPaginator } from './custom-paginator';
     , MatSort
     , MatSelectModule
     , MatButtonModule
+    , CurrencyMaskModule
 
   ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
+    { provide: LOCALE_ID, useValue: 'pt' },
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
 
   ],
   bootstrap: [AppComponent]

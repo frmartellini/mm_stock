@@ -59,7 +59,7 @@
               Preço de Venda
         </th>
       <td mat-cell *matCellDef="let element">
-            {{ element.preco_venda }}
+            {{ element.preco_venda | number:'1.2-2':'pt' }}
         </td>
     </ng-container>
 

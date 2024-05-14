@@ -28,7 +28,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
-import { ClientInclusionComponent } from './client-inclusion/client-inclusion.component';
 import { CustomPaginator } from './custom-paginator';
 
 
@@ -49,7 +48,6 @@ import { CustomPaginator } from './custom-paginator';
     ,ProdutoSaidaComponent
     ,MovimentacaoCsComponent
     ,ProdutoSaidaComponent
-    ,ClientInclusionComponent
 
 
   ],

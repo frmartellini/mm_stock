@@ -77,6 +77,30 @@ app.get('/produto/cores', (req, res) => {
   console.log('get /produto/cores executado. Cores distintas dos produtos retornadas com sucesso!');
 });
 
+// retorna os tamanhos distintos dos produtos da tabela "produto"
+app.get('/produto/tamanhos', (req, res) => {
+  db.query('SELECT DISTINCT tamanho FROM produto ORDER BY tamanho ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar os tamanhos dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/tamanhos executado. Tamanhos distintos dos produtos retornados com sucesso!');
+});
+
+// retorna os "tipo_material" distintos dos produtos da tabela "produto"
+app.get('/produto/tipos_material', (req, res) => {
+  db.query('SELECT DISTINCT tipo_material FROM produto ORDER BY tipo_material ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar os valores distintos de "tipo_material" dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/tipos_material executado. "tipo_material" distintos dos produtos retornados com sucesso!');
+});
+
 /* Create a new post */
 app.post('/produto/create', (req, res) => {
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;

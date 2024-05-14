@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
@@ -13,21 +15,24 @@ export class AppComponent {
   //logado;
   menu:boolean = false;
 
-  constructor(private authenticationService: AuthenticationService) { 
-    //this.logado = this.ShowDeslogarBtn();
+  // vars que indicar se estah executando no servidor ou no browser
+  isServer :boolean;
+  isBrowser :boolean;
+
+  constructor(private authenticationService: AuthenticationService
+              ,@Inject(PLATFORM_ID) platformId: Object
+              )
+  { 
+    // setar as vars que indicar se estah executando no servidor ou no browser
+    this.isServer = isPlatformServer(platformId);
+    this.isBrowser = isPlatformBrowser(platformId);
+    //console.log("app.constructor.this.isServer=" + this.isServer);
+    //console.log("app.constructor.this.isBrowser=" + this.isBrowser);
   }
 
   deslogar(){
     this.authenticationService.deslogar();
   }
-
-  // ShowDeslogarBtn() :boolean {
-
-  //   //console.log("ShowDeslogarBtn()");
-    
-  //   return this.authenticationService.IsLogado();
-
-  // }
 
   showMenu(component: any): void {
 
@@ -39,4 +44,4 @@ export class AppComponent {
     }
   }
 
-}
+} // class

@@ -76,8 +76,17 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
 
   <div id="ContentDiv" class="ContentDivClass">
 
-    <router-outlet (activate)="showMenu($event)"/>
-
+    <!--
+      as duas divsabaixo consistem no esquema para remover o flicker (piscada) da tela de login
+      quando jah estava logado e fazia um F5 na pagina aberta.
+    -->
+    <div style="display: none" *ngIf="isServer">
+      <router-outlet (activate)="showMenu($event)"/>
+    </div>
+    <div *ngIf="isBrowser">
+      <router-outlet (activate)="showMenu($event)"/>
+    </div>
+      
   </div>
 
 </main>

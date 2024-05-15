@@ -27,8 +27,8 @@ purple-green.css
 
   /* apenas para testes */
   border-color: black;
-  border-width: 2px;
-  border-style: solid;
+  border-width: 1px;
+  border-style: none;
 
   padding: 5px;
 
@@ -55,6 +55,13 @@ purple-green.css
   
 }
 
+/* Opacidade da imagem de login */
+.watermark {
+  opacity: 0.7;
+  filter: alpha(opacity=50); /* Para compatibilidade com IE8 e anteriores */
+
+}
+
 /* Estilo dos links quando estão ativos */
 .admin-nav ul li a.active {
   color: #007bff; /* Azul */
@@ -73,7 +80,7 @@ purple-green.css
   }
 }
 
-/* diminuir adistancia entre o texto do titulo da coluna e o icone de setinha que indica o sentido da ordenacao */
+/* diminuir a distancia entre o texto do titulo da coluna e o icone de setinha que indica o sentido da ordenacao */
 .mat-sort-header-arrow {
   margin-left: 3px !important;
 }

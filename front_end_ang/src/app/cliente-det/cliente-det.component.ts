@@ -156,14 +156,19 @@ export class ClienteDetComponent implements OnInit {
     // desativar os campos CPF e CNPF
     this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
     this.cliente_form.get("Cad_Cliente_CPF")?.disable();
-    // ativar o campo CPF ou CNPJ de acordo com o tipo cliente selecionado pelo usuario
-    if ( value == "Pessoa Física") {
-      this.cliente_form.get("Cad_Cliente_CPF")?.enable();
-      this.cliente_form.get("Cad_Cliente_CNPJ")?.setValue("");
-    }
-    else if ( value == "Pessoa Jurídica") {
-      this.cliente_form.get("Cad_Cliente_CNPJ")?.enable();
-      this.cliente_form.get("Cad_Cliente_CPF")?.setValue("");
+
+    // se nao estah no modo de visualizacao, eh inclusao ou edicao e 
+    // deve habilitar algum dos campos CPF ou CNPJ e limpar o outro
+    if ( !this.IsInViewMode() ) {
+      // ativar o campo CPF ou CNPJ de acordo com o tipo cliente selecionado pelo usuario
+      if ( value == "Pessoa Física") {
+        this.cliente_form.get("Cad_Cliente_CPF")?.enable();
+        this.cliente_form.get("Cad_Cliente_CNPJ")?.setValue("");
+      }
+      else if ( value == "Pessoa Jurídica") {
+        this.cliente_form.get("Cad_Cliente_CNPJ")?.enable();
+        this.cliente_form.get("Cad_Cliente_CPF")?.setValue("");
+      }
     }
 
     return true;

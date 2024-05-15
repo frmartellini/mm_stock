@@ -34,7 +34,7 @@
   <br />
   <mat-form-field appearance="fill" style="width: 40%">
     <mat-label>Tipo do cliente</mat-label> 
-    <mat-select id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
+    <mat-select #Cad_Cliente_Tipo id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
                 [(value)]="cliente.tipo_cliente" required="true"
                 (ngModelChange)="on_Cad_Cliente_Tipo_Change($event)" >
       <mat-option value="Pessoa Física">Pessoa Física</mat-option>
@@ -42,15 +42,15 @@
     </mat-select> 
   </mat-form-field>
   <br />
-  <mat-form-field appearance="fill" class="" style="width: 70%">
+  <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cpf" [matTooltipPosition]="'below'" >
     <mat-label>CPF</mat-label>
-    <input matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
+    <input #Cad_Cliente_CPF matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
            [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" />
   </mat-form-field>
   <br />
-  <mat-form-field appearance="fill" class="" style="width: 70%">
+  <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cnpj" [matTooltipPosition]="'below'" >
     <mat-label>CNPJ</mat-label>
-    <input matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
+    <input #Cad_Cliente_CNPJ matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
            [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" />
   </mat-form-field>
   <br />

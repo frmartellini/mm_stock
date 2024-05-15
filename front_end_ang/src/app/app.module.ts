@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { CustomPaginator } from './custom-paginator';
 
@@ -86,6 +87,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatSelectModule
     , MatButtonModule
     , MatAutocompleteModule
+    , MatTooltipModule
     , CurrencyMaskModule
 
   ],

@@ -28,6 +28,10 @@ export class ClienteDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando cliente"; 
   public SubmitButtonText: String = "Confirmar";
 
+  // vars que contem o texto a ser exibido no tooltip dos controles do CPF e CNPJ
+  public tooltip_cpf: string = "";
+  public tooltip_cnpj: string = "";
+
   constructor(
     private route: ActivatedRoute
     ,private location: Location
@@ -108,6 +112,9 @@ export class ClienteDetComponent implements OnInit {
       this.cliente_form.get("Cad_Cliente_Estado")?.disable();
 
       this.PageTitle = "Visualizando cliente";
+
+      this.tooltip_cpf = "";
+      this.tooltip_cnpj = "";
     }
     else {
 
@@ -117,6 +124,9 @@ export class ClienteDetComponent implements OnInit {
         // desativar estes campos porque o campo correto serah ativado quando o usuario seleciona o "tipo do cliente"
         this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
         this.cliente_form.get("Cad_Cliente_CPF")?.disable();
+
+        this.tooltip_cpf = "Selecione primeiro o \'Tipo do Cliente\'";
+        this.tooltip_cnpj = "Selecione primeiro o \'Tipo do Cliente\'";
       }
       else if ( this.GetMode() == "E") {
         this.SubmitButtonText = "Confirmar Edição";
@@ -166,10 +176,18 @@ export class ClienteDetComponent implements OnInit {
       if ( value == "Pessoa Física") {
         this.cliente_form.get("Cad_Cliente_CPF")?.enable();
         this.cliente_form.get("Cad_Cliente_CNPJ")?.setValue("");
+        this.tooltip_cpf = "";
+        this.tooltip_cnpj = "Fica habilitado apenas se selecionar o tipo de cliente 'Pessoa Jurídica'";
       }
       else if ( value == "Pessoa Jurídica") {
         this.cliente_form.get("Cad_Cliente_CNPJ")?.enable();
         this.cliente_form.get("Cad_Cliente_CPF")?.setValue("");
+        this.tooltip_cpf = "Fica habilitado apenas se selecionar o tipo de cliente 'Pessoa Física'";
+        this.tooltip_cnpj = "";
+      }
+      else if ( value == "") {
+        this.tooltip_cpf = "Selecione primeiro o \'Tipo do Cliente\'";
+        this.tooltip_cnpj = "Selecione primeiro o \'Tipo do Cliente\'";
       }
     }
 

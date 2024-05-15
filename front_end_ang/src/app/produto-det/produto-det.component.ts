@@ -121,6 +121,8 @@ export class ProdutoDetComponent implements OnInit {
       this.produto_form.get("Cad_Produto_Tipo_Material")?.disable();
       this.produto_form.get("Cad_Produto_Preco_Venda")?.disable();
       this.produto_form.get("Cad_Produto_Quantidade_Atual")?.disable();
+
+      this.PageTitle = "Visualizando produto";
     }
     else {
 

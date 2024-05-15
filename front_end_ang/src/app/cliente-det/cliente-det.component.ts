@@ -106,6 +106,8 @@ export class ClienteDetComponent implements OnInit {
       this.cliente_form.get("Cad_Cliente_Complemento")?.disable();
       this.cliente_form.get("Cad_Cliente_Cidade")?.disable();
       this.cliente_form.get("Cad_Cliente_Estado")?.disable();
+
+      this.PageTitle = "Visualizando cliente";
     }
     else {
 

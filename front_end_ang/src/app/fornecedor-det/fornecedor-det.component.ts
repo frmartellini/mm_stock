@@ -108,7 +108,9 @@ export class FornecedorDetComponent implements OnInit{
       this.fornecedor_form.get("Cad_fornecedor_Complemento")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Cidade")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Estado")?.disable();
-    }
+    
+      this.PageTitle = "Visualizando fornecedor";
+}
     else {
 
       if ( this.GetMode() == "I") {

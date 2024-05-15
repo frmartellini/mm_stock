@@ -51,11 +51,27 @@ export class MovimentacaoCsComponent implements OnInit {
           {
             MOVIMENTACAO_DATA = response;
             this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
+            this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
           }
     )
   }
+
+  // Funcao para customizar a ordenacao do table e configurar a ordenacao de algumas colunas especificas.
+  // Esta funcao eh executada uma vez para cada linha da tabela quando a ordenacao eh alterada.
+  // "property" contem uma string com o nome da coluan clicada
+  // "item" eh o obj com os dados da linha que estah sendo avaliada no processo de ordenacao.
+  // "item" contem props com os mesmos nomes dos campos retornados pela API do back-end.
+  private sortingDataAccessor (item :any, property: string)  {
+    //console.log("sortingDataAccessor - property=" + property);
+    //console.log("sortingDataAccessor - item=" + JSON.stringify(item));
+    switch (property) {
+      case 'produto': return item.id_produto;
+      case 'cliente': return item.nome_completo;
+      default: return item[property] || '';
+    }
+  } // sortingDataAccessor
 
   //Deletar Movimentação
   excluirMovimentacao(id_movimentacao: number) {

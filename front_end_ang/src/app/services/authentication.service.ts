@@ -116,7 +116,7 @@ export class AuthenticationService {
   updatePassword_http(pNewPW: string
                       ,pOldPW : string
                       ): Observable<any> {
-    console.log(Utils.getDateTimeString() + " updatePassword_http - pNewPW=" + pNewPW);
+    //console.log(Utils.getDateTimeString() + " updatePassword_http - pNewPW=" + pNewPW);
 
     // Montar um obj com as props "senha_nova" e "senha_atual" para enviar para back-end.
     // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
@@ -135,14 +135,14 @@ export class AuthenticationService {
                  ,pOnPwChangeError_CallBackFunction: () => void
                  ) : void {
     
-    console.log(Utils.getDateTimeString() + " updatePassword - pNewPW=" + pNewPW);
+    //console.log(Utils.getDateTimeString() + " updatePassword - pNewPW=" + pNewPW);
 
     // executar a rotina que vai realmente enviar pro back-end a nova senha que deve ser gravada passando as tres callback functions 
     // que serao executadas conforme necessario
     this.updatePassword_http(pNewPW, pOldPW).subscribe( {
 
       next: response => {
-        console.log(Utils.getDateTimeString() + " updatePassword - response recebido=" + JSON.stringify( response ));
+        //console.log(Utils.getDateTimeString() + " updatePassword - response recebido=" + JSON.stringify( response ));
       },
 
       error: error => {
@@ -153,7 +153,7 @@ export class AuthenticationService {
 
       complete() {
         //window.alert('Nova senha gravada com sucesso!');
-        console.log(Utils.getDateTimeString() + " updatePassword - antes de chamar a pOnPwChangeSuccess_CallBackFunction");
+        //console.log(Utils.getDateTimeString() + " updatePassword - antes de chamar a pOnPwChangeSuccess_CallBackFunction");
         pOnPwChangeSuccess_CallBackFunction();
       },
       
@@ -168,7 +168,7 @@ export class AuthenticationService {
               ): Observable<any> {
 
                 console.log(Utils.getDateTimeString() + " login_http - pLogin=" + pLogin);
-    console.log(Utils.getDateTimeString() + " login_http - pSenha=" + pSenha);
+    //console.log(Utils.getDateTimeString() + " login_http - pSenha=" + pSenha);
     
     // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
     const obj = JSON.parse('{ "login":"' + pLogin  + '", "senha":"' + pSenha +'" }');
@@ -187,15 +187,15 @@ export class AuthenticationService {
         ,pOnLoginFail_CallBackFunction: () => void
         ) : void {
 
-    console.log(Utils.getDateTimeString() + " login - pLogin=" + pLogin);
-    console.log(Utils.getDateTimeString() + " senha - pSenha=" + pSenha);
+    //console.log(Utils.getDateTimeString() + " login - pLogin=" + pLogin);
+    //console.log(Utils.getDateTimeString() + " senha - pSenha=" + pSenha);
 
     // executar a rotina que vai realmente enviar pro back-end a nova senha que deve ser gravada passando as tres callback functions 
     // que serao executadas conforme necessario
     this.login_http(pLogin, pSenha).subscribe( {
 
       next: response => {
-        console.log(Utils.getDateTimeString() + " login - response recebido=" + JSON.stringify( response ));
+        //console.log(Utils.getDateTimeString() + " login - response recebido=" + JSON.stringify( response ));
       },
 
       error: error => {
@@ -206,7 +206,7 @@ export class AuthenticationService {
 
       complete() {
         //window.alert('Nova senha gravada com sucesso!');
-        console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginSuccess_CallBackFunction");
+        //console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginSuccess_CallBackFunction");
         pOnLoginSuccess_CallBackFunction();
       },
 

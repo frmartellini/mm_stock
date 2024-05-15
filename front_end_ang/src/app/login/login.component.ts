@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { HttpClient } from '@angular/common/http';
-
-import * as bcrypt from 'bcryptjs';
-
 import { ToastrService } from 'ngx-toastr';
-
-import Utils from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +29,7 @@ export class LoginComponent {
   // funcao executada quando ha sucesso no login
   OnLoginSuccess_CallBackFunction() {
 
-    console.log(Utils.getDateTimeString() + " OnLoginSuccess_CallBackFunction foi executada");
+    //console.log(Utils.getDateTimeString() + " OnLoginSuccess_CallBackFunction foi executada");
 
     this.toastr.success('Login efetuado!' , '', {
       timeOut: 3000
@@ -49,7 +44,7 @@ export class LoginComponent {
   // funcao executada quando ha falha no login
   OnLoginFail_CallBackFunction() {
 
-    console.log(Utils.getDateTimeString() + " OnLoginFail_CallBackFunction foi executada");
+    //console.log(Utils.getDateTimeString() + " OnLoginFail_CallBackFunction foi executada");
 
     //console.error("login nao foi realizado");
     this.toastr.error('Usuário ou senha inválidos!' , '', {

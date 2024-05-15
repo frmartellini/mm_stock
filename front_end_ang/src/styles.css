@@ -23,6 +23,25 @@ purple-green.css
 
 }
 
+.TopTableDiv {
+  _border-style: solid;
+  margin-bottom: 2px;
+}
+
+.TopTable_filtro {
+  _border-style: solid;
+  float: right;
+}
+
+.button-and-filter-container {
+  display: flex;
+  /* Alinha os itens nas extremidades */
+  justify-content: space-between;
+  /* Alinha os itens verticalmente */
+  align-items: center;
+  margin-bottom: 2px;
+}
+
 .LoginDiv {
 
   /* apenas para testes */
@@ -94,4 +113,9 @@ html {
 .table {
   /* diminuir o espaco vertical entre o fim da table do angular material e o inicio da area "mat-paginator" */
   margin-bottom: 3px;
+}
+
+h2 {
+  /* remover a margem inferior do titulo das telas */
+  margin-bottom: 0px !important;
 }

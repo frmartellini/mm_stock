@@ -6,7 +6,7 @@
   <button type="button" mat-raised-button color="basic">Incluir novo</button>
 </a>
 <!-- Filtro-->
-<mat-form-field>
+<mat-form-field subscriptSizing="dynamic">
   <mat-label>Filtro</mat-label>
   <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>

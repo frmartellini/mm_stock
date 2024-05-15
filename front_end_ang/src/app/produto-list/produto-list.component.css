@@ -9,11 +9,3 @@
     border-right: 1px solid #ccc;
     /* Adiciona uma borda direita */
 }
-
-.button-and-filter-container {
-    display: flex;
-    justify-content: space-between;
-    /* Alinha os itens nas extremidades */
-    align-items: center;
-    /* Alinha os itens verticalmente */
-}

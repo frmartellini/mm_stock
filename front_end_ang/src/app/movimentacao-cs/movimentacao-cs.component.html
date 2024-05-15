@@ -1,14 +1,14 @@
-<h2>Consulta de Movimentação</h2>
+<h2>Consulta de Movimentação do Estoque</h2>
 
 <!-- &todo& adicionar um filtro obrigatorio por periodo onde o usuario deverah selecionar a data inicial e a data final e
      quando clicar no botao "Filtrar por periodo" vai carregar apenas as movimentacoes com data/hora dentro do periodo informado pelo usuario.
      Vai usar o controle "datepicker" do angular material (https://material.angular.io/components/datepicker/overview)
 -->
-<div class="container">
-  <mat-form-field class="filtro">
-    <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
-  </mat-form-field>
+<div id="TopTableDiv" class="table-responsive TopTableDiv">
+    <mat-form-field class="TopTable_filtro" subscriptSizing=dynamic>
+      <mat-label>Filtro</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
 </div>
 <!--Tabela-->
 <div class="table-responsive">

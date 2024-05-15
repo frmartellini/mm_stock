@@ -1,16 +1,16 @@
 <h2>Cadastro de Clientes</h2>
 
-<p>&todo&<br />
-  vai exibir a lista de clientes usando um table que serah configurado com o Datatable do Bootstrap, que vai ativar a
-  paginacao e a busca<br />
-  vai ter uma coluna com icone para editar o registro atual chamando o component cliente-det<br />
-  vai ter uma coluna com icone para excluir o registro atual</p>
-
+<div class="button-and-filter-container">
+<!-- Botão de inclusão de novo cliente -->
+<a routerLink="/cliente-det/000">
+  <button type="button" mat-raised-button color="basic">Incluir novo</button>
+</a>
 <!-- Filtro-->
 <mat-form-field>
   <mat-label>Filtro</mat-label>
   <input matInput (keyup)="applyFilter($event)" #input>
 </mat-form-field>
+</div>
 <!--Tabela-->
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
@@ -157,7 +157,3 @@
   <!--Paginador-->
   <mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"></mat-paginator>
 </div>
-
-<a routerLink="/cliente-det/000">
-  <button type="button" mat-raised-button color="basic">Incluir novo</button>
-</a>

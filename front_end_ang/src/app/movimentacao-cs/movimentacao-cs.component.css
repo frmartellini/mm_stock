@@ -1,3 +1,12 @@
+.container {
+  position: relative;
+}
+
+.filtro {
+  position: relative;
+  right: 0;
+  left: 106.5%;
+}
 
 /* formatar as celulas de dados das colunas da tabela */
 

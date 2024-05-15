@@ -4,11 +4,12 @@
      quando clicar no botao "Filtrar por periodo" vai carregar apenas as movimentacoes com data/hora dentro do periodo informado pelo usuario.
      Vai usar o controle "datepicker" do angular material (https://material.angular.io/components/datepicker/overview)
 -->
-
-<mat-form-field>
-  <mat-label>Filtro</mat-label>
-  <input matInput (keyup)="applyFilter($event)" #input>
-</mat-form-field>
+<div class="container">
+  <mat-form-field class="filtro">
+    <mat-label>Filtro</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
+</div>
 <!--Tabela-->
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>

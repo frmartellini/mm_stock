@@ -43,7 +43,7 @@ export class FornecedorDetComponent implements OnInit{
   };
 
   ngOnInit(): void {
-console.log(this.fornecedor);
+    //console.log(this.fornecedor);
     this.fornecedor_form = this.formBuilder.group(
       {
         Cad_fornecedor_Nome: ['', Validators.required]
@@ -89,25 +89,25 @@ console.log(this.fornecedor);
       }
     }
 
-    console.log("this.id final=" + this.id);
-    console.log("this.mode final=" + this.mode);
+    //console.log("this.id final=" + this.id);
+    //console.log("this.mode final=" + this.mode);
 
     // carregar os dados do fornecedor se foi recebido um id na url
     this.getFornecedor();
 
     // desativar os campos se estiver no modo de visualizacao
     if ( this.IsInViewMode() ) {
-      this.fornecedor_form.get("Cad_Fornecedor_Nome")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Responsavel")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Contato_Telefonico")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Redes_Sociais")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Materiais_Fornecidos")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_CNPJ")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Endereco")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Numero")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Complemento")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Cidade")?.disable();
-      this.fornecedor_form.get("Cad_Fornecedor_Estado")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Nome")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Responsavel")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Contato_Telefonico")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Redes_Sociais")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Materiais_Fornecidos")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_CNPJ")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Endereco")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Numero")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Complemento")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Cidade")?.disable();
+      this.fornecedor_form.get("Cad_fornecedor_Estado")?.disable();
     }
     else {
 
@@ -139,12 +139,12 @@ console.log(this.fornecedor);
   // obter o dados do fornecedor conforme o id recebido na url
   getFornecedor(): void {
 
-    console.log("id=" + this.id);
+    //console.log("id=" + this.id);
 
     if ( this.id ) {
       this.fornecedoresApiService.getFornecedor_http(this.id)
         .subscribe(fornecedor => this.fornecedor = fornecedor);
-        console.log(this.fornecedor);
+        //console.log(this.fornecedor);
        // &todo& precisa tratar aqui o caso do usuario digitar uma url com um id de fornecedor que nao existe
       // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }

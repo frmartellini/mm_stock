@@ -72,9 +72,6 @@ export class ProdutoListComponent implements OnInit {
     }
   }
 
-
-
-
   //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

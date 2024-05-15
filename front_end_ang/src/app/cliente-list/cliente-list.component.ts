@@ -60,11 +60,6 @@ export class ClienteListComponent implements OnInit {
     }
   }
 
-  editarCliente(cliente: clienteData) {
-    console.log('Editar cliente', cliente);
-  }
-
-
   //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

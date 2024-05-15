@@ -59,10 +59,6 @@ export class FornecedorListComponent implements OnInit {
     }
   }
 
-  editarFornecedor(fornecedor: FORNECEDOR) {
-    console.log('Editar fornecedor', fornecedor);
-  }
-
    //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

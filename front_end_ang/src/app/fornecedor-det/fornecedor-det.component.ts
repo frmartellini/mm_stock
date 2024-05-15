@@ -51,7 +51,7 @@ export class FornecedorDetComponent implements OnInit{
         ,Cad_fornecedor_Contato_Telefonico: ['', ]
         ,Cad_fornecedor_Redes_Sociais: ['', ]
         ,Cad_fornecedor_Materiais_Fornecidos: ['',Validators.required ]
-        ,Cad_fornecedor_CNPJ: ['',Validators.required ]
+        ,Cad_fornecedor_CNPJ: ['', ]
         ,Cad_fornecedor_Endereco: ['', ]
         ,Cad_fornecedor_Numero: ['', ]
         ,Cad_fornecedor_Complemento: ['', ]
@@ -174,7 +174,7 @@ export class FornecedorDetComponent implements OnInit{
          ,positionClass: 'toast-top-center'
       });
 
-      local_router.navigate(['/Fornecedor-list']);
+      local_router.navigate(['/fornecedor-list']);
 
     } // OnSaveSuccess_CallBackFunction
 

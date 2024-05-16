@@ -35,7 +35,7 @@
            (input)="FilterProdutos(CorInput.value, 'input')"
            (focus)="FilterProdutos(CorInput.value, 'focus')"
            >
-      <mat-autocomplete autoActiveFirstOption #Produto_Auto="matAutocomplete" id="Produto_Auto" name="Produto_Auto" 
+      <mat-autocomplete autoActiveFirstOption requireSelection #Produto_Auto="matAutocomplete" id="Produto_Auto" name="Produto_Auto" 
                         [displayWith]="Produto_Auto_DisplayFn">
          @for (produto of filtered_produtos; track produto) {
           <mat-option [value]="produto">{{produto.descricao}}</mat-option>

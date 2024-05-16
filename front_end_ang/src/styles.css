@@ -24,13 +24,17 @@ purple-green.css
 }
 
 .TopTableDiv {
+  display: flex;
   _border-style: solid;
   margin-bottom: 2px;
+  /* Alinha os itens verticalmente */
+  align-items: center;
 }
 
 .TopTable_filtro {
-  _border-style: solid;
-  float: right;
+  /* para a div do filtro ficar rente a borda direita da tela */
+  margin-left: auto;
+  order: 2;
 }
 
 .button-and-filter-container {

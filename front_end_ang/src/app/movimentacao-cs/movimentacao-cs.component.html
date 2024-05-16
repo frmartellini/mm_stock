@@ -5,6 +5,21 @@
      Vai usar o controle "datepicker" do angular material (https://material.angular.io/components/datepicker/overview)
 -->
 <div id="TopTableDiv" class="table-responsive TopTableDiv">
+
+  <mat-form-field class="TopTable_filtro_periodo" subscriptSizing=dynamic>
+    <mat-label>Período</mat-label>
+    <mat-date-range-input [formGroup]="periodo_range" [rangePicker]="periodo_filtro_daterangepicker">
+      <input matStartDate formControlName="dhinicio" placeholder="Data inicial">
+      <input matEndDate formControlName="dhfim" placeholder="Data final">
+    </mat-date-range-input>
+    <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+    <mat-datepicker-toggle matIconSuffix [for]="periodo_filtro_daterangepicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #periodo_filtro_daterangepicker></mat-date-range-picker>
+  </mat-form-field>
+  &nbsp;
+  &nbsp;
+  <button type="button" mat-raised-button color="basic" (click)="BtnFiltroPeriodoClick($event)">Filtrar</button>
+  
     <mat-form-field class="TopTable_filtro" subscriptSizing=dynamic>
       <mat-label>Filtro</mat-label>
       <input matInput (keyup)="applyFilter($event)" #input>

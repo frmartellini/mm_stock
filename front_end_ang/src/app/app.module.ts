@@ -29,8 +29,12 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { CustomPaginator } from './custom-paginator';
+import { DatePipe } from '@angular/common';
+import { CookieService } from 'ngx-cookie-service';
 
 import {HashLocationStrategy, LocationStrategy, registerLocaleData, DecimalPipe} from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
@@ -87,6 +91,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatSelectModule
     , MatButtonModule
     , MatAutocompleteModule
+    , MatDatepickerModule
     , MatTooltipModule
     , CurrencyMaskModule
 
@@ -97,7 +102,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-
+    provideNativeDateAdapter()
+    ,DatePipe
+    ,CookieService
   ],
   bootstrap: [AppComponent]
 })

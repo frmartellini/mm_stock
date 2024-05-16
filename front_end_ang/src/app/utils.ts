@@ -30,5 +30,11 @@ export default class Utils {
 
   } // getTipoMovText
 
+  // retorna se uma data eh valida (true) ou nao (false)
+  static isDate = (value: unknown): value is Date => {
+    
+    return value instanceof Date && !isNaN(+value);
+    
+  } // isDate
 
 } // class

@@ -6,6 +6,9 @@ import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { MovimentacaoService } from '../services/movimentacao.service';
 import Utils from '../utils';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common'
+import { CookieService } from 'ngx-cookie-service';
 
 export interface movimentacaoData{
 
@@ -39,14 +42,54 @@ export class MovimentacaoCsComponent implements OnInit {
   // "publicar" a funcao que retorna a descricao do tipo de movimentacao para o .html conseguir usar
   public getTipoMovText = Utils.getTipoMovText;
 
-  constructor(private http: HttpClient, private movimentacaoService: MovimentacaoService){}
+  // guarda as datas do filtro por periodo no formato yyyy/MM/dd
+  dhinicio_str: string | null = "";
+  dhfim_str: string | null = "";
+
+  periodo_range = new FormGroup({
+    dhinicio: new FormControl<Date | null>(null),
+    dhfim: new FormControl<Date | null>(null),
+  });
+
+  constructor(private http: HttpClient
+              , private movimentacaoService: MovimentacaoService
+              , public datepipe: DatePipe
+              , private cookieService: CookieService
+              )
+  {
+
+  }
+
     //Inicialização dos dados na tabela
   ngOnInit(){
+
+    // obter as datas dos cookies
+    this.dhinicio_str = this.cookieService.get('movimentacao-cs-dhinicio');
+    this.dhfim_str = this.cookieService.get('movimentacao-cs-dhfim');
+    //console.log("dhinicio_str carregado do cookie=" + this.dhinicio_str);
+    //console.log("dhfim_str carregado do cookie=" + this.dhfim_str);
+
+    // setar as datas do "periodo_filtro_daterangepicker" com as datas obtidas dos cookies
+    try {
+      this.periodo_range.get("dhinicio")?.setValue(new Date(this.dhinicio_str));
+      this.periodo_range.get("dhfim")?.setValue(new Date(this.dhfim_str));
+    }
+    catch {}
+
     this.fetchData();
-  }
-   // Obtenção dos Dados da API
-   fetchData(): void {
-    this.http.get(ENV.REST_API_URL+'/movimentacao').subscribe(
+  } // ngOnInit
+
+  // Obtenção dos Dados da API
+  fetchData(): void {
+    
+    // api que retorna tudo porque nao receb params de data de inicio de data de fim
+    //this.http.get(ENV.REST_API_URL+'/movimentacao').subscribe(
+    
+    // exemplo de como fica a chamada a api movimentacao_por_periodo, atencao com o formato da data
+    //this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio=2024-05-15&dhfim=2024-05-16').subscribe(
+    
+    // chamar a api que recebe a data inicial e a data final para retornar apenas as movimentacoes do periodo
+    this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + '/').subscribe(
         (response: any) =>
           {
             MOVIMENTACAO_DATA = response;
@@ -54,9 +97,10 @@ export class MovimentacaoCsComponent implements OnInit {
             this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
+            //console.log("subscribe do fetchData executou");
           }
     )
-  }
+  } // fetchData
 
   // Funcao para customizar a ordenacao do table e configurar a ordenacao de algumas colunas especificas.
   // Esta funcao eh executada uma vez para cada linha da tabela quando a ordenacao eh alterada.
@@ -83,7 +127,7 @@ export class MovimentacaoCsComponent implements OnInit {
     }
   }
 
-  //filtro
+  //filtro digitado pelo usuario
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -101,4 +145,30 @@ export class MovimentacaoCsComponent implements OnInit {
 
   }
 
-}
+  // botao Filtrar do filtro por periodo
+  BtnFiltroPeriodoClick(event: Event) {
+    
+    var val_dhini_picker = this.periodo_range.get("dhinicio")?.value;
+    var val_dhfim_picker = this.periodo_range.get("dhfim")?.value;
+    //console.log("val_dhini_picker=" + val_dhini_picker);
+    //console.log("val_dhfim_picker=" + val_dhfim_picker);
+
+    //if ( ( isNaN (val_dhini_picker?.getTime()) )  || ( isNaN (val_dhfim_picker?.getTime()) )  ) {
+    //if ( this.periodo_range.get("dhinicio")?.hasError('matDatepickerParse') || this.periodo_range.get("dhfim")?.hasError('matDatepickerParse') ) {
+    if ( ( ! Utils.isDate(val_dhini_picker) ) || ( ! Utils.isDate(val_dhfim_picker) )  ) {  
+      alert("As datas de início de fim devem ser informadas!");
+      return;
+    }
+
+    this.dhinicio_str = this.datepipe.transform(val_dhini_picker, 'yyyy/MM/dd');
+    this.dhfim_str = this.datepipe.transform(val_dhfim_picker, 'yyyy/MM/dd') ;
+    //console.log("periodo=" + this.dhinicio_str + " - " + this.dhfim_str);
+    
+    // gravar os cookies com as datas do periodo do filtro
+    this.cookieService.set( 'movimentacao-cs-dhinicio', this.dhinicio_str ?? "" );
+    this.cookieService.set( 'movimentacao-cs-dhfim', this.dhfim_str ?? "" );
+
+    this.fetchData();
+  } // BtnFiltroPeriodoClick
+
+} // class

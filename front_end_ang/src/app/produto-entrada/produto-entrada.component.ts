@@ -28,6 +28,8 @@ export class ProdutoEntradaComponent implements OnInit {
 
   // lista de produtos para exibir o controle Select
   public produtos: PRODUTO[] = [];
+  // contem apenas os produtos conforme filtrado pela digitacao do usuario no "Produto_Input"
+  public filtered_produtos: PRODUTO[] = [];
 
   //formfieldControl = new FormControl( '', [Validators.required] );
 
@@ -64,10 +66,11 @@ export class ProdutoEntradaComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    
+    //console.log("produto-entrada - ngOnInit");
     this.form = this.formBuilder.group(
       {
-        ProdutoSelect: ['', Validators.required]
+        //ProdutoSelect: ['', Validators.required]
+        Produto_Input: ['', Validators.required]
         ,QuantidadeInput: ['', Validators.required]
         ,ObsTextArea: ['', ]
       }
@@ -80,7 +83,8 @@ export class ProdutoEntradaComponent implements OnInit {
     this.getAllProdutos();
 
     if ( this.IsInViewMode() ) {
-      this.form.get("ProdutoSelect")?.disable();
+      //this.form.get("ProdutoSelect")?.disable();
+      this.form.get("Produto_Input")?.disable();
       this.form.get("QuantidadeInput")?.disable();
       this.form.get("ObsTextArea")?.disable();
     }
@@ -97,13 +101,31 @@ export class ProdutoEntradaComponent implements OnInit {
     }
   }
 
+  // executado quando o usuario digita no campo Input do autocomplete do campo "Produto"
+  public FilterProdutos(value :string, EventName: any): void {
+    //console.log("value="+ value);
+    if( EventName == "input") {
+      this.filtered_produtos = this.produtos.filter(produto => produto.descricao.toLowerCase().includes(value.toLowerCase()));
+      //console.log("this.filtered_cores abaixo");
+      //console.table(this.filtered_cores);
+    }
+    else if( EventName == "focus") {
+      this.filtered_produtos = this.produtos;
+    }
+  } // FilterCores
+
+  // funcao que retorna o rexto a ser exibido em cada opcao do autocomplete do Produto
+  // pProduto contem o objeto PRODUTO que eh enviado pelo autocomplete para esta funcao "decidir" e retornar o texto que deve ser exibido na opcao da lista
+  Produto_Auto_DisplayFn(pProduto: PRODUTO): string {
+    //console.log("Produto_Auto_DisplayFn - pProduto=" + JSON.stringify(pProduto));
+    return pProduto && pProduto.descricao ? pProduto.descricao : '';
+  }
+
   onSubmit(pFormValues: any): void {
 
     var local_toastr = this.toastr;
 
     var local_router = this.router;
-
-    //console.log("post param=" + JSON.stringify(pFormValues));
 
     // funcao executada quando ha sucesso
     function OnSaveSuccess_CallBackFunction() {
@@ -131,10 +153,19 @@ export class ProdutoEntradaComponent implements OnInit {
 
     if (this.movimentacao) {
 
+      //console.log("pFormValues=" + JSON.stringify(pFormValues));
+
+      // obter o obj que contem o produto selecionado pelo usuario usando o autocomplete "Produto_Auto"
+      var prod :PRODUTO = this.form.get("Produto_Input")?.value;
+      //console.log("prod=" + JSON.stringify(prod));
+      // precisa setar o this.movimentacao.id_produto porque nenhum controle faz o binding com este campo
+      this.movimentacao.id_produto = prod.id_produto;
+
       this.movimentacao.data_hora = Utils.getCurrentDateTime_forMysql();
       this.movimentacao.tipo_mov = "E";
 
-      console.log("this.movimentacao.data_hora=" + this.movimentacao.data_hora);
+      //console.log("this.movimentacao.data_hora=" + this.movimentacao.data_hora);
+      //console.log("this.movimentacao=" + JSON.stringify(this.movimentacao));
 
       this.movservice.createMovimentacao_http(this.movimentacao)
         .subscribe( {
@@ -157,4 +188,4 @@ export class ProdutoEntradaComponent implements OnInit {
     this.location.back();
   }
 
-}
+} // class

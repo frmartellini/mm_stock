@@ -77,7 +77,7 @@ export class ProdutoSaidaComponent implements OnInit {
       {
         ProdutoSelect: ['', Validators.required]
         ,QuantidadeInput: ['', Validators.required]
-        ,ClienteSelect: ['', Validators.required]
+        ,ClienteSelect: ['', ]
         ,NumPedidoInput: ['', ]
         ,ObsTextArea: ['', ]
       }

@@ -34,9 +34,9 @@ export class MovimentacaoService {
     return this.http.post(ENV.REST_API_URL+'/movimentacao/create', JSON.stringify(mov), this.httpOptions).pipe(
     );
   }
-  excluirMovimentacao(id: number) {
-    return this.http.delete(ENV.REST_API_URL + '/movimentacao/'+id);
+  // excluirMovimentacao(id: number) {
+  //   return this.http.delete(ENV.REST_API_URL + '/movimentacao/'+id);
 
-  }
+  // }
 
 }

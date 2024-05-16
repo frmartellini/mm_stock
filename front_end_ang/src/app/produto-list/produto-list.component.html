@@ -1,11 +1,9 @@
-
-<h2>Cadastro de Produtos</h2>
-
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo produto -->
   <a routerLink="/produto-det/0">
     <button type="button" mat-raised-button color="basic">Incluir novo</button>
   </a>
+  <h2>Cadastro de Produtos</h2>
   <!-- Filtro-->
   <mat-form-field subscriptSizing="dynamic">
     <mat-label>Filtro</mat-label>
@@ -16,7 +14,7 @@
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_produto">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID do Produto" [matTooltipPosition]="'above'">
              Id do Produto
         </th>
         <td mat-cell *matCellDef="let element">
@@ -25,16 +23,16 @@
     </ng-container>
 
     <ng-container matColumnDef="descricao">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
                Descrição
           </th>
-        <td mat-cell *matCellDef="let element">
+        <td class="centered-sorted-header" mat-cell *matCellDef="let element">
           <a href='{{"/produto-det/" + element.id_produto+ "?mode=V"}}'>{{ element.descricao }}</a>              
         </td>
     </ng-container>
 
     <ng-container matColumnDef="cor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Cor
           </th>
         <td mat-cell *matCellDef="let element">
@@ -43,7 +41,7 @@
     </ng-container>
 
     <ng-container matColumnDef="tamanho">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Tamanho
           </th>
         <td mat-cell *matCellDef="let element">
@@ -52,7 +50,7 @@
     </ng-container>
 
     <ng-container matColumnDef="tipo_material">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Tipo de Material
         </th>
       <td mat-cell *matCellDef="let element">
@@ -61,7 +59,7 @@
     </ng-container>
 
     <ng-container matColumnDef="preco_venda">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Preço de Venda
         </th>
       <td mat-cell *matCellDef="let element">
@@ -70,7 +68,7 @@
     </ng-container>
 
     <ng-container matColumnDef="quantidade_atual">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
              Quantidade Atual
         </th>
       <td mat-cell *matCellDef="let element">
@@ -79,14 +77,16 @@
     </ng-container>
 
 <!-- Botões Editar e Exlcuir-->
-       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="text-center">
+      <ng-container  matColumnDef="actions" >
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef >
           Ações
         </th>
         <td mat-cell *matCellDef="let row" class="text-center">
-          <div fxLayout="row" fxLayoutAlign="center center"> <!-- Flex Layout para centralizar os botões -->
-            <a href='{{"/produto-det/" + row.id_produto + "?mode=E"}}'><mat-icon>edit</mat-icon></a>
-            <button mat-stroked-button class="m-2 square-button" color="warn" title="Deletar" (click)="excluirItem(row.id_produto)">
+          <div class="d-flex align-items-center justify-content-center">
+            <button mat-stroked-button class="" color="primary">
+              <a href='{{"/produto-det/" + row.id_produto + "?mode=E"}}'><mat-icon>edit</mat-icon></a>
+            </button>     
+            <button mat-stroked-button class="" color="warn" title="Deletar" (click)="excluirItem(row.id_produto)">
               <!-- Adicione uma classe de estilo para o botão quadrado -->
               <mat-icon>delete</mat-icon>
             </button>

@@ -35,7 +35,7 @@ export class MovimentacaoCsComponent implements OnInit {
 
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   // colunas que serao exibidas pelo table
-  public displayColumn: string[] = ['id_movimentacao','data_hora','produto','tipo_mov','quantidade','num_pedido','cliente','obs','actions'];
+  public displayColumn: string[] = ['id_movimentacao','data_hora','produto','tipo_mov','quantidade','num_pedido','cliente','obs']; //,'actions'
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
@@ -117,15 +117,15 @@ export class MovimentacaoCsComponent implements OnInit {
     }
   } // sortingDataAccessor
 
-  //Deletar Movimentação
-  excluirMovimentacao(id_movimentacao: number) {
-    if (confirm('Tem certeza que deseja excluir esta Movimentação?')) {
-        this.movimentacaoService.excluirMovimentacao(id_movimentacao).subscribe(() => {
-        this.fetchData(); // Recarregar os itens após a exclusão
+  // //Deletar Movimentação
+  // excluirMovimentacao(id_movimentacao: number) {
+  //   if (confirm('Tem certeza que deseja excluir esta Movimentação?')) {
+  //       this.movimentacaoService.excluirMovimentacao(id_movimentacao).subscribe(() => {
+  //       this.fetchData(); // Recarregar os itens após a exclusão
 
-      });
-    }
-  }
+  //     });
+  //   }
+  // }
 
   //filtro digitado pelo usuario
   applyFilter(event: Event) {

@@ -112,6 +112,10 @@ tyle: solid; */
   color: #fff;
 }
 
+.admin-header a .home {
+  display: flex;
+}
+
 .logo img {
   width: 40px;
   height: auto;
@@ -147,7 +151,7 @@ tyle: solid; */
 
 /* Estilo dos links quando estão ativos */
 .admin-nav ul li a.active {
-  color: #007bff; /* Azul */
+  color: silver; 
 }
 
 /* Animação de transição */

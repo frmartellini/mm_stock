@@ -43,7 +43,7 @@ ng-click="setActive('produto-saida')" ng-class="{ 'active': activeTab === 'produ
 ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'movimentacao-cs' }" -->
 
 <header *ngIf="menu" class="admin-header">
-  <a routerLink="/home">
+  <a routerLink="/home" class="home">
     <div class="logo">
       <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
       <img src="../assets/images/logo-mm-stock.jpg" alt="Logo">
@@ -51,14 +51,14 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   </a>
   <nav class="admin-nav">
     <ul>
-      <li><a routerLink="/cliente-list" >Cadastro de Clientes</a></li>
-      <li><a routerLink="/fornecedor-list" >Cadastro de Fornecedores</a></li>
-      <li><a routerLink="/produto-list" >Cadastro de Produtos</a></li>
+      <li><a routerLink="/cliente-list" class="active">Cadastro de Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" class="active">Cadastro de Fornecedores</a></li>
+      <li><a routerLink="/produto-list" class="active">Cadastro de Produtos</a></li>
 
-      <li><a routerLink="/produto-entrada" >Entrada de Produto</a></li>
-      <li><a routerLink="/produto-saida" >Saída de Produto</a></li>
+      <li><a routerLink="/produto-entrada" class="active">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" class="active">Saída de Produto</a></li>
 
-      <li><a routerLink="/movimentacao-cs" >Consulta de Movimentação do Estoque</a></li>
+      <li><a routerLink="/movimentacao-cs" class="active">Consulta de Movimentação do Estoque</a></li>
     </ul>
   </nav>
   <div class="admin-actions">

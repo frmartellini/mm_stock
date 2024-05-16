@@ -5,6 +5,8 @@ import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
 
+const menuHighlightScript = require('../assets/menu-highlight.js');
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

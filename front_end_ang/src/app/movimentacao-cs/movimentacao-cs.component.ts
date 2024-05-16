@@ -45,6 +45,9 @@ export class MovimentacaoCsComponent implements OnInit {
   // guarda as datas do filtro por periodo no formato yyyy/MM/dd
   dhinicio_str: string | null = "";
   dhfim_str: string | null = "";
+  // guarda as datas do filtro por periodo em obj tipo Date
+  val_dhini_picker : any; // Date
+  val_dhfim_picker : any;  // Date
 
   periodo_range = new FormGroup({
     dhinicio: new FormControl<Date | null>(null),
@@ -76,6 +79,19 @@ export class MovimentacaoCsComponent implements OnInit {
     }
     catch {}
 
+    // se a data inicio ou data fim do "periodo_range" for invalido/vazio, vamos inicializar com o periodo sendo o fim a data atual e o inicio vai ser 6 dias atras
+    if ( ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) ) || ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) )  ) {  
+      this.periodo_range.get("dhfim")?.setValue(new Date());
+      // calcular a data inicial que vai ser a data atual menos 6 dias
+      var data_fim :Date;
+      data_fim = new Date();
+      data_fim.setDate(data_fim.getDate() - 6);
+      this.periodo_range.get("dhinicio")?.setValue(data_fim );
+
+      // atualziar as vars Date e string usadas no filtro por periodo
+      this.Update_vars_dh_filtro();
+    }
+
     this.fetchData();
   } // ngOnInit
 
@@ -89,7 +105,8 @@ export class MovimentacaoCsComponent implements OnInit {
     //this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio=2024-05-15&dhfim=2024-05-16').subscribe(
     
     // chamar a api que recebe a data inicial e a data final para retornar apenas as movimentacoes do periodo
-    this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + '/').subscribe(
+    // precisa passar a hora23:59:59 no param dhfim para considerar o dia final todo
+    this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + ' 23:59:59/').subscribe(
         (response: any) =>
           {
             MOVIMENTACAO_DATA = response;
@@ -145,24 +162,37 @@ export class MovimentacaoCsComponent implements OnInit {
 
   }
 
-  // botao Filtrar do filtro por periodo
-  BtnFiltroPeriodoClick(event: Event) {
-    
-    var val_dhini_picker = this.periodo_range.get("dhinicio")?.value;
-    var val_dhfim_picker = this.periodo_range.get("dhfim")?.value;
+  // atualizar as vars do tipo Date e string que sao usados no filtro por periodo
+  Update_vars_dh_filtro() {
+
+    this.val_dhini_picker = this.periodo_range.get("dhinicio")?.value;
+    this.val_dhfim_picker = this.periodo_range.get("dhfim")?.value;
     //console.log("val_dhini_picker=" + val_dhini_picker);
     //console.log("val_dhfim_picker=" + val_dhfim_picker);
 
-    //if ( ( isNaN (val_dhini_picker?.getTime()) )  || ( isNaN (val_dhfim_picker?.getTime()) )  ) {
-    //if ( this.periodo_range.get("dhinicio")?.hasError('matDatepickerParse') || this.periodo_range.get("dhfim")?.hasError('matDatepickerParse') ) {
-    if ( ( ! Utils.isDate(val_dhini_picker) ) || ( ! Utils.isDate(val_dhfim_picker) )  ) {  
-      alert("As datas de início de fim devem ser informadas!");
-      return;
+    try {
+      this.dhinicio_str = this.datepipe.transform(this.val_dhini_picker, 'yyyy/MM/dd');
+      this.dhfim_str = this.datepipe.transform(this.val_dhfim_picker, 'yyyy/MM/dd') ;
+      //console.log("periodo=" + this.dhinicio_str + " - " + this.dhfim_str);
+    }
+    catch {
+      this.dhinicio_str = "";
+      this.dhfim_str = "";
     }
 
-    this.dhinicio_str = this.datepipe.transform(val_dhini_picker, 'yyyy/MM/dd');
-    this.dhfim_str = this.datepipe.transform(val_dhfim_picker, 'yyyy/MM/dd') ;
-    //console.log("periodo=" + this.dhinicio_str + " - " + this.dhfim_str);
+  } // Update_vars_dh_filtro
+
+  // botao Filtrar do filtro por periodo
+  BtnFiltroPeriodoClick(event: Event) {
+    
+    // atualziar as vars Date e string usadas no filtro por periodo
+    this.Update_vars_dh_filtro();
+
+    // se 
+    if ( ( ! Utils.isDate(this.val_dhini_picker) ) || ( ! Utils.isDate(this.val_dhfim_picker) )  ) {  
+      alert("A \"Data Inicial\" e a \"Data Final\" devem ser informadas!");
+      return;
+    }
     
     // gravar os cookies com as datas do periodo do filtro
     this.cookieService.set( 'movimentacao-cs-dhinicio', this.dhinicio_str ?? "" );

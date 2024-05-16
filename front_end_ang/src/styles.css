@@ -150,3 +150,8 @@ h2 {
   min-width: 40px !important;
   max-width: 50px !important;
 }
+
+/* pintar a linha do table quando o mouse passa (hover) sobre a linha #F0F8FF #E1EBEE  #AFDBF5 */
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #e2effa !important;
+}

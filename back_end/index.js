@@ -385,6 +385,27 @@ app.get('/movimentacao', (req, res) => {
   console.log('get /movimentacao executado. Movimentações retornadas com sucesso!');
 });
 
+// Retorna os registros de movimentacao de um periodo de datas.
+// Precisa passar os params como o exemplo abaixo:
+//     /movimentacao_por_periodo?dhinicio=2024-05-15&dhfim=2024-05-16
+app.get('/movimentacao_por_periodo', (req, res) => {
+  console.log("/movimentacao_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
+  console.log("/movimentacao_por_periodo - req.query.dhfim=" + req.query.dhfim);
+  const query = 'SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m '+
+                'LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) ' +
+                'INNER JOIN produto p ON (m.id_produto = p.id_produto)' +
+                'WHERE ( m.data_hora BETWEEN ? AND ? ) ';
+  const values = [ req.query.dhinicio , req.query.dhfim ];
+  db.query(query, values, (err, results) => {
+    if (err) {
+      res.status(500).send('Erro retornando movimentações por periodo: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /movimentacao_por_periodo executado. Movimentações retornadas com sucesso!');
+});
+
 /* Create a new post */
 app.post('/movimentacao/create', async (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;

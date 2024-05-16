@@ -37,4 +37,13 @@ export default class Utils {
     
   } // isDate
 
+  // recarregar a pagina atual
+  // o param "pThis" deve ser o objeto do component que tem o "private router: Router" injected no constructor
+  static reloadCurrentRoute(pThis : any) : void {
+    let currentUrl = pThis.router.url;
+    pThis.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      pThis.router.navigate([currentUrl]);
+    });
+  } // reloadCurrentRoute
+
 } // class

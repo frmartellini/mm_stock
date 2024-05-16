@@ -127,6 +127,8 @@ export class ProdutoEntradaComponent implements OnInit {
 
     var local_router = this.router;
 
+    var _this = this;
+
     // funcao executada quando ha sucesso
     function OnSaveSuccess_CallBackFunction() {
 
@@ -135,9 +137,11 @@ export class ProdutoEntradaComponent implements OnInit {
         ,positionClass: 'toast-top-center'
       });
 
-      local_router.navigate(['/produto-entrada']);  
-      //local_router.navigate(['/produto-list']);
-      //location.reload();
+      Utils.reloadCurrentRoute(_this); // recarregar a pagina atual
+      //_this.reloadCurrentRoute();
+      //local_router.navigate(['/produto-entrada']); // assim acontece que o campo qtde ainda fica com o valor conteudo
+      //local_router.navigate(['/produto-list']); // achamos melhor nao voltar para a tela da lista de produtos
+      //location.reload(); // nao pode porque assim nao exibe a msg Toastr da confirmacao pro usuario
 
     } // OnSaveSuccess_CallBackFunction
 

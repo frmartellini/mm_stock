@@ -117,6 +117,8 @@ export class ProdutoSaidaComponent implements OnInit {
 
     var local_router = this.router;
 
+    var _this = this;
+
     //console.log("post param=" + JSON.stringify(pFormValues));
 
     // funcao executada quando ha sucesso
@@ -127,7 +129,8 @@ export class ProdutoSaidaComponent implements OnInit {
         ,positionClass: 'toast-top-center'
       });
   
-      local_router.navigate(['/produto-saida']);
+      //local_router.navigate(['/produto-saida']);
+      Utils.reloadCurrentRoute(_this); // recarregar a pagina atual
 
     } // OnSaveSuccess_CallBackFunction
 
@@ -146,7 +149,7 @@ export class ProdutoSaidaComponent implements OnInit {
       this.movimentacao.data_hora = Utils.getCurrentDateTime_forMysql();
       this.movimentacao.tipo_mov = "S";
 
-      console.log("this.movimentacao.data_hora=" + this.movimentacao.data_hora);
+      //console.log("this.movimentacao.data_hora=" + this.movimentacao.data_hora);
 
       this.movservice.createMovimentacao_http(this.movimentacao)
         .subscribe( {

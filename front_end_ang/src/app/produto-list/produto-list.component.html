@@ -88,12 +88,12 @@
               <a href='{{"/produto-det/" + row.id_produto + "?mode=E"}}'><mat-icon>edit</mat-icon></a>
             </button>     
             -->
-            <a href='{{"/produto-det/" + row.id_produto + "?mode=E"}}'>
+            <a href='{{"/produto-det/" + row.id_produto + "?mode=E"}}' matTooltip="Editar" [matTooltipPosition]="'above'">
               <button mat-stroked-button class="" color="primary">
                 <mat-icon>edit</mat-icon>
               </button>
             </a>
-            <button mat-stroked-button class="" color="warn" title="Deletar" (click)="excluirItem(row.id_produto)">
+            <button mat-stroked-button class="" color="warn" (click)="excluirItem(row.id_produto)" matTooltip="Excluir" [matTooltipPosition]="'above'">
               <!-- Adicione uma classe de estilo para o botão quadrado -->
               <mat-icon>delete</mat-icon>
             </button>

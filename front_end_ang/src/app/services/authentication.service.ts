@@ -101,7 +101,7 @@ export class AuthenticationService {
 
     this.setLogado(pLogin);
 
-    this.router.navigate(['']);
+    this.router.navigate(['home']);
 
   }
 

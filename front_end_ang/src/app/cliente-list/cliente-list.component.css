@@ -1,10 +1,3 @@
-.button-and-filter-container {
-    display: flex;
-    justify-content: space-between;
-    /* Alinha os itens nas extremidades */
-    align-items: center;
-    /* Alinha os itens verticalmente */
-}
 
 /* formatar as celulas de dados das colunas da tabela */
 
@@ -14,8 +7,8 @@
 }
 
 .mat-column-nome_completo {
-    text-align: center;
-    width: 150px !important;
+    text-align: left;
+    width: 200px !important;
 }
 
 .mat-column-telefone {
@@ -24,28 +17,45 @@
 }
 
 .mat-column-email {
-    text-align: center;
+    
+    text-align: left;
     width: 60px !important;
+    max-width: 140px !important;
+    
+}
+
+td.mat-column-email {
+  font-size: 12px;
 }
 
 .mat-column-nome_loja {
-    text-align: center;
-    width: 120px !important;
+    text-align: left;
+    width: 140px !important;
 }
 
 .mat-column-cpf {
     text-align: center;
     width: 50px !important;
 }
+td.mat-column-cpf {
+  font-size: 12px;
+}
 
 .mat-column-cnpj {
     text-align: center;
     width: 50px !important;
 }
+td.mat-column-cnpj {
+  font-size: 12px;
+}
 
 .mat-column-tipo_cliente {
+    font-size: 12px;
     text-align: center;
     width: 95px !important;
+}
+td.mat-column-tipo_cliente {
+  font-size: 12px;
 }
 
 .mat-column-endereco {
@@ -73,10 +83,6 @@
     width: 30px !important;
 }
 
-.mat-column-actions {
-    text-align: center;
-    width: 30px !important;
-}
 
 /* formatar o table (linhas, header, botoes) */
 

@@ -14,8 +14,8 @@
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_fornecedor">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID do Cliente" [matTooltipPosition]="'above'">
-             Id do Fornecedor
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID do Fornecedor" [matTooltipPosition]="'above'">
+             ID
         </th>
         <td mat-cell *matCellDef="let element">
               {{element.id_fornecedor}}
@@ -24,7 +24,7 @@
 
     <ng-container matColumnDef="nome_fornecedor">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-               Nome do Fornecedor
+               Nome
           </th>
         <td mat-cell *matCellDef="let element">
           <a href='{{"/fornecedor-det/" + element.id_fornecedor + "?mode=V"}}'>{{ element.nome_fornecedor}}</a>   
@@ -33,7 +33,7 @@
 
     <ng-container matColumnDef="nome_responsavel">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Nome do Responsável
+              Responsável
           </th>
         <td mat-cell *matCellDef="let element">
               {{ element.nome_responsavel }}
@@ -42,7 +42,7 @@
 
     <ng-container matColumnDef="contato_telefonico">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Contato Telefonico
+              Telefone
           </th>
         <td mat-cell *matCellDef="let element">
               {{ element.contato_telefonico }}
@@ -76,32 +76,32 @@
         </td>
     </ng-container>
 
-    <ng-container matColumnDef="endereco">
+    <!-- <ng-container matColumnDef="endereco">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Endereço
         </th>
       <td mat-cell *matCellDef="let element">
             {{ element.endereco }}
         </td>
-    </ng-container>
+    </ng-container> -->
 
-    <ng-container matColumnDef="numero">
+    <!-- <ng-container matColumnDef="numero">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
              Número
         </th>
       <td mat-cell *matCellDef="let element">
             {{ element.numero }}
         </td>
-    </ng-container>
+    </ng-container> -->
 
-     <ng-container matColumnDef="complemento">
+     <!-- <ng-container matColumnDef="complemento">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Complemento
         </th>
       <td mat-cell *matCellDef="let element">
             {{ element.complemento }}
         </td>
-    </ng-container>
+    </ng-container> -->
 
       <ng-container matColumnDef="cidade">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -128,9 +128,11 @@
           </th>
           <td mat-cell *matCellDef="let row" class="text-center">
             <div class="d-flex align-items-center justify-content-center">
-              <button mat-stroked-button class="" color="primary">
-                <a href='{{"/fornecedor-det/" + row.id_fornecedor + "?mode=E"}}'><mat-icon>edit</mat-icon></a>
-              </button>     
+              <a href='{{"/fornecedor-det/" + row.id_fornecedor + "?mode=E"}}'>
+                <button mat-stroked-button class="" color="primary">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </a>
               <button mat-stroked-button class="" color="warn" title="Deletar" (click)="excluirFornecedor(row.id_fornecedor)">
                 <!-- Adicione uma classe de estilo para o botão quadrado -->
                 <mat-icon>delete</mat-icon>

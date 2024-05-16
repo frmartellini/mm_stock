@@ -1,10 +1,3 @@
-.button-and-filter-container {
-    display: flex;
-    justify-content: space-between;
-    /* Alinha os itens nas extremidades */
-    align-items: center;
-    /* Alinha os itens verticalmente */
-}
 
 /* formatar as celulas de dados das colunas da tabela */
 
@@ -15,21 +8,23 @@
 
 .mat-column-nome_fornecedor {
     text-align: left;
-    width: 100px !important;
+    width: 200px !important;
 }
 
 .mat-column-nome_responsavel {
     text-align: left;
-    width: 120px !important;
+    width: 100px !important;
+    max-width: 100px !important;
 }
 
 .mat-column-contato_telefonico {
     text-align: center;
     width: 40px !important;
+    max-width: 80px !important;
 }
 
 .mat-column-redes_sociais {
-    text-align: center;
+    text-align: left;
     width: 70px !important;
 }
 
@@ -41,6 +36,7 @@
 .mat-column-cnpj {
     text-align: center;
     width: 40px !important;
+    max-width: 100px !important;
 }
 
 .mat-column-endereco {
@@ -49,8 +45,9 @@
 }
 
 .mat-column-numero {
-    text-align: center;
+    text-align: right;
     width: 30px !important;
+    max-width: 60px !important;
 }
 
 .mat-column-complemento {
@@ -64,11 +61,6 @@
 }
 
 .mat-column-uf {
-    text-align: center;
-    width: 30px !important;
-}
-
-.mat-column-actions {
     text-align: center;
     width: 30px !important;
 }

@@ -1,21 +1,14 @@
-.button-and-filter-container {
-    display: flex;
-    justify-content: space-between;
-    /* Alinha os itens nas extremidades */
-    align-items: center;
-    /* Alinha os itens verticalmente */
-}
 
 /* formatar as celulas de dados das colunas da tabela */
 
 .mat-column-id_produto {
     text-align: center;
-    width: 40px !important;
+    width: 30px !important;
 }
 
 .mat-column-descricao {
-    text-align: center;
-    width: 150px !important;
+    text-align: left;
+    width: 300px !important;
 }
 
 .mat-column-cor {
@@ -25,28 +18,28 @@
 
 .mat-column-tamanho {
     text-align: center;
-    width: 70px !important;
+    width: 60px !important;
+    max-width: 60px !important;
 }
 
 .mat-column-tipo_material {
     text-align: center;
-    width: 100px !important;
+    width: 80px !important;
+    max-width: 80px !important;
 }
 
 .mat-column-preco_venda {
-    text-align: center;
-    width: 40px !important;
+    text-align: right;
+    width: 80px !important;
+    max-width: 80px !important;
 }
 
 .mat-column-quantidade_atual {
-    text-align: center;
-    width: 40px !important;
+    text-align: right;
+    width: 60px !important;
+    max-width: 80px !important;
 }
 
-.mat-column-actions {
-    text-align: center;
-    width: 30px !important;
-}
 
 /* formatar o table (linhas, header, botoes) */
 

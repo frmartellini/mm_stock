@@ -29,6 +29,7 @@ purple-green.css
   margin-bottom: 2px;
   /* Alinha os itens verticalmente */
   align-items: center;
+  justify-content: space-between;
 }
 
 .TopTable_filtro {
@@ -126,7 +127,26 @@ html {
   margin-bottom: 3px;
 }
 
+td , th {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
 h2 {
   /* remover a margem inferior do titulo das telas */
   margin-bottom: 0px !important;
+}
+
+/* remover as margens horizontais dos botoes de acao (Editar e Excluir) das tabelas */
+.mat-column-actions  .mat-mdc-outlined-button  .mat-icon {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+/* coluna "acoes" das tabelas  */
+.mat-column-actions {
+  text-align: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 50px !important;
 }

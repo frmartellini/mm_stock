@@ -1,5 +1,3 @@
-
-
 /* formatar as celulas de dados das colunas da tabela */
 
 .mat-column-id_movimentacao {
@@ -22,10 +20,10 @@
   text-align: right;
   width: 120px !important;
 }
-.mat-column-actions {
+/* .mat-column-actions {
   text-align: center;
   width: 60px !important;
-}
+} */
 /* formatar o table (linhas, header, botoes) */
 
 .mat-mdc-table {
@@ -40,6 +38,8 @@
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   border-left: 2px solid rgba(0, 0, 0, 0.12);
   border-right: 2px solid rgba(0, 0, 0, 0.12);
+
+  /* vertical-align: middle; */
 
   padding-top: 1px;
   padding-bottom: 1px;

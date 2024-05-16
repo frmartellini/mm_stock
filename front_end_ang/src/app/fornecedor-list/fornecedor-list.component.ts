@@ -16,7 +16,7 @@ let FORNECEDOR_DATA: FORNECEDOR[]=[];
 })
 export class FornecedorListComponent implements OnInit {
   dataSource : any;
-  public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','endereco','numero','complemento','cidade','uf','actions'];
+  public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 

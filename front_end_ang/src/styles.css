@@ -156,3 +156,11 @@ h2 {
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: #e2effa !important;
 }
+
+/* teste para ver melhor a div id=Main
+.main {
+  _height: 100% !important;
+  border-style: solid;
+  border-color: blue;
+}
+*/

@@ -1,0 +1,9 @@
+.background-image {
+  background-image: url('../../assets/images/logo_home.jpg');
+  background-size: 100% auto;
+  background-position: center;
+  margin: -16px;
+  _border-color: red;
+  _border-style: solid;
+  height: 755px; /* altura inicial que depois eh recalculada e alterada em run-time via JS */
+}

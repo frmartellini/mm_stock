@@ -42,7 +42,7 @@ ng-click="setActive('produto-entrada')" ng-class="{ 'active': activeTab === 'pro
 ng-click="setActive('produto-saida')" ng-class="{ 'active': activeTab === 'produto-saida' }"
 ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'movimentacao-cs' }" -->
 
-<header *ngIf="menu" class="admin-header">
+<header id="Header" *ngIf="menu" class="admin-header">
   <a routerLink="/home" class="home">
     <div class="logo">
       <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
@@ -83,7 +83,7 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
     <div style="display: none" *ngIf="isServer">
       <router-outlet (activate)="showMenu($event)"/>
     </div>
-    <div *ngIf="isBrowser">
+    <div id="BrowserRouterOutletDiv" *ngIf="isBrowser">
       <router-outlet (activate)="showMenu($event)"/>
     </div>
       

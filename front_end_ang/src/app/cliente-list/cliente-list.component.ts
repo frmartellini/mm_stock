@@ -55,7 +55,7 @@ export class ClienteListComponent implements OnInit {
       (error) => {
         console.error('Erro ao deletar post:', error.error);
         // error.error contém a mensagem de erro enviada pelo servidor
-        alert(error.error);
+        alert(error.error.error);
       });
     }
   }

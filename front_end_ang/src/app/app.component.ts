@@ -1,49 +1,67 @@
-import { Component } from '@angular/core';
-import { Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
-
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
-
-const menuHighlightScript = require('../assets/menu-highlight.js');
+import { Router, NavigationEnd, Event } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Controle de Estoque';
-  //logado;
-  menu:boolean = false;
+  menu: boolean = false;
 
-  // vars que indicar se estah executando no servidor ou no browser
-  isServer :boolean;
-  isBrowser :boolean;
+  // Vars que indicam se está executando no servidor ou no browser
+  isServer: boolean;
+  isBrowser: boolean;
+  platformId: Object;  // Declare platformId as a property
 
-  constructor(private authenticationService: AuthenticationService
-              ,@Inject(PLATFORM_ID) platformId: Object
-              )
-  { 
-    // setar as vars que indicar se estah executando no servidor ou no browser
+  constructor(
+    private authenticationService: AuthenticationService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    private router: Router
+  ) {
+    this.platformId = platformId; // Assign the platformId to the property
     this.isServer = isPlatformServer(platformId);
     this.isBrowser = isPlatformBrowser(platformId);
-    //console.log("app.constructor.this.isServer=" + this.isServer);
-    //console.log("app.constructor.this.isBrowser=" + this.isBrowser);
   }
 
-  deslogar(){
+  ngOnInit() {
+    if (this.isBrowser) {
+      this.router.events.subscribe((event: any) => {
+        if (event instanceof NavigationEnd) {
+          this.updateActiveLinks();
+        }
+      });
+
+      // Ensure the active link is set on initial load
+      this.updateActiveLinks();
+    }
+  }
+
+  deslogar() {
     this.authenticationService.deslogar();
   }
 
   showMenu(component: any): void {
-
-    if (component instanceof LoginComponent) {
-      this.menu = false;
-    }
-    else {
-      this.menu = true;
-    }
+    this.menu = !(component instanceof LoginComponent);
   }
 
-} // class
+  updateActiveLinks() {
+    if (this.isBrowser) {
+      const links = document.querySelectorAll('nav a');
+      const currentPath = this.router.url;
+
+      links.forEach(link => {
+        if (link.getAttribute('routerLink') === currentPath) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+  }
+}

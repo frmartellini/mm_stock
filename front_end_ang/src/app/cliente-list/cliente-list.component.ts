@@ -6,10 +6,9 @@ import {MatSort, } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { ClienteService } from '../services/cliente.service';
 import { clienteData } from '../CLIENTEDATA';
-
+import { ToastrService } from 'ngx-toastr';
 
 let CLIENT_DATA: clienteData[] = [];
-
 
 @Component({
   selector: 'app-cliente-list',
@@ -17,13 +16,21 @@ let CLIENT_DATA: clienteData[] = [];
   styleUrl: './cliente-list.component.css',
 
 })
+
 export class ClienteListComponent implements OnInit {
   public dataSource : any;
   public displayColumn: string[] = ['id_cliente','nome_completo','telefone','email','nome_loja','cnpj','cpf','tipo_cliente','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
-  constructor(private http: HttpClient, private clienteService: ClienteService){}
+  constructor(private http: HttpClient
+              ,private clienteService: ClienteService
+              ,private toastr: ToastrService
+            )
+  {
+
+  }
+
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
@@ -37,11 +44,6 @@ export class ClienteListComponent implements OnInit {
             this.dataSource = new MatTableDataSource(CLIENT_DATA);
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-            // setTimeout(() => {
-            //   console.log(this.sort) //not undefined
-            //   this.dataSource.sort = this.sort;
-            // })
-
           }
     )
  }
@@ -50,6 +52,11 @@ export class ClienteListComponent implements OnInit {
    excluirCliente(id_cliente: number) {
     if (confirm('Tem certeza que deseja excluir este cliente?')) {
       this.clienteService.excluirCliente(id_cliente).subscribe(() => {
+        // avisar o usuario
+        this.toastr.success('Cliente excluído com sucesso!' , '', {
+          timeOut: 3000
+          ,positionClass: 'toast-top-center'
+        });
         this.fetchData(); // Recarregar os itens após a exclusão
       },
       (error) => {
@@ -59,6 +66,7 @@ export class ClienteListComponent implements OnInit {
       });
     }
   }
+
 
   //filtro
   applyFilter(event: Event) {

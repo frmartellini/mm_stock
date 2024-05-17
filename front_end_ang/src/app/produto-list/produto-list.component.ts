@@ -5,9 +5,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { ProdutoService } from '../services/produto.service';
-
-
-
+import { ToastrService } from 'ngx-toastr';
 
 export interface produtoData{
 
@@ -33,13 +31,19 @@ export class ProdutoListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
+  constructor(private http: HttpClient
+              ,private produtoService: ProdutoService
+              ,private toastr: ToastrService
+              )
+  {
 
-
-  constructor(private http: HttpClient, private produtoService: ProdutoService){}
-    //Inicialização dos dados na tabela
+  }
+    
+  //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
   }
+
    // Obtenção dos Dados da API
    fetchData(): void {
     this.http.get(ENV.REST_API_URL+'/produto').subscribe(
@@ -60,8 +64,13 @@ export class ProdutoListComponent implements OnInit {
 
   //Deletar cadastro
   excluirItem(id_produto: number) {
-    if (confirm('Tem certeza que deseja excluir este item?')) {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
       this.produtoService.excluirItem(id_produto).subscribe(() => {
+        // avisar o usuario
+        this.toastr.success('Produto excluído com sucesso!' , '', {
+          timeOut: 3000
+          ,positionClass: 'toast-top-center'
+        });
         this.fetchData(); // Recarregar os itens após a exclusão
       },
       (error) => {

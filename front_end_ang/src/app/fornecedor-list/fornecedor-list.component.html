@@ -14,7 +14,7 @@
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_fornecedor">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID do Fornecedor" [matTooltipPosition]="'above'">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Fornecedor" [matTooltipPosition]="'above'">
              ID
         </th>
         <td mat-cell *matCellDef="let element">

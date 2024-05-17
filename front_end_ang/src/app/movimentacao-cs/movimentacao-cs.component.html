@@ -36,7 +36,7 @@
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id_movimentacao">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID da movimentação" [matTooltipPosition]="'above'">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID da movimentação" [matTooltipPosition]="'above'">
             ID
           </th>
         <td mat-cell *matCellDef="let element">

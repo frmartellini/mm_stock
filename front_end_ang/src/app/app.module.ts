@@ -43,6 +43,7 @@ registerLocaleData(locale_pt);
 
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
 import { SortingDirective } from './SortingCache.directive';
+import { PersistPaginatorDirective } from './PersistPaginator.directive';
 
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -72,6 +73,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,MovimentacaoCsComponent
     ,ProdutoSaidaComponent
     ,SortingDirective
+    ,PersistPaginatorDirective
 
   ],
   imports: [

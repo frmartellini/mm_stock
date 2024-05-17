@@ -7,11 +7,16 @@
       <img src="../assets/images/logo-mm-stock.jpg" alt="logo da empresa" class="watermark" style="width: 272px; height: 272px; padding: 0px;" >
     </div>
 
-    <label class="form-label" for="username">Nome de usuário:</label>
-    <input class="form-control" type="text" id="username" name="username" [(ngModel)]="username" required>
-    <label class="form-label" for="password">Senha:</label>
-    <input class="form-control" type="password" id="password" name="password" [(ngModel)]="password" required>
-    
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Nome de usuário</mat-label>
+      <input matInput type="text" id="username" name="username" [(ngModel)]="username" required="true" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" id="password" name="password" [(ngModel)]="password" required="true" />
+    </mat-form-field>
+
     <div class="row mt-2">
       <div class="col text-center">
         <button class="btn btn-primary " type="submit">Login</button>

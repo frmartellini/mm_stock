@@ -201,4 +201,9 @@ export class MovimentacaoCsComponent implements OnInit {
     this.fetchData();
   } // BtnFiltroPeriodoClick
 
+  // retorna o nome da classe css que deve ser usada para pintar a linha do table com base no campo tipo_mov
+  getCSSClassForRow(row :movimentacaoData) {
+    return (row.tipo_mov === 'E' ? "linha-entrada" : (row.tipo_mov === 'S') ? "linha-saida" : "");
+  }
+
 } // class

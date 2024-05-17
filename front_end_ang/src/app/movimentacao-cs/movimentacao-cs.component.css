@@ -70,3 +70,12 @@
   border-style: none;
   min-width: 30px;
 }
+
+/* classe das linhas do tipo "entrada" da consulta de movimentacao */
+.linha-entrada {
+  _background-color: rgb(209, 241, 209) !important;
+}
+/* classe das linhas do tipo "saida" da consulta de movimentacao */
+.linha-saida {
+  _background-color: rgb(241, 210, 215) !important;
+}

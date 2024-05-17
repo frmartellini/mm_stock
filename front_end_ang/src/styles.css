@@ -130,6 +130,7 @@ html {
 td , th {
   white-space: normal;
   word-wrap: break-word;
+  background-color: transparent !important; /* precisa garantir isso aqui para funcionar o esquema de colorir as linhas do table */
 }
 
 h2 {

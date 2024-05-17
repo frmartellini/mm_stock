@@ -4,7 +4,6 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 import { PlatformState, platformServer } from '@angular/platform-server';  
 
 function createEnvironmentProviders(platformState: PlatformState) {

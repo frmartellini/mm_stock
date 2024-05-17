@@ -30,13 +30,19 @@ export class ProdutoSaidaComponent implements OnInit {
 
   // lista de produtos para exibir o controle Select
   public produtos: PRODUTO[] = [];
+  // contem apenas os produtos conforme filtrado pela digitacao do usuario no "Produto_Input"
+  public filtered_produtos: PRODUTO[] = [];
 
   // lista de produtos para exibir o controle Select
   public clientes: CLIENTE_PESQ[] = [];
+  // contem apenas os clientes conforme filtrado pela digitacao do usuario no "Cliente_Input"
+  public filtered_clientes: CLIENTE_PESQ[] = [];
 
   form: FormGroup = new FormGroup({
-    ProdutoSelect: new FormControl(''),
+    Produto_Input: new FormControl(''),
     QuantidadeInput: new FormControl(''),
+    Cliente_Input: new FormControl(''),
+    NumPedidoInput: new FormControl(''),
     ObsTextArea: new FormControl('')
   });
   submitted = false;
@@ -75,9 +81,9 @@ export class ProdutoSaidaComponent implements OnInit {
     
     this.form = this.formBuilder.group(
       {
-        ProdutoSelect: ['', Validators.required]
+        Produto_Input: ['', Validators.required]
         ,QuantidadeInput: ['', Validators.required]
-        ,ClienteSelect: ['', ]
+        ,Cliente_Input: ['', ]
         ,NumPedidoInput: ['', ]
         ,ObsTextArea: ['', ]
       }
@@ -92,9 +98,9 @@ export class ProdutoSaidaComponent implements OnInit {
     this.getAllClientes();
 
     if ( this.IsInViewMode() ) {
-      this.form.get("ProdutoSelect")?.disable();
+      this.form.get("Produto_Input")?.disable();
       this.form.get("QuantidadeInput")?.disable();
-      this.form.get("ClienteSelect")?.disable();
+      this.form.get("Cliente_Input")?.disable();
       this.form.get("NumPedidoInput")?.disable();
       this.form.get("ObsTextArea")?.disable();
     }
@@ -109,6 +115,46 @@ export class ProdutoSaidaComponent implements OnInit {
       this.movservice.getMovimentacao_http(this.id)
         .subscribe(movimentacao => this.movimentacao = movimentacao);
     }
+  }
+
+  // executado quando o usuario digita no campo Input do autocomplete do campo "Produto"
+  public FilterProdutos(value :string, EventName: any): void {
+    //console.log("value="+ value);
+    if( EventName == "input") {
+      this.filtered_produtos = this.produtos.filter(produto => produto.descricao.toLowerCase().includes(value.toLowerCase()));
+      //console.log("this.filtered_produtos abaixo");
+      //console.table(this.filtered_produtos);
+    }
+    else if( EventName == "focus") {
+      this.filtered_produtos = this.produtos;
+    }
+  } // FilterProdutos
+
+  // executado quando o usuario digita no campo Input do autocomplete do campo "Cliente"
+  public FilterClientes(value :string, EventName: any): void {
+    //console.log("value="+ value);
+    if( EventName == "input") {
+      this.filtered_clientes = this.clientes.filter(cliente => cliente.nome_completo.toLowerCase().includes(value.toLowerCase()));
+      //console.log("this.filtered_clientes abaixo");
+      //console.table(this.filtered_clientes);
+    }
+    else if( EventName == "focus") {
+      this.filtered_clientes = this.clientes;
+    }
+  } // FilterClientes
+
+  // funcao que retorna o rexto a ser exibido em cada opcao do autocomplete do Produto
+  // pProduto contem o objeto PRODUTO que eh enviado pelo autocomplete para esta funcao "decidir" e retornar o texto que deve ser exibido na opcao da lista
+  Produto_Auto_DisplayFn(pProduto: PRODUTO): string {
+    //console.log("Produto_Auto_DisplayFn - pProduto=" + JSON.stringify(pProduto));
+    return pProduto && pProduto.descricao ? pProduto.descricao : '';
+  }
+
+  // funcao que retorna o rexto a ser exibido em cada opcao do autocomplete do Cliente
+  // pCliente contem o objeto CLIENTE_PESQ que eh enviado pelo autocomplete para esta funcao "decidir" e retornar o texto que deve ser exibido na opcao da lista
+  Cliente_Auto_DisplayFn(pCliente: CLIENTE_PESQ): string {
+    //console.log("Cliente_Auto_DisplayFn - pCliente=" + JSON.stringify(pCliente));
+    return pCliente && pCliente.nome_completo ? pCliente.nome_completo : '';
   }
 
   onSubmit(pFormValues: any): void {
@@ -145,6 +191,18 @@ export class ProdutoSaidaComponent implements OnInit {
     } // OnSaveError_CallBackFunction
 
     if (this.movimentacao) {
+
+      // obter o obj que contem o produto selecionado pelo usuario usando o autocomplete "Produto_Auto"
+      var prod :PRODUTO = this.form.get("Produto_Input")?.value;
+      // console.log("prod=" + JSON.stringify(prod));
+      // precisa setar o this.movimentacao.id_produto porque nenhum controle faz o binding com este campo
+      this.movimentacao.id_produto = prod.id_produto;
+
+      // obter o obj que contem o cliente selecionado pelo usuario usando o autocomplete "Cliente_Auto"
+      var cli :CLIENTE_PESQ = this.form.get("Cliente_Input")?.value;
+      // console.log("cli=" + JSON.stringify(cli));
+      // precisa setar o this.movimentacao.id_cliente porque nenhum controle faz o binding com este campo
+      this.movimentacao.id_cliente = cli.id_cliente;
 
       this.movimentacao.data_hora = Utils.getCurrentDateTime_forMysql();
       this.movimentacao.tipo_mov = "S";

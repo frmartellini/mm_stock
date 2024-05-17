@@ -106,13 +106,13 @@ export class ProdutoEntradaComponent implements OnInit {
     //console.log("value="+ value);
     if( EventName == "input") {
       this.filtered_produtos = this.produtos.filter(produto => produto.descricao.toLowerCase().includes(value.toLowerCase()));
-      //console.log("this.filtered_cores abaixo");
-      //console.table(this.filtered_cores);
+      //console.log("this.filtered_produtos abaixo");
+      //console.table(this.filtered_produtos);
     }
     else if( EventName == "focus") {
       this.filtered_produtos = this.produtos;
     }
-  } // FilterCores
+  } // FilterProdutos
 
   // funcao que retorna o rexto a ser exibido em cada opcao do autocomplete do Produto
   // pProduto contem o objeto PRODUTO que eh enviado pelo autocomplete para esta funcao "decidir" e retornar o texto que deve ser exibido na opcao da lista

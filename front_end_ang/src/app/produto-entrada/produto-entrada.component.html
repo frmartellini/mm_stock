@@ -29,11 +29,11 @@
 
     <mat-form-field appearance="fill" class="" style="width: 100%">
       <mat-label>Produto</mat-label>
-      <input #CorInput matInput type="text"
+      <input #Produto_Input matInput type="text"
            id="Produto_Input" name="Produto_Input" formControlName="Produto_Input" [(ngModel)]="movimentacao.id_produto"
            [matAutocomplete]="Produto_Auto"
-           (input)="FilterProdutos(CorInput.value, 'input')"
-           (focus)="FilterProdutos(CorInput.value, 'focus')"
+           (input)="FilterProdutos(Produto_Input.value, 'input')"
+           (focus)="FilterProdutos(Produto_Input.value, 'focus')"
            >
       <mat-autocomplete autoActiveFirstOption requireSelection #Produto_Auto="matAutocomplete" id="Produto_Auto" name="Produto_Auto" 
                         [displayWith]="Produto_Auto_DisplayFn">

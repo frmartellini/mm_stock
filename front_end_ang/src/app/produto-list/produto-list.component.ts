@@ -76,10 +76,10 @@ export class ProdutoListComponent implements OnInit {
       (error) => {
         console.error('Erro ao deletar post:', error.error);
         // error.error contém a mensagem de erro enviada pelo servidor
-        alert(error.error);
-      }); // subscribe
-    } // confirm
-  } // excluirItem
+        alert(error.error.error);
+      });
+    }
+  }
 
   //filtro
   applyFilter(event: Event) {

@@ -4,6 +4,13 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
+import { PlatformState, platformServer } from '@angular/platform-server';  
+
+function createEnvironmentProviders(platformState: PlatformState) {
+  return [
+    { provide: PlatformState, useValue: platformState }
+  ];
+}
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -13,6 +20,7 @@ export function app(): express.Express {
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine();
+  const platformState = platformServer().injector.get(PlatformState);
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
@@ -34,7 +42,10 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl }, 
+          ...createEnvironmentProviders(platformState)
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

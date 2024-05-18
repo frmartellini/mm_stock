@@ -173,9 +173,9 @@ app.delete('/produto/:id', (req, res) => {
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro deletando produto: Não é possível deletar um produto que já esteja envolvido em uma movimentação com um cliente.');
+        res.status(409).json({ error: 'Erro deletando produto: Não é possível deletar um produto que já esteja envolvido em uma movimentação com um cliente.'});
       } else {
-        res.status(500).send('Erro deletando produto: ' + err);
+        res.status(500).json({ error: 'Erro deletando produto: ' + err});
       }
       return;
     }
@@ -247,9 +247,9 @@ app.put('/cliente/:id', (req, res) => {
     db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).json({ error: 'Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.'});
       } else {
-        res.status(500).send('Erro alterando cliente: ' + err);
+        res.status(500).json({ error: 'Erro alterando cliente: ', details: err.message});
       }
       return;
     }
@@ -270,7 +270,7 @@ app.delete('/cliente/:id', (req, res) => {
   db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+        res.status(409).json({ error: 'Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.'});
       } else {
         res.status(500).send('Erro deletando cliente: ' + err);
       }

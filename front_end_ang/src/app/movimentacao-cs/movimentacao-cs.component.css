@@ -1,0 +1,81 @@
+/* formatar as celulas de dados das colunas da tabela */
+
+.mat-column-id_movimentacao {
+  text-align: center;
+  width: 50px !important;
+}
+.mat-column-data_hora {
+  text-align: center;
+  width: 150px !important;
+}
+.mat-column-tipo_mov {
+  text-align: center;
+  width: 70px !important;
+}
+.mat-column-quantidade {
+  text-align: right;
+  width: 100px !important;
+}
+.mat-column-num_pedido {
+  text-align: right;
+  width: 120px !important;
+}
+/* .mat-column-actions {
+  text-align: center;
+  width: 60px !important;
+} */
+/* formatar o table (linhas, header, botoes) */
+
+.mat-mdc-table {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 2px solid rgba(0, 0, 0, 0.12);
+  border-right: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-mdc-header-cell {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 2px solid rgba(0, 0, 0, 0.12);
+  border-right: 2px solid rgba(0, 0, 0, 0.12);
+
+  /* vertical-align: middle; */
+
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.mat-mdc-cell {
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 2px solid rgba(0, 0, 0, 0.12);
+  border-right: 2px solid rgba(0, 0, 0, 0.12);
+
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.mat-header-row, .mat-row {
+  min-height: 30px;
+}
+
+.mat-mdc-outlined-button {
+  padding: 1px;
+  border-width: 0px;
+  border-style: none;
+  min-width: 30px;
+}
+
+/* classe das linhas do tipo "entrada" da consulta de movimentacao */
+.linha-entrada {
+  _background-color: rgb(209, 241, 209) !important;
+}
+/* classe das linhas do tipo "saida" da consulta de movimentacao */
+.linha-saida {
+  _background-color: rgb(241, 210, 215) !important;
+}

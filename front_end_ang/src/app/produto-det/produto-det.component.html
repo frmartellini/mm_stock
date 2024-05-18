@@ -1,2 +1,115 @@
-<p>produto-det works!</p>
 
+<div class="form-group col-md-6  mx-auto" >
+  
+  <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
+  
+  <!--&todo& talvez poderia vamos colocar um botao excluir para excluir o produto que o usuario estiver vendo os detalhes (somente se estiver visualizando um produto)-->
+  
+  <form [formGroup]="produto_form" (ngSubmit)="onSubmit(produto_form.value)">
+  
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Descrição</mat-label>
+      <input matInput type="text" id="Cad_Produto_Descricao" name="Cad_Produto_Descricao" formControlName="Cad_Produto_Descricao"
+             [(ngModel)]="produto.descricao" required="true" />
+    </mat-form-field>
+    
+    <!-- 
+      <br />
+      <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Cor</mat-label>
+      <input matInput type="text" id="Cad_Produto_Cor" name="Cad_Produto_Cor" formControlName="Cad_Produto_Cor"
+             [(ngModel)]="produto.cor" required="true" />
+    </mat-form-field> -->
+    <br />
+
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Cor</mat-label>
+      <input #CorInput matInput type="text"
+           id="Cad_Produto_Cor_Input" name="Cad_Produto_Cor_Input" formControlName="Cad_Produto_Cor" [(ngModel)]="produto.cor"
+           [matAutocomplete]="Cad_Produto_Cor_auto"
+           (input)="FilterCores(CorInput.value, 'input')"
+           (focus)="FilterCores(CorInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_Cor_auto="matAutocomplete" id="Cad_Produto_Cor_Auto" name="Cad_Produto_Cor_Auto" >
+         @for (cor of filtered_cores; track cor) {
+          <mat-option [value]="cor.cor">{{cor.cor}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <br />
+    <!--
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tamanho</mat-label>
+      <input matInput type="text" id="Cad_Produto_Tamanho" name="Cad_Produto_Tamanho" formControlName="Cad_Produto_Tamanho"
+             [(ngModel)]="produto.tamanho" required="true" />
+    </mat-form-field>
+    -->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tamanho</mat-label>
+      <input #TamanhoInput matInput type="text"
+           id="Cad_Produto_Tamanho_Input" name="Cad_Produto_Tamanho_Input" formControlName="Cad_Produto_Tamanho" [(ngModel)]="produto.tamanho"
+           [matAutocomplete]="Cad_Produto_Tamanho_auto"
+           (input)="FilterTamanhos(TamanhoInput.value, 'input')"
+           (focus)="FilterTamanhos(TamanhoInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_Tamanho_auto="matAutocomplete" id="Cad_Produto_Tamanho_Auto" name="Cad_Produto_Tamanho_Auto" >
+         @for (tamanho of filtered_tamanhos; track tamanho) {
+          <mat-option [value]="tamanho.tamanho">{{tamanho.tamanho}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <br />
+    <!--
+    <mat-form-field appearance="fill" class="" style="width: 70%">
+      <mat-label>Tipo Material</mat-label>
+      <input matInput type="text" id="Cad_Produto_Tipo_Material" name="Cad_Produto_Tipo_Material" formControlName="Cad_Produto_Tipo_Material"
+             [(ngModel)]="produto.tipo_material" />
+    </mat-form-field>
+    -->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Tipo Material</mat-label>
+      <input #TipoMaterialInput matInput type="text"
+           id="Cad_Produto_Tipo_Material_Input" name="Cad_Produto_Tipo_Material_Input" formControlName="Cad_Produto_Tipo_Material" [(ngModel)]="produto.tipo_material"
+           [matAutocomplete]="Cad_Produto_TipoMaterial_auto"
+           (input)="FilterTiposMaterial(TipoMaterialInput.value, 'input')"
+           (focus)="FilterTiposMaterial(TipoMaterialInput.value, 'focus')"
+           >
+      <mat-autocomplete autoActiveFirstOption #Cad_Produto_TipoMaterial_auto="matAutocomplete" id="Cad_Produto_TipoMaterial_Auto" name="Cad_Produto_TipoMaterial_Auto" >
+         @for (tipo of filtered_tipos_material; track tipo) {
+          <mat-option [value]="tipo.tipo_material">{{tipo.tipo_material}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 30%">
+      <mat-label>Preço de venda</mat-label>
+      <!-- input com "mask directive" especial para valores monetarios -->
+      <input matInput id="Cad_Produto_Preco_Venda" name="Cad_Produto_Preco_Venda" formControlName="Cad_Produto_Preco_Venda"
+             [(ngModel)]="produto.preco_venda" currencyMask [min]="0" />
+    </mat-form-field>
+
+    <!-- exibir o preco_venda com formato pt-BR para testes -->
+    <!-- {{this.produto.preco_venda | number:'1.2-2':'pt'}} -->
+
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 30%">
+      <mat-label>Qtde atual</mat-label>
+      <input type="number" id="Cad_Produto_Quantidade_Atual" name="Cad_Produto_Quantidade_Atual" formControlName="Cad_Produto_Quantidade_Atual"
+             matInput min="0" step="1" pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required="true" />
+    </mat-form-field>
+    
+    <div class="form-group">
+      <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!produto_form.valid"
+              id="SubmitButton" name="SubmitButton" >
+          <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+          {{ this.SubmitButtonText }}
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+    </div>
+  
+  </form>
+  
+</div>
+  

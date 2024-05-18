@@ -1,0 +1,56 @@
+
+<div class="col-md-6 mx-auto">
+
+  <h3 class="text-center">Alteração da senha do usuário "admin"</h3>
+
+  <form [formGroup]="ConfigForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-4 mx-auto">
+        <div class="form-group">
+        <label>Senha atual</label>
+        <input
+            formControlName="oldPwd"
+            id="oldPwd"
+            type="password" 
+            class="form-control" />
+        <div class="alert alert-danger" *ngIf="oldPwd?.touched && oldPwd?.invalid">
+            <div *ngIf="oldPwd?.errors?.['required']">obrigatório</div>
+        </div>
+        </div>
+
+        <div class="form-group">
+        <label>Nova senha</label>
+        <input 
+            formControlName="newPwd" 
+            id="newPwd"
+            type="password"  
+            class="form-control" />
+        <div class="alert alert-danger" *ngIf="newPwd?.touched && newPwd?.invalid">
+            <div *ngIf="newPwd?.errors?.['required']">obrigatório</div>
+        </div>
+        </div>
+
+        <div class="form-group">
+        <label>Confirme a nova senha</label>
+        <input 
+            formControlName="confirmPwd" 
+            id="confirmPwd"
+            type="password"  
+            class="form-control" />
+        <div class="alert alert-danger" *ngIf="confirmPwd?.touched && confirmPwd?.invalid">
+            <div *ngIf="confirmPwd?.errors?.['required']">obrigatório</div>
+        </div>
+        <div class="alert alert-danger" *ngIf="newPwd?.value != '' && confirmPwd?.value != '' && confirmPwd?.value != newPwd?.value ">
+            nova senha não confirmada
+        </div>
+        </div>
+
+        <div class="row mt-2">
+        <div class="col text-center">
+            <button type="submit" class="btn btn-primary">Alterar senha</button>
+        </div>
+        </div>
+
+    </div>
+  </form>
+
+</div>

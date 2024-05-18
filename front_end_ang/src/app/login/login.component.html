@@ -1,0 +1,27 @@
+
+<form (ngSubmit)="login()">
+  
+  <div class="form-group col-md-3    LoginDiv mx-auto" >
+
+    <div class="row justify-content-center mb-5" style="margin-top: 50px;">
+      <img src="../assets/images/logo-mm-stock.jpg" alt="logo da empresa" class="watermark" style="width: 272px; height: 272px; padding: 0px;" >
+    </div>
+
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Nome de usuário</mat-label>
+      <input matInput type="text" id="username" name="username" [(ngModel)]="username" required="true" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" id="password" name="password" [(ngModel)]="password" required="true" />
+    </mat-form-field>
+
+    <div class="row mt-2">
+      <div class="col text-center">
+        <button class="btn btn-primary " type="submit">Login</button>
+      </div>
+    </div>
+  </div>
+  
+</form>

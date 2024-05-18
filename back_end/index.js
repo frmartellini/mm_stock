@@ -5,10 +5,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
   
 const app = express();
-const port = 3000; // 4200 padrão do Angular
+var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
 
 // get the environment variables for the database connection
 dotenv.config();
@@ -19,6 +19,11 @@ const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
   
+// se a config "BACKEND_PORT" do arquivo .env estiver configurada, vai usar a porta indicada nesta config "BACKEND_PORT" do .env
+if ( process.env.BACKEND_PORT ) {
+  port = process.env.BACKEND_PORT;
+}
+
 /* MySQL Connection */
 const db = mysql.createConnection({
   host: dbHost,
@@ -52,14 +57,50 @@ app.use(cors());
 app.get('/produto', (req, res) => {
   db.query('SELECT * FROM produto', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;
     }
     res.json(results);
   });
   console.log('get /produto executado. Produtos retornados com sucesso!');
 });
-   
+
+// retorna as cores distintas dos produtos da tabela "produto"
+app.get('/produto/cores', (req, res) => {
+  db.query('SELECT DISTINCT cor FROM produto ORDER BY cor ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar as cores dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/cores executado. Cores distintas dos produtos retornadas com sucesso!');
+});
+
+// retorna os tamanhos distintos dos produtos da tabela "produto"
+app.get('/produto/tamanhos', (req, res) => {
+  db.query('SELECT DISTINCT tamanho FROM produto ORDER BY tamanho ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar os tamanhos dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/tamanhos executado. Tamanhos distintos dos produtos retornados com sucesso!');
+});
+
+// retorna os "tipo_material" distintos dos produtos da tabela "produto"
+app.get('/produto/tipos_material', (req, res) => {
+  db.query('SELECT DISTINCT tipo_material FROM produto ORDER BY tipo_material ASC', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro ao retornar os valores distintos de "tipo_material" dos produtos: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /produto/tipos_material executado. "tipo_material" distintos dos produtos retornados com sucesso!');
+});
+
 /* Create a new post */
 app.post('/produto/create', (req, res) => {
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
@@ -67,31 +108,31 @@ app.post('/produto/create', (req, res) => {
   const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual];
   db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro criando produto: ' + err);
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM produto WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM produto WHERE id_produto = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando produto criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
     });
   });
-  console.log('post executado, produto criado com sucesso!');
+  console.log('post executado, produto criado com sucesso! ');
 });
   
 /* Get a specific post */
 app.get('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
-  db.query('SELECT * FROM produto WHERE id = ?', produtoId, (err, result) => {
+  db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando produto: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Produto não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -108,12 +149,16 @@ app.put('/produto/:id', (req, res) => {
 
   db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(409).send('Erro alterando produto: Não é possível alterar informações de um produto que já esteja envolvido em uma movimentação com um cliente.');
+      } else {
+        res.status(500).send('Erro alterando produto: ' + err);
+      }
       return;
     }
-    db.query('SELECT * FROM produto WHERE id = ?', produtoId, (err, result) => {
+    db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando o produto alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -125,12 +170,16 @@ app.put('/produto/:id', (req, res) => {
 /* Delete a post */
 app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
-  db.query('DELETE FROM produto WHERE id = ?', produtoId, err => {
+  db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(409).send('Erro deletando produto: Não é possível deletar um produto que já esteja envolvido em uma movimentação com um cliente.');
+      } else {
+        res.status(500).send('Erro deletando produto: ' + err);
+      }
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Produto deletado com sucesso' });
   });
   console.log('delete /produto/' + produtoId + ' executado. Produto deletado com sucesso!');
 });
@@ -142,7 +191,7 @@ app.delete('/produto/:id', (req, res) => {
 app.get('/cliente', (req, res) => {
   db.query('SELECT * FROM cliente', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro recuperando clientes: ' + err);
       return;
     }
     res.json(results);
@@ -157,13 +206,13 @@ app.post('/cliente/create', (req, res) => {
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro criando cliente: ' + err);
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM cliente WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM cliente WHERE id_cliente = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando cliente criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
@@ -175,13 +224,13 @@ app.post('/cliente/create', (req, res) => {
 /* Get a specific post */
 app.get('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
-  db.query('SELECT * FROM cliente WHERE id = ?', clienteId, (err, result) => {
+  db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando cliente: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Cliente não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -193,16 +242,20 @@ app.get('/cliente/:id', (req, res) => {
 app.put('/cliente/:id', (req, res) => {
     const clienteId = req.params.id;
     const { nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf } = req.body;
-    const query = `UPDATE cliente SET nome_completo = ?, email = ?, nome_loja = ?, cnpj = ?, cpf = ?, tipo_cliente = ?, endereco = ?, numero = ?, complemento = ?, cidade = ?, uf = ? WHERE id_cliente = ?`;
+    const query = `UPDATE cliente SET nome_completo = ?, telefone = ?, email = ?, nome_loja = ?, cnpj = ?, cpf = ?, tipo_cliente = ?, endereco = ?, numero = ?, complemento = ?, cidade = ?, uf = ? WHERE id_cliente = ?`;
     const values = [nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf, clienteId];
     db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(409).send('Erro alterando cliente: Não é possível alterar informações de um cliente que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro alterando cliente: ' + err);
+      }
       return;
     }
-    db.query('SELECT * FROM cliente WHERE id = ?', clienteId, (err, result) => {
+    db.query('SELECT * FROM cliente WHERE id_cliente = ?', clienteId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando cliente alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -214,12 +267,16 @@ app.put('/cliente/:id', (req, res) => {
 /* Delete a post */
 app.delete('/cliente/:id', (req, res) => {
   const clienteId = req.params.id;
-  db.query('DELETE FROM cliente WHERE id = ?', clienteId, err => {
+  db.query('DELETE FROM cliente WHERE id_cliente = ?', clienteId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(409).send('Erro deletando cliente: Não é possível deletar um cliente que já esteja envolvido em uma movimentação de produto.');
+      } else {
+        res.status(500).send('Erro deletando cliente: ' + err);
+      }
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Cliente deletado com sucesso' });
   });
   console.log('delete /cliente/' + clienteId + ' executado. Cliente deletado com sucesso!');
 });
@@ -231,7 +288,7 @@ app.delete('/cliente/:id', (req, res) => {
 app.get('/fornecedor', (req, res) => {
   db.query('SELECT * FROM fornecedor', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro retornando fornecedores: ' + err);
       return;
     }
     res.json(results);
@@ -241,18 +298,18 @@ app.get('/fornecedor', (req, res) => {
    
 /* Create a new post */
 app.post('/fornecedor/create', (req, res) => {
-    const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf } = req.body;
-    const query = `INSERT INTO fornecedor (nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf];
+    const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf } = req.body;
+    const query = `INSERT INTO fornecedor (nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf];
     db.query(query, values, (err, result) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro criando fornecedor: ' + err);
       return;
     }
     const postId = result.insertId;
-    db.query('SELECT * FROM fornecedor WHERE id = ?', postId, (err, result) => {
+    db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', postId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching created post');
+        res.status(500).send('Erro recuperando fornecedor criado: ' + err);
         return;
       }
       res.status(201).json(result[0]);
@@ -264,13 +321,13 @@ app.post('/fornecedor/create', (req, res) => {
 /* Get a specific post */
 app.get('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  db.query('SELECT * FROM fornecedor WHERE id = ?', fornecedorId, (err, result) => {
+  db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando fornecedor: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Fornecedor não encontrado: ' + err);
       return;
     }
     res.json(result[0]);
@@ -281,17 +338,17 @@ app.get('/fornecedor/:id', (req, res) => {
 /* Update a post */
 app.put('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf } = req.body;
-  const query = `UPDATE fornecedor SET nome_fornecedor = ?, nome_responsavel = ?, contato_telefonico = ?, redes_sociais = ?, materiais_fornecidos = ?, endereco = ?, complemento = ?, cidade = ?, uf = ? WHERE id_fornecedor = ?`;
-  const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, endereco, complemento, cidade, uf, id, fornecedorId];
+  const { nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf } = req.body;
+  const query = `UPDATE fornecedor SET nome_fornecedor = ?, nome_responsavel = ?, contato_telefonico = ?, redes_sociais = ?, materiais_fornecidos = ?, cnpj = ?, endereco = ?, numero = ?, complemento = ?, cidade = ?, uf = ? WHERE id_fornecedor = ?`;
+  const values = [nome_fornecedor, nome_responsavel, contato_telefonico, redes_sociais, materiais_fornecidos, cnpj, endereco, numero, complemento, cidade, uf, fornecedorId];
     db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      res.status(500).send('Erro alterando fornecedor: ' + err);
       return;
     }
-    db.query('SELECT * FROM fornecedor WHERE id = ?', fornecedorId, (err, result) => {
+    db.query('SELECT * FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando fornecedor alterado: ' + err);
         return;
       }
       res.json(result[0]);
@@ -303,12 +360,12 @@ app.put('/fornecedor/:id', (req, res) => {
 /* Delete a post */
 app.delete('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;
-  db.query('DELETE FROM fornecedor WHERE id = ?', fornecedorId, err => {
+  db.query('DELETE FROM fornecedor WHERE id_fornecedor = ?', fornecedorId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Erro deletando fornecedor: ' + err);
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Fornecedor deletado com sucesso' });
   });
   console.log('delete /fornecedor/' + fornecedorId + ' executado. Fornecedor deletado com sucesso!');
 });
@@ -318,9 +375,9 @@ app.delete('/fornecedor/:id', (req, res) => {
 // 
 
 app.get('/movimentacao', (req, res) => {
-  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m INNER JOIN cliente c ON m.id_cliente = c.id_cliente INNER JOIN produto p ON m.id_produto = p.id_produto', (err, results) => {
+  db.query('SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) INNER JOIN produto p ON (m.id_produto = p.id_produto)', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro retornando movimentações: ' + err);
       return;
     }
     res.json(results);
@@ -328,38 +385,80 @@ app.get('/movimentacao', (req, res) => {
   console.log('get /movimentacao executado. Movimentações retornadas com sucesso!');
 });
 
-/* Create a new post */
-app.post('/movimentacao/create', (req, res) => {
-  const { id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
-  const query = `INSERT INTO movimentacao (id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-  const values = [id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
-  db.query(query, values, (err, result) => {
+// Retorna os registros de movimentacao de um periodo de datas.
+// Precisa passar os params como o exemplo abaixo:
+//     /movimentacao_por_periodo?dhinicio=2024-05-15&dhfim=2024-05-16
+app.get('/movimentacao_por_periodo', (req, res) => {
+  console.log("/movimentacao_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
+  console.log("/movimentacao_por_periodo - req.query.dhfim=" + req.query.dhfim);
+  const query = 'SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m '+
+                'LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) ' +
+                'INNER JOIN produto p ON (m.id_produto = p.id_produto)' +
+                'WHERE ( m.data_hora BETWEEN ? AND ? ) ';
+  const values = [ req.query.dhinicio , req.query.dhfim ];
+  db.query(query, values, (err, results) => {
     if (err) {
-      res.status(500).send('Error creating post');
+      res.status(500).send('Erro retornando movimentações por periodo: ' + err);
       return;
     }
-    const postId = result.insertId;
-    db.query('SELECT * FROM movimentacao WHERE id = ?', postId, (err, result) => {
-      if (err) {
-        res.status(500).send('Error fetching created post');
+    res.json(results);
+  });
+  console.log('get /movimentacao_por_periodo executado. Movimentações retornadas com sucesso!');
+});
+
+/* Create a new post */
+app.post('/movimentacao/create', async (req, res) => {
+  const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
+  const query = `INSERT INTO movimentacao (data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs];
+
+  try {
+    if (tipo_mov === 'S') {
+      // Se for uma saída, verificar se a quantidade em estoque é suficiente
+      const quantidadeEmEstoque = await obterQuantidadeEmEstoque(id_produto);
+
+      if (quantidadeEmEstoque < quantidade) {
+        // Se a quantidade em estoque for inferior à quantidade a ser movimentada, retornar erro
+        res.status(400).send('Quantidade em estoque insuficiente para a movimentação.');
         return;
       }
-      res.status(201).json(result[0]);
+    }
+
+    // Atualizar a quantidade do produto
+    await atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov);
+
+    // Criar a movimentação
+    db.query(query, values, (err, result) => {
+      if (err) {
+        res.status(500).send('Erro criando movimentação: ' + err);
+        return;
+      }
+      const postId = result.insertId;
+      db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', postId, (err, result) => {
+        if (err) {
+          res.status(500).send('Erro recuperando movimentação criada: ' + err);
+          return;
+        }
+        res.status(201).json(result[0]);
+      });
+      console.log('Post executado. Movimentação criada com sucesso!');
     });
-    console.log('post executado. Movimentação criada com sucesso!');
-  });
+  } catch (error) {
+    res.status(400).send('Erro criando movimentação, quantidade inválida!');
+    return;
+  }
 });
 
 /* Get a specific post */
 app.get('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  db.query('SELECT * FROM movimentacao WHERE id = ?', movimentacaoId, (err, result) => {
+  db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando movimentação: ' + err);
       return;
     }
     if (result.length === 0) {
-      res.status(404).send('Post not found');
+      res.status(404).send('Movimentação não encontrada: ' + err);
       return;
     }
     res.json(result[0]);
@@ -370,17 +469,17 @@ app.get('/movimentacao/:id', (req, res) => {
 /* Update a post */
 app.put('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  const { id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
-  const query = `UPDATE movimentacao SET id_movimentacao = ?, data_hora = ?, id_produto = ?, tipo_mov = ?, quantidade = ?, num_pedido = ?, id_cliente = ?, obs = ? WHERE id_movimentacao = ?`;
-  const values = [id_movimentacao, data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
+  const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;
+  const query = `UPDATE movimentacao SET data_hora = ?, id_produto = ?, tipo_mov = ?, quantidade = ?, num_pedido = ?, id_cliente = ?, obs = ? WHERE id_movimentacao = ?`;
+  const values = [data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs, movimentacaoId];
   db.query(query, values, err => {
     if (err) {
-      res.status(500).send('Error updating post');
+      res.status(500).send('Erro alterando movimentação: ' + err);
       return;
     }
-    db.query('SELECT * FROM movimentacao WHERE id = ?', movimentacaoId, (err, result) => {
+    db.query('SELECT * FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, (err, result) => {
       if (err) {
-        res.status(500).send('Error fetching updated post');
+        res.status(500).send('Erro recuperando movimentação alterada: ' + err);
         return;
       }
       res.json(result[0]);
@@ -392,12 +491,12 @@ app.put('/movimentacao/:id', (req, res) => {
 /* Delete a post */
 app.delete('/movimentacao/:id', (req, res) => {
   const movimentacaoId = req.params.id;
-  db.query('DELETE FROM movimentacao WHERE id = ?', movimentacaoId, err => {
+  db.query('DELETE FROM movimentacao WHERE id_movimentacao = ?', movimentacaoId, err => {
     if (err) {
-      res.status(500).send('Error deleting post');
+      res.status(500).send('Erro deletando movimentação: ' + err);
       return;
     }
-    res.status(200).json({ msg: 'Post deleted successfully' });
+    res.status(200).json({ msg: 'Movimentação deletada com sucesso' });
   });
   console.log('delete /movimentacao/' + movimentacaoId + ' executado. Movimentação deletada com sucesso!');
 });
@@ -409,8 +508,7 @@ app.delete('/movimentacao/:id', (req, res) => {
 app.get('/produtos/names', (req, res) => {
   db.query('SELECT id_produto, descricao FROM produto', (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
-      return;
+      res.status(500).send('Erro recuperando nomes dos produtos');
     }
     res.json(result);
   });
@@ -422,7 +520,7 @@ app.get('/produtos/names', (req, res) => {
 app.get('/clientes/names', (req, res) => {
   db.query('SELECT id_cliente, nome_completo FROM cliente', (err, result) => {
     if (err) {
-      res.status(500).send('Error fetching post');
+      res.status(500).send('Erro recuperando nomes dos clientes');
       return;
     }
     res.json(result);
@@ -497,16 +595,64 @@ app.get('/search/movimentacao/:value', (req, res) => {
   console.log('get /search/movimentacao/' + req.params.value + ' executado. Movimentação retornada com sucesso!');
 });
 
-// 
+//
+
+//
+// auxiliar functions
+//
+
+// function to update the quantity of a product after a movimentation, with promise to wait for the update to finish due to the async nature of the db query on  javascript
+function atualizarQuantidadeProduto(id_produto, quantidade, tipo_mov)
+{
+  return new Promise((resolve, reject) => {
+    db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+        return;
+      }
+      const quantidade_atual = result[0].quantidade_atual;
+      let nova_quantidade;
+      if (tipo_mov === 'E') {
+        nova_quantidade = quantidade_atual + quantidade; 
+      }
+      else { // Se não é entrada, é saída, são as duas únicas opções
+        nova_quantidade = quantidade_atual - quantidade;        
+      }
+      db.query('UPDATE produto SET quantidade_atual = ? WHERE id_produto = ?', [nova_quantidade, id_produto], err => {
+        if (err) {
+          console.error(err);
+          reject(err);
+          return;
+        }
+      });     
+    });
+    resolve();
+  });
+}
+
+function obterQuantidadeEmEstoque(id_produto) {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT quantidade_atual FROM produto WHERE id_produto = ?', id_produto, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+        return;
+      }
+      const quantidade_atual = result[0].quantidade_atual;
+      resolve(quantidade_atual);
+    });
+  });
+}
 
 //
 // Config table - WIP 
 //
 
 app.get('/config', (req, res) => {
-  db.query('SELECT * FROM CONFIG', (err, results) => {
+  db.query('SELECT * FROM config', (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching posts');
+      res.status(500).send('Erro recuperando configurações: ' + err);
       return;
     }
     res.json(results);
@@ -514,34 +660,166 @@ app.get('/config', (req, res) => {
   console.log('get /config executado. Configurações retornadas com sucesso!');
 });
 
+//
+// verificacao de login (usuario e senha) que o front-end chama para validar o login do usuario
+//
+// para testar com o postman, usar o body raw json :    { "login":"admin","senha":"123" }
+//
+app.post('/config/login', (req, res) => {
 
-/* Update a post */
-app.put('/config/:value', (req, res) => {
-  const { value } = req.body;
-  // Hashing to store on the database
-  bcrypt.hash(value, 10, (err, hashedPassword) => {
-    if (err) {
-      res.status(500).send('Error occured while hashing');
-      return;
-    }
-    const query = `UPDATE CONFIG SET CFG01 = ?`;
-    const values = [hashedPassword];
-    db.query(query, values, err => {
+  console.log('get /config/login - inicio');
+  
+  const { login, senha } = req.body;
+  console.log('login=' + login.toLowerCase());
+  console.log('senha=' + senha);
+
+  var senha_atual_do_bd = "";
+
+  if ( login.toLowerCase() == "admin") {
+
+    db.query('SELECT CFG01 FROM config', (err, results) => {
+      console.log('results=' + JSON.stringify(results));
+      
       if (err) {
-        res.status(500).send('Error updating post');
+        res.status(500).send('Erro no select da tabela CONFIG');
         return;
       }
-      db.query('SELECT * FROM config', (err, result) => {
-        if (err) {
-          res.status(500).send('Error fetching updated post');
-          return;
-        }
-        res.json(result[0]);
-      });
-    });
-  });
-  console.log('put /config/ executado. Configuração atualizada com sucesso!');
-});
+      else {
+
+        senha_atual_do_bd = results[0].CFG01;
+        console.log('senha_atual_do_bd=' +senha_atual_do_bd);
+
+        if ( senha_atual_do_bd != "" ) {
+
+          console.log("senha_atual_do_bd NAO estah vazia");
+      
+          // verificar se a senha recebida pro login bate com a senha gravada no BD
+          bcrypt.compare(senha, senha_atual_do_bd).then(
+    
+            function(isCorrect) { 
+              console.log("isCorrect=" + isCorrect);
+              // se a senha atual enviada pelo usuario bate com a senha gravada no bd
+              if ( isCorrect ) {
+                console.log("senha informada pelo usuario bate com senha gravada no bd");
+                res.status(200).json('{ "Status":"OK" }');
+              }
+              // se a senha atual enviada pelo usuario NAO bate com a senha gravada no bd
+              else {
+                console.log("senha informada pelo usuario NAO bate com senha gravada no bd");
+                res.status(401).json('{ "Status":"INVALIDO" }');
+              }
+    
+            } // function(isCorrect)
+    
+          ); // bcrypt.compare.....then
+
+        } // if ( senha_atual_do_bd != "" )
+        // se a senha gravada no bd estiver vazia
+        else {
+          console.log("senha gravada no bdestah vazia");
+          res.status(500).send("senha gravada no bd estah vazia");
+        } // else
+
+      } // else
+      
+    }); // db.query select
+
+  } // if login == admin
+  else {
+    res.status(401).json('{ "Status":"INVALIDO" }'); // login nao eh "admin"
+  }
+
+}); // post /config/login
+
+/*
+Alterar a senha de acesso do sistema que fica gravada na tabela "CONFIG" no campo "CFG01".
+Precisa passar a nova senha e também a senha atual porque serah feita a verificacao se a senha atual bate com a senha gravada no BD.
+*/
+/*
+para testar com o postman, usar o comando PUT com a url "http://localhost:3000/config/alter" para testar localmente ou "179.145.6.125:3000/config/alter" para testar no servidor e enviar o "body" com conteudo "raw" no formato "json" com o texto abaixo, por exemplo:
+{ "senha_nova":"12345", "senha_atual":"12345" }
+*/
+app.put('/config/alter', (req, res) => {
+  const { senha_nova, senha_atual } = req.body;
+  console.log('put /config/ senha_nova=' + senha_nova);
+  console.log('put /config/ senha_atual=' + senha_atual);
+  
+  // verificar se q senha atual recebida bate com a senha gravada atualmente no BD
+
+  db.query('SELECT CFG01 FROM config', (err, result) => {
+    if (err) {
+      res.status(500).send('Erro no select que pega a senha atual do bd para verificar. ' + err);
+      return;
+    }
+
+    // aqui result contem um array de objetos e cada objeto tem como props os campos da tabela CONFIG
+
+    // se foi obtido ao menos um registro da tabela CONFIG
+    if ( result.length ) {
+
+      senha_atual_do_bd = result[0].CFG01;
+      console.log('senha_atual_do_bd=' + senha_atual_do_bd);
+
+      bcrypt.compare(senha_atual, senha_atual_do_bd).then(
+
+        function(isCorrect) { 
+          //console.log("isCorrect=" + isCorrect);
+          
+          // se a senha atual enviada pelo usuario bate com a senha gravada no bd
+          if ( isCorrect ) {
+            console.log("senha atual informada pelo usuario bate com senha gravada no bd");
+
+            console.log("antes de obter o hash da nova senha");
+    
+            // Hashing to store on the database
+            bcrypt.hash(senha_nova, 10, (err, hashedPassword) => {
+              if (err) {
+                res.status(500).send('Error occured while hashing the new password. ' + err);
+                return;
+              }
+              const query = `UPDATE config SET CFG01 = ?`;
+              const values = [hashedPassword];
+              console.log('put /config/ values=' + values);
+              db.query(query, values, err => {
+                if (err) {
+                  res.status(500).send('erro no update da tabeal CONFIG. ' + err);
+                  return;
+                }
+                db.query('SELECT * FROM config', (err, result) => {
+                  if (err) {
+                    res.status(500).send('Erro no select da tabela CONFIG depois do update. ' + err);
+                    return;
+                  }
+                  res.json(result[0]);
+                }); // db.query
+              }); // db.query
+            }); // bcrypt.hash
+
+            console.log('put /config/ executado. Configuração atualizada com sucesso!');
+
+          }
+          // se a senha atual enviada pelo usuario NAO bate com a senha gravada no bd
+          else {
+            console.log("senha atual informada pelo usuario NAO bate com senha gravada no bd");
+            res.status(500).send('senha atual incorreta.');
+            return;
+          }
+
+        } // function(isCorrect)
+
+      ); // bcrypt.compare.....then
+
+    } // if ( result.length )
+    else {
+      console.log("nao foi encontrado registro da tabela CONFIG");
+      res.status(500).send('nao foi encontrado registro da tabela CONFIG.');
+      return;
+    }
+
+  }); // db.query
+  
+}); // function
+
 
 //
   

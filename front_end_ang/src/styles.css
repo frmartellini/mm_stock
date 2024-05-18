@@ -4,9 +4,163 @@
 
 @import  "./sticky-footer-navbar.css";
 
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+@import "../node_modules/ngx-toastr/toastr.css";
+
+/* tema de cores selecionado para o angular material
+outras opcoes:
+deeppurple-amber.css
+indigo-pink.css
+pink-bluegrey.css
+purple-green.css
+*/
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 .ContentDivClass {
 
   width: 100%;
 
 }
+
+.TopTableDiv {
+  display: flex;
+  _border-style: solid;
+  margin-bottom: 2px;
+  /* Alinha os itens verticalmente */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.TopTable_filtro {
+  /* para a div do filtro ficar rente a borda direita da tela */
+  margin-left: auto;
+  order: 2;
+}
+
+.button-and-filter-container {
+  display: flex;
+  /* Alinha os itens nas extremidades */
+  justify-content: space-between;
+  /* Alinha os itens verticalmente */
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.LoginDiv {
+
+  /* apenas para testes */
+  border-color: black;
+  border-width: 1px;
+  border-style: none;
+
+  padding: 5px;
+
+}
+
+.ConfigDiv {
+
+  width: 50px;
+  height: 40px;
+
+}
+
+.LogoutDiv {
+
+  /* apenas para testes */
+  /*
+  border-color: gray;
+  border-width: 1px;
+  border-style: solid;
+  */
+  
+  width: 50px;
+  height: 40px;
+  
+}
+
+/* Opacidade da imagem de login */
+.watermark {
+  opacity: 0.7;
+  filter: alpha(opacity=50); /* Para compatibilidade com IE8 e anteriores */
+
+}
+
+/* Estilo dos links quando estão ativos */
+.admin-nav ul li a.active {
+  color: #007bff; /* Azul */
+}
+
+/* Animação de transição */
+.admin-nav ul li a {
+  transition: color 0.3s ease;
+}
+
+/* classes para as tabelas do angular material */
+
+.centered-sorted-header {  
+  .mat-sort-header-container {
+    justify-content: center;
+  }
+}
+
+/* diminuir a distancia entre o texto do titulo da coluna e o icone de setinha que indica o sentido da ordenacao */
+.mat-sort-header-arrow {
+  margin-left: 3px !important;
+}
+
+html {
+
+  /* altura padrao da linha do header do table do angular material */
+  --mat-table-header-container-height: 35px;
+
+  /* altura padrao das linhas de dados do table do angular material */
+  --mat-table-row-item-container-height: 32px;
+
+  /* altura do botao quando colocado em uma celula de um table do angular material */
+  --mdc-outlined-button-container-height: 25px;
+
+}
+
+.table {
+  /* diminuir o espaco vertical entre o fim da table do angular material e o inicio da area "mat-paginator" */
+  margin-bottom: 3px;
+}
+
+td , th {
+  white-space: normal;
+  word-wrap: break-word;
+  background-color: transparent !important; /* precisa garantir isso aqui para funcionar o esquema de colorir as linhas do table */
+}
+
+h2 {
+  /* remover a margem inferior do titulo das telas */
+  margin-bottom: 0px !important;
+}
+
+/* remover as margens horizontais dos botoes de acao (Editar e Excluir) das tabelas */
+.mat-column-actions  .mat-mdc-outlined-button  .mat-icon {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+/* coluna "acoes" das tabelas  */
+.mat-column-actions {
+  text-align: center !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 50px !important;
+}
+
+/* pintar a linha do table quando o mouse passa (hover) sobre a linha #F0F8FF #E1EBEE  #AFDBF5 */
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #e2effa !important;
+}
+
+/* teste para ver melhor a div id=Main
+.main {
+  _height: 100% !important;
+  border-style: solid;
+  border-color: blue;
+}
+*/

@@ -1,3 +1,26 @@
-node_modules
+# Compiled output
+/dist
+/out-tsc
+
+# Node
+/node_modules
+package-lock.json
 .env
-config.json
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/connect.lock
+/coverage
+/libpeerconnection.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db

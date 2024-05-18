@@ -1,1 +1,21 @@
-<p>home works!</p>
+
+<div style="display: none">
+  <mat-form-field appearance="fill" class="" style="width: 40%">
+    <!-- &todo& remover esta parte no futuro ou melhorar se for manter esta opcao/recurso -->
+    <mat-label>[TESTE] Digite o id da movimentacao de entrada para consultar.</mat-label>
+    <input type="number" id="id_mov_entrada" name="id_mov_entrada" matInput  />
+  </mat-form-field>
+  <br />
+  <button type="button" mat-raised-button color="basic" (click)="consultar_mov_entrada()">Consultar entrada de produto</button>
+</div>
+<div style="display: none">
+  <mat-form-field appearance="fill" class="" style="width: 40%">
+    <!-- &todo& remover esta parte no futuro ou melhorar se for manter esta opcao/recurso -->
+    <mat-label>[TESTE] Digite o id da movimentacao de saída para consultar.</mat-label>
+    <input type="number" id="id_mov_saida" name="id_mov_saida" matInput  />
+  </mat-form-field>
+  <br />
+  <button type="button" mat-raised-button color="basic" (click)="consultar_mov_saida()">Consultar saída de produto</button>
+</div>
+<div id="HomeBackgroundDiv" name="HomeBackgroundDiv" class="background-image" (window:resize)="onResize($event)">
+</div>

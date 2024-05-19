@@ -4,10 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:development": "ng serve --configuration development --port 4201 --host 0.0.0.0",
+    "start:production": "ng serve --configuration production",
     "build": "ng build",
+    "build:development": "ng build --configuration development",
+    "build:production": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:front_end_ang": "node dist/front_end_ang/server/server.mjs"
+    "start:ssr": "node dist/front_end_ang/server/server.mjs"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +31,7 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "ng2-currency-mask": "^13.0.3",
     "ngx-cookie-service": "^17.1.0",

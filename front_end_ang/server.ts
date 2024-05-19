@@ -41,16 +41,24 @@ export function app(): express.Express {
   });
 
   return server;
-}
+} // app()
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
+
+  const dotenv = require('dotenv');
+  // get the environment variables for the database connection
+  dotenv.config();
+  // console.log("process.env=" + JSON.stringify(process.env));
+
+  var port: string = "";
+  port = process.env['PORT'] || "4200";
+  // console.log("port=" + port);
 
   // Start up the Node server
   const server = app();
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
-}
+} // run
 
 run();

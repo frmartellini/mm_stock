@@ -18,28 +18,86 @@ const dbPort = process.env.DB_PORT;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
+const DB_POOL_CONNECTION_LIMIT = process.env.DB_POOL_CONNECTION_LIMIT;
   
 // se a config "BACKEND_PORT" do arquivo .env estiver configurada, vai usar a porta indicada nesta config "BACKEND_PORT" do .env
 if ( process.env.BACKEND_PORT ) {
   port = process.env.BACKEND_PORT;
 }
 
-/* MySQL Connection */
-const db = mysql.createConnection({
+// usando esse estoque de conecxao simples, se o mysql server reiniciar (por exemplo), esta conexao serah finalizada e nao serah reconectada e 
+// a partir daih todos os comandos que executam SQL no BD vao dar erro e por isso o processo do back-end precisa ser parado e iniciado novamente.
+/* MySQL Connection - conexao simples unica que fica aberta enquanto o processo estiver rodando */
+// const db = mysql.createConnection({
+//   host: dbHost,
+//   port: dbPort,
+//   user: dbUser,
+//   password: dbPassword,
+//   database: dbName
+// });
+
+// criar o connection pool do mysql
+/*
+   O proprio coonection pool cria (ou recria) conexoes com o BD se e quando for preciso.
+*/
+//console.info(new Date() , ' - DB_POOL_CONNECTION_LIMIT=',DB_POOL_CONNECTION_LIMIT);
+const db = mysql.createPool({
+  connectionLimit: DB_POOL_CONNECTION_LIMIT,
+  //program_name: "node_process_back_end",
   host: dbHost,
   port: dbPort,
   user: dbUser,
   password: dbPassword,
   database: dbName
 });
-  
-/* Connect to MySQL */
-db.connect(err => {
-  if (err) {
-    throw err;
-  }
-  console.log('Connected to MySQL');
+
+//console.info(new Date() , ' - db.config.connectionLimit=',db.config.connectionLimit);
+
+// evento disparado quando o programa faz uma nova conexao com o bd (dentro do pool)
+db.on('connection', function (connection) {
+  console.info(new Date() , ' - MySQL Connection '+ connection.threadId +' established');
+  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+
+  connection.on('error', function (err) {
+    console.error(new Date(), ' - MySQL error event on connection ' + connection.threadId, ' - ' , err.code);
+  });
+
+  // nao vi ser executado e acho que eh porque o close das conexoes do pool nao eh executado
+  connection.on('close', function (err) {
+    console.error(new Date(), ' - MySQL close on connection ' + connection.threadId, err);
+  });
+
+  connection.on('end', function () {
+    console.info(new Date(), ' - MySQL end event on connection ' + connection.threadId );
+  });
+
 });
+
+// evento disparado quando o programa "pega" uma conexao do pool para usar
+db.on('acquire', function (connection) {
+  console.log(new Date() , (' - MySQL Connection '+ connection.threadId +' acquired from the pool'));
+  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+});
+
+// evento disparado quando o programa devolve a conexao para o pool
+db.on('release', function (connection) {
+  console.log(new Date() , ' - MySQL Connection ' + connection.threadId + ' released');
+  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+});
+
+// nao precisa mais conectar no mysql server assim porque agora usa connection pool
+/* Connect to MySQL */
+//db.connect(err => {
+// db.getConnection(err => {  
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('Connected to MySQL');
+// });
+
 
 // close connectio to mysql --> db.end();
   
@@ -47,8 +105,19 @@ db.connect(err => {
 app.use(bodyParser.json());
 app.use(cors());
   
-/* Routes */
-/* List all posts */
+/*
+// fechar a conexao com o mysql (deve ser usado apenas para testes)
+app.get('/close_mysql_connection', (req, res) => {
+
+  console.log("db.connection=" + db.);
+
+  // fecha o pool inteiro
+  //db.end();
+  var result = {"msg":"conexao com o mysql foi fechada"};
+  res.json(result);
+  console.log('get /close_mysql_connection executado.');
+});
+*/
 
 //
 // produto table
@@ -656,8 +725,9 @@ app.get('/config', (req, res) => {
       return;
     }
     res.json(results);
+    console.log('Configurações retornadas com sucesso!');
   });
-  console.log('get /config executado. Configurações retornadas com sucesso!');
+  console.log('get /config executado.');
 });
 
 //

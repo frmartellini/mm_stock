@@ -25,6 +25,21 @@ if ( process.env.BACKEND_PORT ) {
   port = process.env.BACKEND_PORT;
 }
 
+// retorna a data/hora atual no timezone atual do sistema no formato yyyy-MM-ddThh:mm:ss.zzz
+function GetLocalDateTimeForLog() {
+  var dt = new Date();
+  //dt.setHours(dt.getHours() );
+  //return dt.toLocaleString('pt-BR'); // retorna no formato: 21/05/2024, 19:03:05
+  //return dt.toISOString(); // retorna no formato: 21/05/2024, 19:03:05
+  return new Date(dt.getTime() - (dt.getTimezoneOffset() * 60000)).toISOString().replace("Z", '').replaceAll(":","-",);
+}
+
+//process.env.TZ='America/Sao_Paulo';
+//console.info('process.env.TZ=',process.env.TZ);
+//console.info("timezone atual=" + (GetLocalDateTimeForLog()).getTimezoneOffset() );
+console.log("new Date()=" , new Date()); // mostra a data/hora atual no timezone UTC(padrao do javascript) como no exemplo: 2024-05-21T22:19:06.129Z
+console.log("GetLocalDateTimeForLog()=" + GetLocalDateTimeForLog());
+
 // usando esse estoque de conecxao simples, se o mysql server reiniciar (por exemplo), esta conexao serah finalizada e nao serah reconectada e 
 // a partir daih todos os comandos que executam SQL no BD vao dar erro e por isso o processo do back-end precisa ser parado e iniciado novamente.
 /* MySQL Connection - conexao simples unica que fica aberta enquanto o processo estiver rodando */
@@ -40,7 +55,7 @@ if ( process.env.BACKEND_PORT ) {
 /*
    O proprio coonection pool cria (ou recria) conexoes com o BD se e quando for preciso.
 */
-//console.info(new Date() , ' - DB_POOL_CONNECTION_LIMIT=',DB_POOL_CONNECTION_LIMIT);
+//console.info('DB_POOL_CONNECTION_LIMIT=',DB_POOL_CONNECTION_LIMIT);
 const db = mysql.createPool({
   connectionLimit: DB_POOL_CONNECTION_LIMIT,
   //program_name: "node_process_back_end",
@@ -51,41 +66,41 @@ const db = mysql.createPool({
   database: dbName
 });
 
-//console.info(new Date() , ' - db.config.connectionLimit=',db.config.connectionLimit);
+//console.info(GetLocalDateTimeForLog() , ' - db.config.connectionLimit=',db.config.connectionLimit);
 
 // evento disparado quando o programa faz uma nova conexao com o bd (dentro do pool)
 db.on('connection', function (connection) {
-  console.info(new Date() , ' - MySQL Connection '+ connection.threadId +' established');
-  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
-  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connection '+ connection.threadId +' established');
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
 
   connection.on('error', function (err) {
-    console.error(new Date(), ' - MySQL error event on connection ' + connection.threadId, ' - ' , err.code);
+    console.error(GetLocalDateTimeForLog(), ' - MySQL error event on connection ' + connection.threadId, ' - ' , err.code);
   });
 
   // nao vi ser executado e acho que eh porque o close das conexoes do pool nao eh executado
   connection.on('close', function (err) {
-    console.error(new Date(), ' - MySQL close on connection ' + connection.threadId, err);
+    console.error(GetLocalDateTimeForLog(), ' - MySQL close on connection ' + connection.threadId, err);
   });
 
   connection.on('end', function () {
-    console.info(new Date(), ' - MySQL end event on connection ' + connection.threadId );
+    console.info(GetLocalDateTimeForLog(), ' - MySQL end event on connection ' + connection.threadId );
   });
 
 });
 
 // evento disparado quando o programa "pega" uma conexao do pool para usar
 db.on('acquire', function (connection) {
-  console.log(new Date() , (' - MySQL Connection '+ connection.threadId +' acquired from the pool'));
-  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
-  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+  console.log(GetLocalDateTimeForLog() , (' - MySQL Connection '+ connection.threadId +' acquired from the pool'));
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
 });
 
 // evento disparado quando o programa devolve a conexao para o pool
 db.on('release', function (connection) {
-  console.log(new Date() , ' - MySQL Connection ' + connection.threadId + ' released');
-  console.info(new Date() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
-  console.info(new Date() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
+  console.log(GetLocalDateTimeForLog() , ' - MySQL Connection ' + connection.threadId + ' released');
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Total=',db._allConnections.length);
+  console.info(GetLocalDateTimeForLog() , ' - MySQL Connections in the pool. Free=',db._freeConnections.length);
 });
 
 // nao precisa mais conectar no mysql server assim porque agora usa connection pool

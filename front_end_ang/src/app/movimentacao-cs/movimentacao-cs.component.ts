@@ -29,7 +29,7 @@ let MOVIMENTACAO_DATA: movimentacaoData[]=[];
 @Component({
   selector: 'app-movimentacao-cs',
   templateUrl: './movimentacao-cs.component.html',
-  styleUrl: './movimentacao-cs.component.css'
+  styleUrl: './movimentacao-cs.component.scss'
 })
 export class MovimentacaoCsComponent implements OnInit {
 
@@ -80,7 +80,7 @@ export class MovimentacaoCsComponent implements OnInit {
     catch {}
 
     // se a data inicio ou data fim do "periodo_range" for invalido/vazio, vamos inicializar com o periodo sendo o fim a data atual e o inicio vai ser 6 dias atras
-    if ( ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) ) || ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) )  ) {  
+    if ( ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) ) || ( ! Utils.isDate(this.periodo_range.get("dhinicio")?.value) )  ) {
       this.periodo_range.get("dhfim")?.setValue(new Date());
       // calcular a data inicial que vai ser a data atual menos 6 dias
       var data_fim :Date;
@@ -97,13 +97,13 @@ export class MovimentacaoCsComponent implements OnInit {
 
   // Obtenção dos Dados da API
   fetchData(): void {
-    
+
     // api que retorna tudo porque nao receb params de data de inicio de data de fim
     //this.http.get(ENV.REST_API_URL+'/movimentacao').subscribe(
-    
+
     // exemplo de como fica a chamada a api movimentacao_por_periodo, atencao com o formato da data
     //this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio=2024-05-15&dhfim=2024-05-16').subscribe(
-    
+
     // chamar a api que recebe a data inicial e a data final para retornar apenas as movimentacoes do periodo
     // precisa passar a hora23:59:59 no param dhfim para considerar o dia final todo
     this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + ' 23:59:59/').subscribe(
@@ -184,16 +184,16 @@ export class MovimentacaoCsComponent implements OnInit {
 
   // botao Filtrar do filtro por periodo
   BtnFiltroPeriodoClick(event: Event) {
-    
+
     // atualziar as vars Date e string usadas no filtro por periodo
     this.Update_vars_dh_filtro();
 
-    // se 
-    if ( ( ! Utils.isDate(this.val_dhini_picker) ) || ( ! Utils.isDate(this.val_dhfim_picker) )  ) {  
+    // se
+    if ( ( ! Utils.isDate(this.val_dhini_picker) ) || ( ! Utils.isDate(this.val_dhfim_picker) )  ) {
       alert("A \"Data Inicial\" e a \"Data Final\" devem ser informadas!");
       return;
     }
-    
+
     // gravar os cookies com as datas do periodo do filtro
     this.cookieService.set( 'movimentacao-cs-dhinicio', this.dhinicio_str ?? "" );
     this.cookieService.set( 'movimentacao-cs-dhfim', this.dhfim_str ?? "" );

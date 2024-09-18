@@ -13,7 +13,7 @@ let CLIENT_DATA: clienteData[] = [];
 @Component({
   selector: 'app-cliente-list',
   templateUrl: './cliente-list.component.html',
-  styleUrl: './cliente-list.component.css',
+  styleUrl: './cliente-list.component.scss',
 
 })
 

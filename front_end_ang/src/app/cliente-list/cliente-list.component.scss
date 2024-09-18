@@ -1,69 +1,88 @@
 
 /* formatar as celulas de dados das colunas da tabela */
 
-.mat-column-id_fornecedor {
+.mat-column-id_cliente {
     text-align: center;
-    width: 30px !important;
+    width: 40px !important;
 }
 
-.mat-column-nome_fornecedor {
+.mat-column-nome_completo {
     text-align: left;
     width: 200px !important;
 }
 
-.mat-column-nome_responsavel {
-    text-align: left;
-    width: 100px !important;
-    max-width: 100px !important;
-}
-
-.mat-column-contato_telefonico {
+.mat-column-telefone {
     text-align: center;
-    width: 40px !important;
-    max-width: 80px !important;
+    width: 65px !important;
 }
 
-.mat-column-redes_sociais {
+.mat-column-email {
+
     text-align: left;
-    width: 70px !important;
+    width: 60px !important;
+    max-width: 140px !important;
+
 }
 
-.mat-column-materiais_fornecidos {
+td.mat-column-email {
+  font-size: 12px;
+}
+
+.mat-column-nome_loja {
     text-align: left;
-    width: 70px !important;
+    width: 140px !important;
+}
+
+.mat-column-cpf {
+    text-align: center;
+    width: 50px !important;
+}
+td.mat-column-cpf {
+  font-size: 12px;
 }
 
 .mat-column-cnpj {
     text-align: center;
-    width: 40px !important;
-    max-width: 100px !important;
+    width: 50px !important;
+}
+td.mat-column-cnpj {
+  font-size: 12px;
+}
+
+.mat-column-tipo_cliente {
+    font-size: 12px;
+    text-align: center;
+    width: 95px !important;
+}
+td.mat-column-tipo_cliente {
+  font-size: 12px;
 }
 
 .mat-column-endereco {
-    text-align: left;
-    width: 130px !important;
+    text-align: center;
+    width: 150px !important;
 }
 
 .mat-column-numero {
-    text-align: right;
+    text-align: center;
     width: 30px !important;
-    max-width: 60px !important;
 }
 
 .mat-column-complemento {
-    text-align: left;
+    text-align: center;
     width: 60px !important;
 }
 
 .mat-column-cidade {
-    text-align: left;
-    width: 90px !important;
+    text-align: center;
+    width: 80px !important;
 }
 
 .mat-column-uf {
     text-align: center;
     width: 30px !important;
 }
+
 
 /* formatar o table (linhas, header, botoes) */
 

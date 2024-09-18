@@ -45,6 +45,9 @@ import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng
 import { SortingDirective } from './SortingCache.directive';
 import { PersistPaginatorDirective } from './PersistPaginator.directive';
 
+//import de acessibilidade
+import {A11yModule} from '@angular/cdk/a11y';
+
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "right",
@@ -97,6 +100,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatDatepickerModule
     , MatTooltipModule
     , CurrencyMaskModule
+    ,A11yModule
 
   ],
   providers: [

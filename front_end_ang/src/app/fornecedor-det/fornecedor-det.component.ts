@@ -10,7 +10,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 @Component({
   selector: 'app-fornecedor-det',
   templateUrl: './fornecedor-det.component.html',
-  styleUrl: './fornecedor-det.component.css'
+  styleUrl: './fornecedor-det.component.scss'
 })
 export class FornecedorDetComponent implements OnInit{
 
@@ -108,7 +108,7 @@ export class FornecedorDetComponent implements OnInit{
       this.fornecedor_form.get("Cad_fornecedor_Complemento")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Cidade")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Estado")?.disable();
-    
+
       this.PageTitle = "Visualizando fornecedor";
 }
     else {

@@ -1,3 +1,6 @@
+/*import de acessibilidade*/
+@use '@angular/cdk';
+
 /* You can add global styles to this file, and also import other style files */
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
@@ -16,6 +19,8 @@ pink-bluegrey.css
 purple-green.css
 */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+
 
 .ContentDivClass {
 
@@ -45,6 +50,10 @@ purple-green.css
   /* Alinha os itens verticalmente */
   align-items: center;
   margin-bottom: 2px;
+  /*Adicionando alto contraste nos botões*/
+  @include cdk.high-contrast() {
+    outline: solid 1px;
+  }
 }
 
 .LoginDiv {
@@ -73,10 +82,10 @@ purple-green.css
   border-width: 1px;
   border-style: solid;
   */
-  
+
   width: 50px;
   height: 40px;
-  
+
 }
 
 /* Opacidade da imagem de login */
@@ -98,7 +107,7 @@ purple-green.css
 
 /* classes para as tabelas do angular material */
 
-.centered-sorted-header {  
+.centered-sorted-header {
   .mat-sort-header-container {
     justify-content: center;
   }

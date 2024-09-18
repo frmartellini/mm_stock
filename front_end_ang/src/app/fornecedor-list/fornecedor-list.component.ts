@@ -12,7 +12,7 @@ let FORNECEDOR_DATA: FORNECEDOR[]=[];
 @Component({
   selector: 'app-fornecedor-list',
   templateUrl: './fornecedor-list.component.html',
-  styleUrl: './fornecedor-list.component.css'
+  styleUrl: './fornecedor-list.component.scss'
 })
 
 export class FornecedorListComponent implements OnInit {

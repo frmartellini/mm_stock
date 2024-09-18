@@ -17,8 +17,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 @Component({
   selector: 'app-produto-saida',
   templateUrl: './produto-saida.component.html',
-  styleUrl: './produto-saida.component.css'
-  
+  styleUrl: './produto-saida.component.scss'
+
 })
 
 export class ProdutoSaidaComponent implements OnInit {
@@ -78,7 +78,7 @@ export class ProdutoSaidaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.form = this.formBuilder.group(
       {
         Produto_Input: ['', Validators.required]
@@ -108,7 +108,7 @@ export class ProdutoSaidaComponent implements OnInit {
   }
 
   getMovimentacao(): void {
-    
+
     //console.log("id=" + this.id);
 
     if ( this.id ) {
@@ -174,7 +174,7 @@ export class ProdutoSaidaComponent implements OnInit {
         timeOut: 3000
         ,positionClass: 'toast-top-center'
       });
-  
+
       //local_router.navigate(['/produto-saida']);
       Utils.reloadCurrentRoute(_this); // recarregar a pagina atual
 
@@ -187,7 +187,7 @@ export class ProdutoSaidaComponent implements OnInit {
         timeOut: 3000
         ,positionClass: 'toast-top-center'
       });
-  
+
     } // OnSaveError_CallBackFunction
 
     if (this.movimentacao) {
@@ -211,7 +211,7 @@ export class ProdutoSaidaComponent implements OnInit {
 
       this.movservice.createMovimentacao_http(this.movimentacao)
         .subscribe( {
-          
+
           next: response => {},
 
           error: error => {
@@ -221,7 +221,7 @@ export class ProdutoSaidaComponent implements OnInit {
           complete() {
             OnSaveSuccess_CallBackFunction();
           }
- 
+
         });
     }
   }

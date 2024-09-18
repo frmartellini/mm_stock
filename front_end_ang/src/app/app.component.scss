@@ -1,5 +1,7 @@
+/*import de acessibilidade*/
+@use '@angular/cdk';
 :host {
-  
+
 
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -131,11 +133,15 @@ tyle: solid; */
   color: #fff;
   cursor: pointer;
   margin-left: 10px;
+  @include cdk.high-contrast() {
+    outline: solid 1px;
+  }
+
 }
 
 /* Estilo dos links quando estão ativos */
 .admin-nav ul li a.active {
-  color: #7CB9E8; 
+  color: #7CB9E8;
 }
 
 /* Animação de transição */
@@ -161,5 +167,6 @@ tyle: solid; */
     flex-direction: column;
     width: max-content;
   }
-} 
-*/ 
+}
+*/
+

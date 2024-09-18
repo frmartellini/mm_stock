@@ -9,13 +9,13 @@ import Utils from '../utils';
 @Component({
   selector: 'app-config',
   templateUrl: './config.component.html',
-  styleUrl: './config.component.css'
+  styleUrl: './config.component.scss'
 })
 
 export class ConfigComponent {
 
-  ConfigForm: FormGroup; 
-  
+  ConfigForm: FormGroup;
+
   constructor(fb: FormBuilder
               ,private authService: AuthenticationService
               ,private toastr: ToastrService
@@ -26,7 +26,7 @@ export class ConfigComponent {
       'oldPwd': ['',Validators.required],
       'newPwd': ['',Validators.required],
       'confirmPwd': ['',Validators.required]
-    }, 
+    },
     );
   }
 
@@ -53,7 +53,7 @@ export class ConfigComponent {
 
     // redirecionar para a home
     this.router.navigate(['/']);
-  
+
   }
 
   OnPwChangeError() {
@@ -64,11 +64,11 @@ export class ConfigComponent {
       timeOut: 5000
       ,positionClass: 'toast-top-center'
     });
-  
+
   }
 
   onSubmit() {
-    
+
     //console.log(this.confirmPwd?.value);
 
     // chamar a rotina que altera a senha

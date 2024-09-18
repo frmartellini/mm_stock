@@ -22,7 +22,7 @@ let PRODUTO_DATA: produtoData[]=[];
 @Component({
   selector: 'app-produto-list',
   templateUrl: './produto-list.component.html',
-  styleUrl: './produto-list.component.css',
+  styleUrl: './produto-list.component.scss',
 
 })
 export class ProdutoListComponent implements OnInit {
@@ -38,7 +38,7 @@ export class ProdutoListComponent implements OnInit {
   {
 
   }
-    
+
   //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();

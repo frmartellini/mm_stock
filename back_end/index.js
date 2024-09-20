@@ -419,6 +419,156 @@ app.get('/fornecedor/:id', (req, res) => {
   console.log('get /fornecedor/' + fornecedorId + ' executado. Fornecedor retornado com sucesso!');
 });
   
+
+//alteração Erik e Marcos//
+
+app.get('/usuario', (req, res) => {
+  db.query('SELECT * FROM usuario', (err, results) => {
+    if (err) {
+      res.status(500).send('Erro retornando usuario: ' + err);
+      return;
+    }
+    res.json(results);
+  });
+  console.log('get /usuario executado. Usuarios retornados com sucesso!');
+});
+   
+/* POST */
+app.post('/usuario/create', (req, res) => {
+  const { login, nome, privilegios, senha } = req.body;
+  
+  // Gerar um salt e hash a senha
+  const saltRounds = 10; // Número de salt rounds
+  bcrypt.hash(senha, saltRounds, (err, hashedPassword) => {
+      if (err) {
+          res.status(500).send('Erro ao hash da senha: ' + err);
+          return;
+      }
+
+      // Continua com a inserção no banco de dados
+      const query = `INSERT INTO usuario (login, nome, privilegios, senha) VALUES (?, ?, ?, ?)`;
+      const values = [login, nome, privilegios, hashedPassword]; // Usa a senha criptografada
+
+      db.query(query, values, (err, result) => {
+          if (err) {
+              res.status(500).send('Erro criando usuario: ' + err);
+              return;
+          }
+
+          const postId = result.insertId;
+          db.query('SELECT * FROM usuario WHERE id_usuario = ?', [postId], (err, result) => {
+              if (err) {
+                  res.status(500).send('Erro recuperando usuario criado: ' + err);
+                  return;
+              }
+              res.status(201).json(result[0]);
+          });
+      });
+
+      console.log('post executado. Usuario criado com sucesso!');
+  });
+});
+  
+/* GET */
+app.get('/usuario/:id', (req, res) => {
+  const usuarioId = req.params.id;
+  db.query('SELECT * FROM usuario WHERE id_usuario = ?', usuarioId, (err, result) => {
+    if (err) {
+      res.status(500).send('Erro recuperando usuario: ' + err);
+      return;
+    }
+    if (result.length === 0) {
+      res.status(404).send('Usuario não encontrado: ' + err);
+      return;
+    }
+    res.json(result[0]);
+  });
+  console.log('get /usuario/' + usuarioId + ' executado. Usuario retornado com sucesso!');
+});
+
+/* DELETE */
+app.delete('/usuario/:id', (req, res) => {
+  const usuarioId = req.params.id;
+  db.query('DELETE FROM usuario WHERE id_usuario = ?', usuarioId, err => {
+    if (err) {
+      if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
+        res.status(409).send('Erro deletando usuario: Não é possível deletar um usuario.');
+      } else {
+        res.status(500).send('Erro deletando usuario: ' + err);
+      }
+      return;
+    }
+    res.status(200).json({ msg: 'Usuario deletado com sucesso' });
+  });
+  console.log('delete /usuario/' + usuarioId + ' executado. Usuario deletado com sucesso!');
+});
+
+
+//*Alterar senha*//
+app.patch('/usuario/:id/senha', (req, res) => {
+  const { senhaAntiga, novaSenha } = req.body;  
+  const usuarioId = req.params.id;  
+
+  // Validação de entrada
+  if (!senhaAntiga || !novaSenha) {
+    return res.status(400).json({ status: "erro", mensagem: "Senha antiga e nova senha são necessárias" });
+  }
+
+  // Validação da nova senha (mínimo de 8 caracteres como exemplo)
+  if (novaSenha.length < 8) {
+    return res.status(400).json({ status: "erro", mensagem: "A nova senha deve ter pelo menos 8 caracteres." });
+  }
+
+  // Verifica se o usuário existe
+  db.query('SELECT senha FROM usuario WHERE id_usuario = ?', [usuarioId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ status: 'erro', mensagem: 'Usuário não encontrado' });
+    }
+
+    const senhaAtualDoBd = results[0].senha;
+
+    // Comparar a senha antiga fornecida com a senha armazenada
+    bcrypt.compare(senhaAntiga, senhaAtualDoBd, (err, isMatch) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
+      }
+
+      if (!isMatch) {
+        return res.status(401).json({ status: 'erro', mensagem: 'Senha antiga incorreta' });
+      }
+
+      // Se a senha antiga estiver correta, hash a nova senha
+      bcrypt.hash(novaSenha, 10, (err, hash) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
+        }
+
+        // Atualiza a senha no banco de dados
+        db.query('UPDATE usuario SET senha = ? WHERE id_usuario = ?', [hash, usuarioId], (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
+          }
+
+          return res.status(200).json({ status: "OK", mensagem: "Senha alterada com sucesso" });
+        });
+      });
+    });
+  });
+});
+
+//fim da alteração//
+
+
+
+
 /* Update a post */
 app.put('/fornecedor/:id', (req, res) => {
   const fornecedorId = req.params.id;

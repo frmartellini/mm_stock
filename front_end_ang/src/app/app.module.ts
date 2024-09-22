@@ -23,6 +23,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
+import { AlterSenhaComponent } from './altersenha/altersenha.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
@@ -75,6 +76,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,ProdutoSaidaComponent
     ,MovimentacaoCsComponent
     ,ProdutoSaidaComponent
+    ,AlterSenhaComponent
     ,SortingDirective
     ,PersistPaginatorDirective
 

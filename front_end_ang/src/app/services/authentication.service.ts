@@ -8,6 +8,7 @@ import * as bcrypt from "bcryptjs";
 import Utils from "../utils";
 import { ENV } from '../env';
 import { LocalStorageService } from './local-storage.service';
+import { USUARIO } from '../USUARIO';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,14 @@ export class AuthenticationService {
 
   private router = inject(Router);
 
+  // guarda o ID do usuario que estah logado no sistema
+  // &todo& preencher quando o ocorrer o login do usuario
+  public IDUsuarioLogado :number;
+
+  // guarda o obj completo do usuario que estah logado no sistema
+  // &todo& preencher quando o ocorrer o login do usuario
+  public UsuarioLogado :USUARIO | null;
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -30,6 +39,10 @@ export class AuthenticationService {
   { 
     //console.log("AuthenticationService.constructor");
     this.isLogado = false;
+
+    this.IDUsuarioLogado = 0;
+
+    this.UsuarioLogado = null;
   }
 
   public IsLogado() : boolean {
@@ -126,7 +139,7 @@ export class AuthenticationService {
     return this.http.put(ENV.REST_API_URL+'/config/alter', JSON.stringify(obj), this.httpOptions).pipe(
       //tap(_ => console.log(`senha foi alterada`))
     );
-  }
+  } // updatePassword_http
 
   // alterar a senha do usuario admin no bd
   updatePassword(pNewPW: string
@@ -161,6 +174,64 @@ export class AuthenticationService {
     
   } // updatePassword
 
+  AlterSenhaUsuario_http(pIDUsuario: number
+                         ,pNewPW: string
+                         ,pOldPW : string
+                         ): Observable<any> {
+    //console.log(Utils.getDateTimeString() + " updatePassword_http - pNewPW=" + pNewPW);
+
+    // Montar um obj com as props "senha_nova" e "senha_atual" para enviar para back-end.
+    // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
+    const obj = JSON.parse('{"senha_nova":"' + pNewPW  + '", "senha_atual":"' +  pOldPW +'" }');
+
+    //// montar a chamada PUT para enviar o obj com a nova senha
+    //return this.http.put(ENV.REST_API_URL+'/config/alter', JSON.stringify(obj), this.httpOptions).pipe(
+    ////tap(_ => console.log(`senha foi alterada`))
+    //);
+
+    // chamar a api "patch" com o caminho    /usuario/:id/senha
+    return this.http.patch(ENV.REST_API_URL+'/usuario/'+ pIDUsuario +'/senha', JSON.stringify(obj), this.httpOptions).pipe(
+    //tap(_ => console.log('senha foi alterada'))
+    );
+
+  }
+
+  // alterar a senha de um usuario no bd
+  AlterSenhaUsuario(pIDUsuario: number
+                    ,pNewPW: string
+                    ,pOldPW : string
+                    ,pOnPwChangeSuccess_CallBackFunction: () => void
+                    ,pOnPwChangeError_CallBackFunction: () => void
+                    ) : void {
+
+    //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario - pNewPW=" + pNewPW);
+
+    // executar a rotina que vai realmente enviar pro back-end a nova senha que deve ser gravada passando as tres callback functions 
+    // que serao executadas conforme necessario
+    this.AlterSenhaUsuario_http(pIDUsuario, pNewPW, pOldPW).subscribe( {
+
+      // callback executada se NAO houve erro na chamada a api
+      next: response => {
+        //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - response recebido=" + JSON.stringify( response ));
+      },
+
+      // callback executada se HOUVE erro na chamada a api
+      error: error => {
+        //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - erro ao tentar gravar a nova senha. " + JSON.stringify(error) );
+        //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - antes de chamar a pOnPwChangeError_CallBackFunction");
+        pOnPwChangeError_CallBackFunction();
+      },
+
+      // callback executada se NAO houve erro na chamada a api
+      complete() {
+        //window.alert('Nova senha gravada com sucesso!');
+        //console.log(Utils.getDateTimeString() + " updatePassword - antes de chamar a pOnPwChangeSuccess_CallBackFunction");
+        pOnPwChangeSuccess_CallBackFunction();
+      },
+
+    }); // subscribe
+
+  } // AlterSenhaUsuario
 
   // chama a api post do back-end para validar o login/senha informado pelo usuario
   login_http(pLogin: string

@@ -19,6 +19,7 @@ const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
 const DB_POOL_CONNECTION_LIMIT = process.env.DB_POOL_CONNECTION_LIMIT;
+const NumMinCharSenhaUsuario = process.env.NumMinCharSenhaUsuario;
   
 // se a config "BACKEND_PORT" do arquivo .env estiver configurada, vai usar a porta indicada nesta config "BACKEND_PORT" do .env
 if ( process.env.BACKEND_PORT ) {
@@ -422,58 +423,70 @@ app.get('/fornecedor/:id', (req, res) => {
 
 //alteração Erik e Marcos//
 
+// retorna a lista de usuarios
 app.get('/usuario', (req, res) => {
+  console.log('get /usuario - inicio');
   db.query('SELECT * FROM usuario', (err, results) => {
     if (err) {
-      res.status(500).send('Erro retornando usuario: ' + err);
+      console.error('Erro retornando usuarios. ' + JSON.stringify(err));
+      res.status(500).send('Erro retornando usuarios: ' + err);
       return;
     }
     res.json(results);
+    console.log('get /usuario executado. Usuarios retornados com sucesso!');
   });
-  console.log('get /usuario executado. Usuarios retornados com sucesso!');
 });
    
-/* POST */
+/* POST para incluir um novo usuario */
 app.post('/usuario/create', (req, res) => {
   const { login, nome, privilegios, senha } = req.body;
   
+  console.log('post /usuario/create - inicio');
+
   // Gerar um salt e hash a senha
   const saltRounds = 10; // Número de salt rounds
   bcrypt.hash(senha, saltRounds, (err, hashedPassword) => {
       if (err) {
+          // nao sei porque neste caso abaixo o JSON.stringify(err) retorna string {} como se o obj estivesse vazio, mas o obj tem ao menos a prop "Error"
+          console.error('erro ao executar bcrypt.hash da senha. ' + err + " " + JSON.stringify(err));
+          //console.error(typeof(err));
           res.status(500).send('Erro ao hash da senha: ' + err);
           return;
       }
 
       // Continua com a inserção no banco de dados
-      const query = `INSERT INTO usuario (login, nome, privilegios, senha) VALUES (?, ?, ?, ?)`;
+      const query = 'INSERT INTO usuario (login, nome, privilegios, senha) VALUES (?, ?, ?, ?)';
       const values = [login, nome, privilegios, hashedPassword]; // Usa a senha criptografada
 
       db.query(query, values, (err, result) => {
           if (err) {
+              console.error('Erro criando usuario. ' + JSON.stringify(err));
               res.status(500).send('Erro criando usuario: ' + err);
               return;
           }
 
-          const postId = result.insertId;
-          db.query('SELECT * FROM usuario WHERE id_usuario = ?', [postId], (err, result) => {
+          const usuarioId = result.insertId;
+          db.query('SELECT * FROM usuario WHERE id_usuario = ?', [usuarioId], (err, result) => {
               if (err) {
+                  console.error('Erro recuperando usuario criado.' + JSON.stringify(err));
                   res.status(500).send('Erro recuperando usuario criado: ' + err);
                   return;
               }
               res.status(201).json(result[0]);
+              console.log('post executado. Usuario criado com sucesso!');
           });
       });
 
-      console.log('post executado. Usuario criado com sucesso!');
   });
 });
   
-/* GET */
+/* GET - retorna um usuario a partir do :id do usuario */
 app.get('/usuario/:id', (req, res) => {
   const usuarioId = req.params.id;
+  console.log('get /usuario/' + usuarioId + ' - inicio');
   db.query('SELECT * FROM usuario WHERE id_usuario = ?', usuarioId, (err, result) => {
     if (err) {
+      console.error(JSON.stringify(err));
       res.status(500).send('Erro recuperando usuario: ' + err);
       return;
     }
@@ -486,25 +499,27 @@ app.get('/usuario/:id', (req, res) => {
   console.log('get /usuario/' + usuarioId + ' executado. Usuario retornado com sucesso!');
 });
 
-/* DELETE */
+/* DELETE - deleta um usuario do BD */
 app.delete('/usuario/:id', (req, res) => {
   const usuarioId = req.params.id;
+  console.log('delete /usuario/' + usuarioId + ' - inicio');
   db.query('DELETE FROM usuario WHERE id_usuario = ?', usuarioId, err => {
     if (err) {
+      console.log('erro deletando o usuario. ' + JSON.stringify(err));
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
-        res.status(409).send('Erro deletando usuario: Não é possível deletar um usuario.');
+        res.status(409).send('Erro deletando usuario: Não é possível deletar um usuario porque existem referencias para o usuário.');
       } else {
-        res.status(500).send('Erro deletando usuario: ' + err);
+        res.status(500).send('Erro deletando usuario. ' + 'Code: '+err.code + '; Message: ' + err.message);
       }
       return;
     }
+    console.log('delete /usuario/' + usuarioId + ' executado. Usuario deletado com sucesso!');
     res.status(200).json({ msg: 'Usuario deletado com sucesso' });
   });
-  console.log('delete /usuario/' + usuarioId + ' executado. Usuario deletado com sucesso!');
 });
 
 
-//*Alterar senha*//
+// Alterar senha do usuario com id_usuario = :id
 app.patch('/usuario/:id/senha', (req, res) => {
   const { senhaAntiga, novaSenha } = req.body;  
   const usuarioId = req.params.id;  
@@ -514,15 +529,15 @@ app.patch('/usuario/:id/senha', (req, res) => {
     return res.status(400).json({ status: "erro", mensagem: "Senha antiga e nova senha são necessárias" });
   }
 
-  // Validação da nova senha (mínimo de 8 caracteres como exemplo)
-  if (novaSenha.length < 8) {
-    return res.status(400).json({ status: "erro", mensagem: "A nova senha deve ter pelo menos 8 caracteres." });
+  // Validação da nova senha (verificar o num mínimo conforme a configuracao "NumMinCharSenhaUsuario")
+  if (novaSenha.length < NumMinCharSenhaUsuario) {
+    return res.status(400).json({ status: "erro", mensagem: "A nova senha deve ter pelo menos "+ NumMinCharSenhaUsuario +" caracteres." });
   }
 
   // Verifica se o usuário existe
   db.query('SELECT senha FROM usuario WHERE id_usuario = ?', [usuarioId], (err, results) => {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
     }
 
@@ -535,7 +550,7 @@ app.patch('/usuario/:id/senha', (req, res) => {
     // Comparar a senha antiga fornecida com a senha armazenada
     bcrypt.compare(senhaAntiga, senhaAtualDoBd, (err, isMatch) => {
       if (err) {
-        console.error(err);
+        console.error(JSON.stringify(err));
         return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
       }
 
@@ -546,14 +561,14 @@ app.patch('/usuario/:id/senha', (req, res) => {
       // Se a senha antiga estiver correta, hash a nova senha
       bcrypt.hash(novaSenha, 10, (err, hash) => {
         if (err) {
-          console.error(err);
+          console.error(JSON.stringify(err));
           return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
         }
 
         // Atualiza a senha no banco de dados
         db.query('UPDATE usuario SET senha = ? WHERE id_usuario = ?', [hash, usuarioId], (err) => {
           if (err) {
-            console.error(err);
+            console.error(JSON.stringify(err));
             return res.status(500).json({ status: 'erro', mensagem: 'Erro ao processar a solicitação' });
           }
 
@@ -902,67 +917,69 @@ app.get('/config', (req, res) => {
 //
 app.post('/config/login', (req, res) => {
 
-  console.log('get /config/login - inicio');
+  console.log('post /config/login - inicio');
   
-  const { login, senha } = req.body;
-  console.log('login=' + login.toLowerCase());
+  var { login, senha } = req.body;
+  login = login.toLowerCase();
+  console.log('login=' + login);
   console.log('senha=' + senha);
 
   var senha_atual_do_bd = "";
 
-  if ( login.toLowerCase() == "admin") {
+  // obter o usuario da tabela do BD
+  db.query('SELECT senha FROM usuario WHERE lower(login) = ?', [login], (err, results) => {
 
-    db.query('SELECT CFG01 FROM config', (err, results) => {
-      console.log('results=' + JSON.stringify(results));
+    if (err) {
+      console.log('/config/login - Erro no select da tabela USUARIO');
+      res.status(500).send('Erro no select da tabela USUARIO. ' + err.message);
+    }
+    else {
+
+      // se existe no BD um usuario com o login recebido
+      if ( results.length > 0) {
       
-      if (err) {
-        res.status(500).send('Erro no select da tabela CONFIG');
-        return;
-      }
-      else {
+        console.log('results=' + JSON.stringify(results));
 
-        senha_atual_do_bd = results[0].CFG01;
-        console.log('senha_atual_do_bd=' +senha_atual_do_bd);
+        senha_atual_do_bd = results[0].senha;
+        console.log('/config/login - senha_atual_do_bd=' +senha_atual_do_bd);
 
         if ( senha_atual_do_bd != "" ) {
 
-          console.log("senha_atual_do_bd NAO estah vazia");
+          console.log("/config/login - senha_atual_do_bd NAO estah vazia");
       
-          // verificar se a senha recebida pro login bate com a senha gravada no BD
-          bcrypt.compare(senha, senha_atual_do_bd).then(
+          // verificar se a senha recebida pro login bate com a senha gravada no campo senha do usuario
+          // compareSync eh executado de forma sincrona (nao usa funcoes callback)
+          if ( bcrypt.compareSync(senha, senha_atual_do_bd) ) {
+            
+            // se a senha atual enviada pelo usuario bate com a senha gravada no campo senha do usuario
+            console.log("/config/login - senha informada pelo usuario bate com senha gravada no campo senha do usuario");
+            res.status(200).json('{ "Status":"OK" }');
     
-            function(isCorrect) { 
-              console.log("isCorrect=" + isCorrect);
-              // se a senha atual enviada pelo usuario bate com a senha gravada no bd
-              if ( isCorrect ) {
-                console.log("senha informada pelo usuario bate com senha gravada no bd");
-                res.status(200).json('{ "Status":"OK" }');
-              }
-              // se a senha atual enviada pelo usuario NAO bate com a senha gravada no bd
-              else {
-                console.log("senha informada pelo usuario NAO bate com senha gravada no bd");
-                res.status(401).json('{ "Status":"INVALIDO" }');
-              }
-    
-            } // function(isCorrect)
-    
-          ); // bcrypt.compare.....then
+          } // if bcrypt.compareSync
+          // se a senha atual enviada pelo usuario NAO bate com a senha gravada no campo senha do usuario
+          else {
+            console.log("/config/login - senha informada pelo usuario NAO bate com senha gravada no campo senha do usuario");
+            res.status(401).json('{ "Status":"INVALIDO" }');
+          } // else
 
         } // if ( senha_atual_do_bd != "" )
         // se a senha gravada no bd estiver vazia
         else {
-          console.log("senha gravada no bdestah vazia");
-          res.status(500).send("senha gravada no bd estah vazia");
+          console.log("/config/login - senha gravada no campo senha do usuario estah vazia");
+          res.status(500).send("senha gravada no campo senha do usuario estah vazia");
         } // else
-
+      } // if ( results.length > 0)
+      // se nao achou no BD um usuario com o login recebido
+      else {
+        console.log("/config/login - login informado pelo usuario NAO existe");
+        res.status(401).json('{ "Status":"INVALIDO" }');
       } // else
-      
-    }); // db.query select
 
-  } // if login == admin
-  else {
-    res.status(401).json('{ "Status":"INVALIDO" }'); // login nao eh "admin"
-  }
+    } // else
+  
+    console.log('post /config/login - fim');
+
+  }); // db.query select
 
 }); // post /config/login
 

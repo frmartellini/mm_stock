@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -84,7 +84,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , FormsModule
     , ReactiveFormsModule
     , AppRoutingModule
-    , HttpClientModule
     , MatSortModule
     , MatInputModule
     , MatIconModule
@@ -104,6 +103,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 
   ],
   providers: [
+    provideHttpClient(withFetch()),
     provideClientHydration(),
     provideAnimationsAsync(),
     { provide: MatPaginatorIntl, useValue: CustomPaginator() },

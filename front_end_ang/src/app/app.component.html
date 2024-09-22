@@ -51,21 +51,21 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   </a>
   <nav class="admin-nav">
     <ul>
-      <li><a routerLink="/cliente-list" routerLinkActive="active">Cadastro de Clientes</a></li>
-      <li><a routerLink="/fornecedor-list" routerLinkActive="active">Cadastro de Fornecedores</a></li>
-      <li><a routerLink="/produto-list" routerLinkActive="active">Cadastro de Produtos</a></li>
+      <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Fornecedores</a></li>
+      <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Produtos</a></li>
 
-      <li><a routerLink="/produto-entrada" routerLinkActive="active">Entrada de Produto</a></li>
-      <li><a routerLink="/produto-saida" routerLinkActive="active">Saída de Produto</a></li>
+      <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page">Saída de Produto</a></li>
 
-      <li><a routerLink="/movimentacao-cs" routerLinkActive="active">Consulta de Movimentação do Estoque</a></li>
+      <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page">Consulta de Movimentação do Estoque</a></li>
     </ul>
   </nav>
   <div class="admin-actions">
-    <button mat-icon-button (click)="deslogar()">
+    <button mat-icon-button (click)="deslogar()" aria-label="Sair">
       <mat-icon>exit_to_app</mat-icon>
     </button>
-    <button mat-icon-button routerLink="/config">
+    <button mat-icon-button routerLink="/config" aria-label="Configurações">
       <mat-icon>settings</mat-icon>
     </button>
   </div>

@@ -136,12 +136,10 @@
       </th>
       <td mat-cell *matCellDef="let row" class="text-center">
         <div class="d-flex align-items-center justify-content-center">
-          <a href='{{"/cliente-det/" + row.id_cliente + "?mode=E"}}' matTooltip="Editar" [matTooltipPosition]="'above'">
-            <button mat-stroked-button class="" color="primary">
-              <mat-icon>edit</mat-icon>
-            </button>
+          <a class="d-flex" aria-label="Editar" href='/cliente-det/{{row.id_cliente}}?mode=E' matTooltip="Editar" [matTooltipPosition]="'above'">
+            <mat-icon class="edit-icon">edit</mat-icon>
           </a>
-          <button mat-stroked-button class="" color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'">
+          <button mat-stroked-button color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar">
             <!-- Adicione uma classe de estilo para o botão quadrado -->
             <mat-icon>delete</mat-icon>
           </button>

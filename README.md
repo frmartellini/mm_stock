@@ -13,7 +13,7 @@
 
 ## Team members
 <p>- Adriano Barbella Arvatti</p>
-<p>- Andriell Henrique Barbosa Montenegro</p>
+<p>- Guilherme Gurat/p>
 <p>- Danilo de Oliveira Nunes</p>
 <p>- Erik Neves Machado</p>
 <p>- Francisco Martellini</p>

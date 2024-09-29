@@ -9,6 +9,7 @@ import Utils from "../utils";
 import { ENV } from '../env';
 import { LocalStorageService } from './local-storage.service';
 import { USUARIO } from '../USUARIO';
+import { UsuarioService } from './usuario.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AuthenticationService {
 
   // guarda o ID do usuario que estah logado no sistema
   // &todo& preencher quando o ocorrer o login do usuario
-  public IDUsuarioLogado :number;
+  public IDUsuarioLogado :number | null;
 
   // guarda o obj completo do usuario que estah logado no sistema
   // &todo& preencher quando o ocorrer o login do usuario
@@ -35,6 +36,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient
               ,private localStorageService: LocalStorageService
+              ,private usuarioService: UsuarioService
               )
   { 
     //console.log("AuthenticationService.constructor");
@@ -68,6 +70,8 @@ export class AuthenticationService {
         if ( bcrypt.compareSync(login_localstorage.toString(), token_localstorage.toString()) ) {
 
           //console.log("dentro do then bcrypt.compareSync");
+
+          this.SaveUsuarioLogado(login_localstorage.toString());
 
           this.isLogado = true;
 
@@ -108,6 +112,10 @@ export class AuthenticationService {
     this.localStorageService.setItem("login", "");
     this.localStorageService.setItem("token", "");
     //console.log("setDeslogado() executado e gravou no localStorage isLogado="+ this.isLogado);
+
+    this.IDUsuarioLogado = null;
+
+    this.UsuarioLogado = null;
   }
   
   logar(pLogin: string) {
@@ -174,7 +182,7 @@ export class AuthenticationService {
     
   } // updatePassword
 
-  AlterSenhaUsuario_http(pIDUsuario: number
+  AlterSenhaUsuario_http(pIDUsuario: number | null
                          ,pNewPW: string
                          ,pOldPW : string
                          ): Observable<any> {
@@ -182,7 +190,7 @@ export class AuthenticationService {
 
     // Montar um obj com as props "senha_nova" e "senha_atual" para enviar para back-end.
     // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
-    const obj = JSON.parse('{"senha_nova":"' + pNewPW  + '", "senha_atual":"' +  pOldPW +'" }');
+    const obj = JSON.parse('{"novaSenha":"' + pNewPW  + '", "senhaAntiga":"' +  pOldPW +'" }');
 
     //// montar a chamada PUT para enviar o obj com a nova senha
     //return this.http.put(ENV.REST_API_URL+'/config/alter', JSON.stringify(obj), this.httpOptions).pipe(
@@ -197,7 +205,7 @@ export class AuthenticationService {
   }
 
   // alterar a senha de um usuario no bd
-  AlterSenhaUsuario(pIDUsuario: number
+  AlterSenhaUsuario(pIDUsuario: number | null
                     ,pNewPW: string
                     ,pOldPW : string
                     ,pOnPwChangeSuccess_CallBackFunction: () => void
@@ -275,14 +283,30 @@ export class AuthenticationService {
         pOnLoginFail_CallBackFunction();
       },
 
-      complete() {
+      complete: () => {
         //window.alert('Nova senha gravada com sucesso!');
         //console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginSuccess_CallBackFunction");
         pOnLoginSuccess_CallBackFunction();
-      },
+        // salvar as infos do usuario logado nas vars desta classe
+        this.SaveUsuarioLogado(pLogin);
+      }, // complete
 
     }); // this.login_http
 
   } // login
+
+  // obtem os dados do usuario a partir do login e salvar esses dados nas vars desta classe
+  private SaveUsuarioLogado(pLogin :string) {
+
+    this.usuarioService.getUsuarioByLogin_http(pLogin)
+      .subscribe(usuario => {
+        // guardar as infos do usuario que logou na var do AuthenticationService
+        this.UsuarioLogado = usuario;
+        console.log("login_http - UsuarioLogado=" + JSON.stringify(this.UsuarioLogado));
+        this.IDUsuarioLogado = this.UsuarioLogado?.id_usuario as number;
+        console.log("login_http - IDUsuarioLogado=" + (this.IDUsuarioLogado));
+      }); // subscribe
+
+  } // SaveUsuarioLogado
 
 } // class

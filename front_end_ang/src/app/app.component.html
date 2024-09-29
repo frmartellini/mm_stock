@@ -65,10 +65,12 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
     <button mat-icon-button (click)="deslogar()">
       <mat-icon>exit_to_app</mat-icon>
     </button>
-    <button mat-icon-button routerLink="/config">
+    <button mat-icon-button routerLink="/altersenha">
       <mat-icon>settings</mat-icon>
     </button>
   </div>
+  <!-- &todo& exibicao temporaria do usuario logado -->
+  <div style="color: yellow; text-align: right;"> {{ this.authenticationService.UsuarioLogado?.login }} </div>
 </header>
 
 

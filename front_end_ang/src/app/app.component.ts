@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   platformId: Object;  // Declare platformId as a property
 
   constructor(
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     @Inject(PLATFORM_ID) platformId: Object,
     private router: Router
   ) {

@@ -16,6 +16,7 @@ import { ConfigComponent } from './config/config.component';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
+import { AlterSenhaComponent } from './altersenha/altersenha.component';
 
 const routes: Routes = [
 
@@ -40,7 +41,7 @@ const routes: Routes = [
   ,{ path: 'produto-saida/:id', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'movimentacao-cs', component: MovimentacaoCsComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
-
+  ,{ path: 'altersenha', component: AlterSenhaComponent , canActivate: [UsuarioAutenticadoGuard] }
 
 
 ];

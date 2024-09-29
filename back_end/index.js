@@ -499,6 +499,26 @@ app.get('/usuario/:id', (req, res) => {
   console.log('get /usuario/' + usuarioId + ' executado. Usuario retornado com sucesso!');
 });
 
+/* GET - retorna um usuario a partir do login do usuario */
+app.get('/usuario/GetByLogin/:login', (req, res) => {
+  const LoginUsuario = req.params.login;
+  console.log('get /usuario/GetByLogin/' + LoginUsuario + ' - inicio');
+  db.query('SELECT * FROM usuario WHERE login = ?', LoginUsuario, (err, result) => {
+    if (err) {
+      console.error(JSON.stringify(err));
+      res.status(500).send('Erro recuperando usuario. ' + err);
+      return;
+    }
+    if (result.length === 0) {
+      console.error('usuario nao encontrado');
+      res.status(404).send('Usuario não encontrado.');
+      return;
+    }
+    res.json(result[0]);
+    console.log('get /usuario/GetByLogin/' + LoginUsuario + ' executado. Usuario retornado com sucesso!');
+  });
+});
+
 /* DELETE - deleta um usuario do BD */
 app.delete('/usuario/:id', (req, res) => {
   const usuarioId = req.params.id;

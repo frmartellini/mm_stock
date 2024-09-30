@@ -11,6 +11,24 @@ import { ENV } from '../env';
 
 export class UsuarioService {
 
+  public static list_privilegios: string[] = [
+    'Cadastro de Clientes - Consulta'
+   ,'Cadastro de Clientes - Inclusão'
+   ,'Cadastro de Clientes - Edição'
+   ,'Cadastro de Clientes - Exclusão'
+   ,'Cadastro de Produtos - Consulta'
+   ,'Cadastro de Produtos - Inclusão'
+   ,'Cadastro de Produtos - Edição'
+   ,'Cadastro de Produtos - Exclusão'
+   ,'Cadastro de Fornecedores - Consulta'
+   ,'Cadastro de Fornecedores - Inclusão'
+   ,'Cadastro de Fornecedores - Edição'
+   ,'Cadastro de Fornecedores - Exclusão'
+   ,'Entrada de Produto'
+   ,'Saída de Produto'
+   ,'Consulta de Movimentação do Estoque'
+  ];
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };

@@ -323,7 +323,7 @@ app.get('/cliente/:id', (req, res) => {
   console.log('get /cliente/' + clienteId + ' executado. Cliente retornado com sucesso!');
 });
   
-/* Update a post */
+/* Update a cliente */
 app.put('/cliente/:id', (req, res) => {
     const clienteId = req.params.id;
     const { nome_completo, telefone, email, nome_loja, cnpj, cpf, tipo_cliente, endereco, numero, complemento, cidade, uf } = req.body;
@@ -480,6 +480,28 @@ app.post('/usuario/create', (req, res) => {
   });
 });
   
+/* PUT para atualizar um usuario */
+app.put('/usuario/:id', (req, res) => {
+  const usuarioId = req.params.id;
+  const { login, nome, privilegios } = req.body;
+  const query = `UPDATE usuario SET login = ? , nome = ? , privilegios = ?  WHERE  ( id_usuario = ? ) `;
+  const values = [login, nome, privilegios, usuarioId];
+  db.query(query, values, err => {
+  if (err) {
+      res.status(500).send('Erro alterando usuario: ' + err);
+    return;
+  }
+  db.query('SELECT * FROM usuario WHERE id_usuario = ?', usuarioId, (err, result) => {
+    if (err) {
+      res.status(500).send('Erro recuperando usuario alterado: ' + err);
+      return;
+    }
+    res.json(result[0]);
+  });
+});
+console.log('put /usuario/' + usuarioId + ' executado. Usuario atualizado com sucesso!');
+});
+
 /* GET - retorna um usuario a partir do :id do usuario */
 app.get('/usuario/:id', (req, res) => {
   const usuarioId = req.params.id;

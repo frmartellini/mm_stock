@@ -39,12 +39,8 @@
   <div >
     <h3>Privilégios</h3>
 
-<!-- &todo& fazer botoes para selecionar e deselecionar todos privs -->
-
     <mat-selection-list #privilegios id="privilegios_sel_list" name="Cad_Usuario_Privs" formControlName="Cad_Usuario_Privs">
-      @for (priv of list_privilegios; track priv) {
-        <mat-list-option [value]="priv.length">{{priv}}</mat-list-option>
-      }
+        <mat-list-option *ngFor="let priv of PrivilegiosObj" [value]="priv.pos">{{priv.desc}}</mat-list-option>
     </mat-selection-list>
     <!-- <p>Options selected: {{privilegios.selectedOptions.selected.length}}</p> -->
   </div>

@@ -181,3 +181,21 @@ h2 {
 a:has(>.edit-icon)  {
   padding: calc(24px - 18px);
 }
+
+/* ini - desabilitar o anchors do botaozinho "Editar" dos cadastros */
+.adisabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+a[disabled=true] {
+  pointer-events: none;
+  cursor: default;
+}
+/* fim - desabilitar o anchors do botaozinho "Editar" dos cadastros */
+
+/* ini - desativar a opcao do menu principal */
+li  a[disabled=true] {
+  pointer-events: none;
+  cursor: default;
+  color: gray !important;
+}

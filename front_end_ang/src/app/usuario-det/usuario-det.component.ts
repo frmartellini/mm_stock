@@ -30,7 +30,7 @@ export class UsuarioDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando usuario";
   public SubmitButtonText: String = "Confirmar";
 
-  list_privilegios: string[] = UsuarioService.list_privilegios;
+  public PrivilegiosObj = UsuarioService.PrivilegiosObj;
 
   @ViewChild('privilegios') ListPrivilegios: MatSelectionList = {} as MatSelectionList;
 
@@ -144,24 +144,32 @@ export class UsuarioDetComponent implements OnInit {
     }
   }
 
-  // obter uma string com zeros e uns indicando a partir do controle mat-selection-list os privilegios do usuario
+  // obter uma string com zeros e uns (a partir do controle mat-selection-list) representando os privilegios do usuario
   public GetStrPriv(pCtrlList :MatSelectionList) : string {
     
-    let str_privs : string = "";
+    let str_privs : string = ""; // var que serah retornada pela funcao
     
+    // se o pCtrlList eh valido e possui opcoes
     if ( pCtrlList && pCtrlList.options) {
-      for(let i = 0; i < pCtrlList.options.length; i++ ) {
+
+      // inicializar a strng com zero em cada char da string
+      str_privs = "0".repeat(pCtrlList.options.length);
+      //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
+
+      // passar pelos itens (privilegios)
+      for ( let i = 0; i < pCtrlList.options.length; i++ ) {
 
         if ( pCtrlList.options.get(i)?.selected ) {
-          str_privs += "1";
-        }
-        else {
-          str_privs += "0";
+          // remontar a string trocando o char da posicao i de 0 para 1
+          str_privs = str_privs.substring(0,i) + "1" + str_privs.substring(i+1);
         }
 
+        //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
       } // for
+      
     } // if
 
+    //console.log("str_privs final="+str_privs + " length="+ str_privs.length);
     return str_privs;
   } // GetStrPriv
 
@@ -298,7 +306,7 @@ export class ConfirmPasswordValidator {
     
     const senha = control.get('Cad_Usuario_Senha')?.value;
     const senhaconf = control.get('Cad_Usuario_SenhaConf')?.value;
-    console.log("senhas digitadas=" + senhaconf + '  ' + senhaconf);
+    //console.log("senhas digitadas=" + senhaconf + '  ' + senhaconf);
     
     // se as senhas digitadas nos dois campos nao batem, indicarque estah com erro
     if (senha !== senhaconf) {

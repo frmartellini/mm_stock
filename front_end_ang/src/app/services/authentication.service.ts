@@ -23,11 +23,9 @@ export class AuthenticationService {
   private router = inject(Router);
 
   // guarda o ID do usuario que estah logado no sistema
-  // &todo& preencher quando o ocorrer o login do usuario
   public IDUsuarioLogado :number | null;
 
   // guarda o obj completo do usuario que estah logado no sistema
-  // &todo& preencher quando o ocorrer o login do usuario
   public UsuarioLogado :USUARIO | null;
 
   httpOptions = {
@@ -47,9 +45,10 @@ export class AuthenticationService {
     this.UsuarioLogado = null;
   }
 
-  public IsLogado() : boolean {
+  public async  IsLogado() : Promise<boolean> {
 
     if ( this.isLogado ) {
+      //console.log("AuthenticationService - IsLogado() vai retornar true porque this.isLogado = true");
       return this.isLogado;
     }
     else {
@@ -71,7 +70,18 @@ export class AuthenticationService {
 
           //console.log("dentro do then bcrypt.compareSync");
 
-          this.SaveUsuarioLogado(login_localstorage.toString());
+
+          await this.SaveUsuarioLogado_SyncWrapper(login_localstorage.toString());
+          //this.SaveUsuarioLogado(login_localstorage.toString());
+
+          //console.log("AuthenticationService - IsLogado() - antes do loop - " + this.IDUsuarioLogado);
+           //while (this.IDUsuarioLogado == 0) {
+           //  this.IDUsuarioLogado = 0;
+            //console.log("AuthenticationService - IsLogado() - loop - " + this.IDUsuarioLogado);
+           //}
+          //console.log("AuthenticationService - IsLogado() - logo depois do loop");
+
+          //console.log("AuthenticationService - IsLogado() - logo depois do SaveUsuarioLogado");
 
           this.isLogado = true;
 
@@ -91,6 +101,13 @@ export class AuthenticationService {
 
       return status;
     }
+  }
+
+
+  async SaveUsuarioLogado_SyncWrapper(pLogin :string) {
+    //console.log("SaveUsuarioLogado_SyncWrapper inicio");
+    await this.SaveUsuarioLogado(pLogin);
+    //console.log("SaveUsuarioLogado_SyncWrapper fim");
   }
 
   setLogado(pLogin: string) {
@@ -209,7 +226,7 @@ export class AuthenticationService {
                     ,pNewPW: string
                     ,pOldPW : string
                     ,pOnPwChangeSuccess_CallBackFunction: () => void
-                    ,pOnPwChangeError_CallBackFunction: () => void
+                    ,pOnPwChangeError_CallBackFunction: (error :any) => void
                     ) : void {
 
     //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario - pNewPW=" + pNewPW);
@@ -227,7 +244,7 @@ export class AuthenticationService {
       error: error => {
         //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - erro ao tentar gravar a nova senha. " + JSON.stringify(error) );
         //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - antes de chamar a pOnPwChangeError_CallBackFunction");
-        pOnPwChangeError_CallBackFunction();
+        pOnPwChangeError_CallBackFunction(error);
       },
 
       // callback executada se NAO houve erro na chamada a api
@@ -288,7 +305,7 @@ export class AuthenticationService {
         //console.log(Utils.getDateTimeString() + " login - antes de chamar a pOnLoginSuccess_CallBackFunction");
         pOnLoginSuccess_CallBackFunction();
         // salvar as infos do usuario logado nas vars desta classe
-        this.SaveUsuarioLogado(pLogin);
+        this.SaveUsuarioLogado_SyncWrapper(pLogin);
       }, // complete
 
     }); // this.login_http
@@ -296,8 +313,9 @@ export class AuthenticationService {
   } // login
 
   // obtem os dados do usuario a partir do login e salvar esses dados nas vars desta classe
-  private SaveUsuarioLogado(pLogin :string) {
-
+  private async SaveUsuarioLogado(pLogin :string) {
+    //console.log("SaveUsuarioLogado - inicio");
+/*
     this.usuarioService.getUsuarioByLogin_http(pLogin)
       .subscribe(usuario => {
         // guardar as infos do usuario que logou na var do AuthenticationService
@@ -305,8 +323,123 @@ export class AuthenticationService {
         console.log("login_http - UsuarioLogado=" + JSON.stringify(this.UsuarioLogado));
         this.IDUsuarioLogado = this.UsuarioLogado?.id_usuario as number;
         console.log("login_http - IDUsuarioLogado=" + (this.IDUsuarioLogado));
+        //alert("SaveUsuarioLogado");
       }); // subscribe
+*/
+      let usuario = await this.usuarioService.getUsuarioByLogin_http_sync(pLogin);
 
+      //console.log("SaveUsuarioLogado - usuario obtido=" + JSON.stringify(usuario));
+
+      this.UsuarioLogado = usuario as USUARIO;
+      this.IDUsuarioLogado = this.UsuarioLogado?.id_usuario as number;
+
+      //console.log("SaveUsuarioLogado - fim");
   } // SaveUsuarioLogado
+
+  // verifica se o usuario logado no sistema possui o privilegio com codigo = pCodPriv
+  // retorna true se o usuario possui o privilegio e false se nao possui
+  public CheckPrivilegio(pCodPriv :string) : boolean {
+
+    // obter a posicao do privilegio com o cod=pCodPriv na string de privilegios
+    var priv_pos = parseInt(UsuarioService.PrivilegiosObj.find(priv => priv.cod == pCodPriv)?.pos as string);
+
+    //console.log("CheckPrivilegio - this.IDUsuarioLogado=" + this.IDUsuarioLogado);
+    //console.log("CheckPrivilegio - this.UsuarioLogado?.privilegios=" + this.UsuarioLogado?.privilegios);
+    //console.log("CheckPrivilegio - pTextoPriv=" + pCodPriv);
+    //console.log("CheckPrivilegio - priv_pos=" + priv_pos);
+    //alert("CheckPrivilegio");
+    let priv_char : string = "0";
+
+    // se a posicao do priv eh valida
+    if ( priv_pos > 0 ) {
+
+      // obter o char (0 ou 1) do privilegio a ser verificado
+      priv_char = this.UsuarioLogado?.privilegios.charAt(priv_pos-1) as string;
+      //console.log("CheckPrivilegio - priv_char=" + priv_char);
+
+      if ( priv_char == "1" ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+
+    } // if
+
+    return false;
+  } // CheckPrivilegio
+
+  // retorna o codigo do privilegio a partir da rota que estah sendo acessada "pRoute"
+  public GetCodPrivForRoute(pRoute :string) : string {
+    let CodPriv : string = "";
+
+    // todas comparacoes serao feitas com textos em letras minusculas
+    pRoute = pRoute.toLowerCase();
+
+    switch(pRoute) { 
+      case "/cliente-list": { 
+         CodPriv = "CadCliCon";
+         break; 
+      }
+      case "/produto-list": { 
+        CodPriv = "CadProdCon";
+        break; 
+      }
+      case "/fornecedor-list": { 
+        CodPriv = "CadFornCon";
+        break; 
+      }
+      case "/usuario-list": { 
+        CodPriv = "CadUsuCon";
+        break; 
+      }
+      case "/movimentacao-cs": { 
+        CodPriv = "CsMovEstq";
+        break; 
+      }
+      
+      default: { 
+         //statements; 
+         break; 
+      } 
+    } // switch
+
+    if ( CodPriv == "") {
+
+      if ( pRoute.startsWith("/cliente-det/") && (pRoute.indexOf("mode=e") > -1) ) {
+        CodPriv = "CadCliEdi";
+      }
+      else if ( pRoute.startsWith("/cliente-det/0") ) {
+        CodPriv = "CadCliInc";
+      }
+      else if ( pRoute.startsWith("/produto-det/") && (pRoute.indexOf("mode=e") > -1) ) {
+        CodPriv = "CadProdEdi";
+      }
+      else if ( pRoute.startsWith("/produto-det/0") ) {
+        CodPriv = "CadProdInc";
+      }
+      else if ( pRoute.startsWith("/fornecedor-det/") && (pRoute.indexOf("mode=e") > -1) ) {
+        CodPriv = "CadFornEdi";
+      }
+      else if ( pRoute.startsWith("/fornecedor-det/0") ) {
+        CodPriv = "CadFornInc";
+      }
+      else if ( pRoute.startsWith("/usuario-det/") && (pRoute.indexOf("mode=e") > -1) ) {
+        CodPriv = "CadUsuEdi";
+      }
+      else if ( pRoute.startsWith("/usuario-det/0") ) {
+        CodPriv = "CadUsuInc";
+      }
+      else if ( pRoute.startsWith("/produto-entrada") ) {
+        CodPriv = "Entrada";
+      }
+      else if ( pRoute.startsWith("/produto-saida") ) {
+        CodPriv = "Saida";
+      }
+
+    } // if
+
+    return CodPriv;
+  } // GetCodPrivForRoute
 
 } // class

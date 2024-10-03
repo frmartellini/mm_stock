@@ -16,9 +16,9 @@ export class UsuarioNaoAutenticadoGuard implements CanActivate{
     
     private router: Router) { }
     
-    canActivate() {
+    async canActivate() {
       
-      if ( this.authenticationService.IsLogado() ) {
+      if ( await this.authenticationService.IsLogado() ) {
         this.router.navigate(['']);
         //console.log("executou o UsuarioNaoAutenticadoGuard.canActivate e vai retornar false");
         return false;

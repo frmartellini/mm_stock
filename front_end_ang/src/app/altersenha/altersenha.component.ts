@@ -28,7 +28,26 @@ export class AlterSenhaComponent {
       'newPwd': ['',Validators.required],
       'confirmPwd': ['',Validators.required]
     },
+    { validator: this.MatchConfirm('newPwd','confirmPwd') } // comparacao dos dois campos da senha
     );
+  }
+
+  // funcao que compara os dois campos da senha para validar o form ou indicar que ha erro
+  private MatchConfirm(type1: any, type2: any) {
+
+    return (checkForm: FormGroup) => {
+      let value1 = checkForm.controls[type1];
+      let value2 = checkForm.controls[type2];
+
+      // se os 2 capos estah preenchidos, vai validar
+      if ( value1.value && value2.value) {
+        if (value1.value === value2.value ) {
+          return value2.setErrors(null);
+        } else {
+          return value2.setErrors({ notEquivalent: true });
+        }
+      }
+    };
   }
 
   get oldPwd() {
@@ -57,13 +76,22 @@ export class AlterSenhaComponent {
 
   }
 
-  OnPwChangeError() {
+  // error eh enviado pela funcao que chama esta callback
+  // abaixo o exemplo do obj que vem no param error:
+  /*
+  {"headers":{"normalizedNames":{},"lazyUpdate":null},"status":401,"statusText":"Unauthorized","url":"http://localhost:3001/usuario/6/senha","ok":false,
+   "name":"HttpErrorResponse","message":"Http failure response for http://localhost:3001/usuario/6/senha: 401 Unauthorized",
+   "error":{"status":"erro","mensagem":"Senha antiga incorreta"}
+  }
+  */
+  OnPwChangeError(error :any) {
 
-    console.log(Utils.getDateTimeString() + " OnPwChangeError foi executada");
+    //console.log(Utils.getDateTimeString() + " OnPwChangeError foi executada");
 
-    this.toastr.error('Erro ao gravar a nova senha.' , '', {
+    this.toastr.error('Erro ao gravar a nova senha. <br />' + error.error.mensagem , '', {
       timeOut: 5000
       ,positionClass: 'toast-top-center'
+      ,enableHtml: true
     });
 
   }

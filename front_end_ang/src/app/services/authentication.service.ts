@@ -209,7 +209,7 @@ export class AuthenticationService {
                     ,pNewPW: string
                     ,pOldPW : string
                     ,pOnPwChangeSuccess_CallBackFunction: () => void
-                    ,pOnPwChangeError_CallBackFunction: () => void
+                    ,pOnPwChangeError_CallBackFunction: (error : any) => void
                     ) : void {
 
     //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario - pNewPW=" + pNewPW);
@@ -227,7 +227,7 @@ export class AuthenticationService {
       error: error => {
         //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - erro ao tentar gravar a nova senha. " + JSON.stringify(error) );
         //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario_http - antes de chamar a pOnPwChangeError_CallBackFunction");
-        pOnPwChangeError_CallBackFunction();
+        pOnPwChangeError_CallBackFunction(error);
       },
 
       // callback executada se NAO houve erro na chamada a api

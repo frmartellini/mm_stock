@@ -48,6 +48,7 @@ import { PersistPaginatorDirective } from './PersistPaginator.directive';
 
 //import de acessibilidade
 import {A11yModule} from '@angular/cdk/a11y';
+import { ToggleHighContrast } from './components/toggle-highcontrast.component';
 
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -79,7 +80,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,AlterSenhaComponent
     ,SortingDirective
     ,PersistPaginatorDirective
-
+    ,ToggleHighContrast
   ],
   imports: [
     BrowserModule

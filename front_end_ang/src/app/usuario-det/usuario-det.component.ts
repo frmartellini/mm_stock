@@ -149,6 +149,8 @@ export class UsuarioDetComponent implements OnInit {
     
     let str_privs : string = ""; // var que serah retornada pela funcao
     
+    let pos : number;
+
     // se o pCtrlList eh valido e possui opcoes
     if ( pCtrlList && pCtrlList.options) {
 
@@ -156,13 +158,24 @@ export class UsuarioDetComponent implements OnInit {
       str_privs = "0".repeat(pCtrlList.options.length);
       //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
 
-      // passar pelos itens (privilegios)
+      // passar pelos itens (privilegios) do controle mat-selection-list
       for ( let i = 0; i < pCtrlList.options.length; i++ ) {
-
+        // se o item estah selecionado
         if ( pCtrlList.options.get(i)?.selected ) {
-          // remontar a string trocando o char da posicao i de 0 para 1
-          str_privs = str_privs.substring(0,i) + "1" + str_privs.substring(i+1);
-        }
+          // obter a posicao do privilegio na string
+          pos = pCtrlList.options.get(i)?.value;
+          //console.log("pos="+pos);
+
+          // se a posicao NAO eh a primeira
+          if ( pos > 0 ) {
+          // remontar a string colocando "1" na posicao "pos" da string
+          str_privs = str_privs.substring(0,pos-1) + "1" + str_privs.substring(pos);
+          }
+          // se a posicao EH a primeira
+          else {
+            str_privs = "1" + str_privs.substring(pos+1);
+          }
+        } // for
 
         //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
       } // for
@@ -179,11 +192,17 @@ export class UsuarioDetComponent implements OnInit {
     //console.log("pStrPrivs=" + pStrPrivs);
     let str_privs : string = "";
     
+    let pos : number;
+
     if ( pCtrlList && pCtrlList.options && pStrPrivs ) {
       //console.log("RestoreStrPriv - entrou no if");
       // passar por cada opcao e selecionar a opcao se o char da string for 1
       for (let i = 0; i < pCtrlList.options.length; i++ ) {
-        if ( pStrPrivs.charAt(i) == '1' ) {
+        
+        pos = pCtrlList.options.get(i)?.value;
+        //console.log("RestoreStrPriv - pos=" + pos);
+        if ( pStrPrivs.charAt(pos-1) == "1" ) {
+          //console.log("RestoreStrPriv - entrou no if == 1");
           pCtrlList.options.get(i)?._setSelected(true);
         }
       } // for

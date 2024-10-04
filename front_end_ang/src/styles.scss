@@ -185,7 +185,7 @@ a:has(>.edit-icon)  {
 /* ini - desabilitar o anchors do botaozinho "Editar" dos cadastros */
 .adisabled {
   cursor: not-allowed;
-  opacity: .65;
+  color: rgba(0, 0, 0, 0.4); //cinza
 }
 a[disabled=true] {
   pointer-events: none;

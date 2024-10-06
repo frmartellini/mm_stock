@@ -1,0 +1,62 @@
+
+<div class="form-group col-md-6  mx-auto" >
+  
+<h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
+
+<!--&todo& talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
+
+<form [formGroup]="usuario_form" (ngSubmit)="onSubmit(usuario_form.value)">
+
+  <br />
+  <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-label>Login</mat-label>
+    <input matInput type="text" id="Cad_Usuario_Login" name="Cad_Usuario_Login" formControlName="Cad_Usuario_Login"
+           [(ngModel)]="usuario.login" required="true" />
+  </mat-form-field>
+  <br /><mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-label>Nome</mat-label>
+    <input matInput type="text" id="Cad_Usuario_Nome" name="Cad_Usuario_Nome" formControlName="Cad_Usuario_Nome"
+           [(ngModel)]="usuario.nome" required="true" />
+  </mat-form-field>
+  <br />
+  
+  <!--exibir esta div apenas se estiver incluindo -->
+  <div *ngIf="GetMode() == 'I'">
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" id="Cad_Usuario_Senha" name="Cad_Usuario_Senha" formControlName="Cad_Usuario_Senha"
+              required="true" />
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Confirmação da Senha</mat-label>
+      <input matInput type="password" id="Cad_Usuario_SenhaConf" name="Cad_Usuario_SenhaConf" formControlName="Cad_Usuario_SenhaConf"
+            required="true" />
+    </mat-form-field>
+    <br />
+  </div>
+
+  <div >
+    <h3>Privilégios</h3>
+
+    <mat-selection-list #privilegios id="privilegios_sel_list" name="Cad_Usuario_Privs" formControlName="Cad_Usuario_Privs">
+        <mat-list-option *ngFor="let priv of PrivilegiosObj" [value]="priv.pos">{{priv.desc}}</mat-list-option>
+    </mat-selection-list>
+    <!-- <p>Options selected: {{privilegios.selectedOptions.selected.length}}</p> -->
+  </div>
+  
+  <br />
+
+  <div class="form-group">
+    <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!usuario_form.valid"
+            id="SubmitButton" name="SubmitButton" >
+        <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+        {{ this.SubmitButtonText }}
+    </button>
+    &nbsp;&nbsp;
+    <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+  </div>
+
+</form>
+
+</div>

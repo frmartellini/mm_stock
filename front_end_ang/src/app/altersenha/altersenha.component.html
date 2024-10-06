@@ -36,8 +36,10 @@
             id="confirmPwd"
             type="password"  
             class="form-control" />
-        <div class="alert alert-danger" *ngIf="confirmPwd?.touched && confirmPwd?.invalid">
-            <div *ngIf="confirmPwd?.errors?.['required']">obrigatório</div>
+            <!-- {{"confirmPwd?.invalid="+confirmPwd?.invalid}} -->
+            <!-- {{"confirmPwd?.errors?.['required']="+confirmPwd?.errors?.['required']}} -->
+        <div class="alert alert-danger" *ngIf="confirmPwd?.touched && confirmPwd?.invalid &&  !confirmPwd?.value">
+            <div *ngIf="confirmPwd?.touched && !confirmPwd?.value">obrigatório</div>
         </div>
         <div class="alert alert-danger" *ngIf="newPwd?.value != '' && confirmPwd?.value != '' && confirmPwd?.value != newPwd?.value ">
             nova senha não confirmada
@@ -46,7 +48,7 @@
 
         <div class="row mt-2">
         <div class="col text-center">
-            <button type="submit" class="btn btn-primary">Alterar senha</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!ConfigForm.valid">Alterar senha</button>
         </div>
         </div>
 

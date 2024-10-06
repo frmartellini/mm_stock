@@ -4,6 +4,7 @@ import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
 import { Router, NavigationEnd, Event } from '@angular/router';
+import { filter } from 'rxjs/internal/operators/filter';
 
 @Component({
   selector: 'app-root',
@@ -31,11 +32,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.isBrowser) {
-      this.router.events.subscribe((event: any) => {
-        if (event instanceof NavigationEnd) {
-          this.updateActiveLinks();
-        }
-      });
+      this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(this.updateActiveLinks);
 
       // Ensure the active link is set on initial load
       this.updateActiveLinks();

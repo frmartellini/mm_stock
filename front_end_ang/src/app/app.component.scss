@@ -142,6 +142,9 @@ tyle: solid; */
 /* Estilo dos links quando estão ativos */
 .admin-nav ul li a.active {
   color: #7CB9E8;
+  @include cdk.high-contrast() {
+    color: yellow;
+  }
 }
 
 /* Animação de transição */
@@ -159,8 +162,6 @@ tyle: solid; */
     margin-left: 0;
   }
 }
-
-
 /*
 @media screen and (max-width: 650px) {
   .content {

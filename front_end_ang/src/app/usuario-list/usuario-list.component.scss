@@ -1,0 +1,65 @@
+
+/* formatar as celulas de dados das colunas da tabela */
+
+.mat-column-id_usuario {
+    text-align: center;
+    width: 40px !important;
+}
+
+.mat-column-login {
+  text-align: left;
+  width: 200px !important;
+}
+
+.mat-column-nome {
+  text-align: left;
+  width: 200px !important;
+}
+
+/* formatar o table (linhas, header, botoes) */
+
+.mat-mdc-table {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 2px solid rgba(0, 0, 0, 0.12);
+    border-right: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-mdc-header-cell {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 2px solid rgba(0, 0, 0, 0.12);
+    border-right: 2px solid rgba(0, 0, 0, 0.12);
+
+    vertical-align: middle;
+
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.mat-mdc-cell {
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 2px solid rgba(0, 0, 0, 0.12);
+    border-right: 2px solid rgba(0, 0, 0, 0.12);
+
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.mat-header-row,
+.mat-row {
+    min-height: 30px;
+}
+
+.mat-mdc-outlined-button {
+    padding: 1px;
+    border-width: 0px;
+    border-style: none;
+    min-width: 30px;
+}

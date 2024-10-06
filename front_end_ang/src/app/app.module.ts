@@ -17,6 +17,8 @@ import { FornecedorListComponent } from './fornecedor-list/fornecedor-list.compo
 import { FornecedorDetComponent } from './fornecedor-det/fornecedor-det.component';
 import { ProdutoDetComponent } from './produto-det/produto-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
+import { UsuarioListComponent } from './usuario-list/usuario-list.component';
+import { UsuarioDetComponent } from './usuario-det/usuario-det.component';
 import { LoginComponent } from './login/login.component';
 import { ConfigComponent } from './config/config.component';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -32,6 +34,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { CustomPaginator } from './custom-paginator';
 import { DatePipe } from '@angular/common';
@@ -48,6 +51,7 @@ import { PersistPaginatorDirective } from './PersistPaginator.directive';
 
 //import de acessibilidade
 import {A11yModule} from '@angular/cdk/a11y';
+import { ToggleHighContrast } from './components/toggle-highcontrast.component';
 
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -70,6 +74,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,ProdutoDetComponent
     ,ClienteDetComponent
     ,ClienteListComponent
+    ,UsuarioListComponent
+    ,UsuarioDetComponent
     ,LoginComponent
     ,ConfigComponent
     ,ProdutoEntradaComponent
@@ -79,7 +85,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,AlterSenhaComponent
     ,SortingDirective
     ,PersistPaginatorDirective
-
+    ,ToggleHighContrast
   ],
   imports: [
     BrowserModule
@@ -100,6 +106,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatButtonModule
     , MatAutocompleteModule
     , MatDatepickerModule
+    , MatListModule
     , MatTooltipModule
     , CurrencyMaskModule
     ,A11yModule

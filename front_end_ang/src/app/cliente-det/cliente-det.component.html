@@ -1,6 +1,6 @@
 
 <div class="form-group col-md-6  mx-auto" >
-  
+
 <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
 
 <!--&todo& talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
@@ -23,7 +23,7 @@
   <mat-form-field appearance="fill" class="" style="width: 50%">
     <mat-label>Telefone</mat-label>
     <input matInput type="text" id="Cad_Cliente_Telefone" name="Cad_Cliente_Telefone" formControlName="Cad_Cliente_Telefone"
-           [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" />
+           [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" mask="(00) 0000-0000||(00) 0 0000-0000"/>
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 100%">
@@ -33,25 +33,25 @@
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" style="width: 40%">
-    <mat-label>Tipo do cliente</mat-label> 
+    <mat-label>Tipo do cliente</mat-label>
     <mat-select #Cad_Cliente_Tipo id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
                 [(value)]="cliente.tipo_cliente" required="true"
                 (ngModelChange)="on_Cad_Cliente_Tipo_Change($event)" >
       <mat-option value="Pessoa Física">Pessoa Física</mat-option>
       <mat-option value="Pessoa Jurídica">Pessoa Jurídica</mat-option>
-    </mat-select> 
+    </mat-select>
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cpf" [matTooltipPosition]="'below'" >
     <mat-label>CPF</mat-label>
     <input #Cad_Cliente_CPF matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
-           [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" />
+           [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" mask="000.000.000-00"/>
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cnpj" [matTooltipPosition]="'below'" >
     <mat-label>CNPJ</mat-label>
     <input #Cad_Cliente_CNPJ matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
-           [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" />
+           [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" mask="00.000.000/0000-00"/>
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" class="" style="width: 100%">
@@ -79,7 +79,7 @@
   </mat-form-field>
   <br />
   <mat-form-field appearance="fill" style="width: 20%">
-    <mat-label>Estado</mat-label> 
+    <mat-label>Estado</mat-label>
     <mat-select id="Cad_Cliente_Estado" name="Cad_Cliente_Estado" formControlName="Cad_Cliente_Estado"
                 [(value)]="cliente.uf" >
       <mat-option value="AC">AC</mat-option>
@@ -109,7 +109,7 @@
       <mat-option value="SP">SP</mat-option>
       <mat-option value="SE">SE</mat-option>
       <mat-option value="TO">TO</mat-option>
-    </mat-select> 
+    </mat-select>
   </mat-form-field>
   <div class="form-group">
     <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!cliente_form.valid"

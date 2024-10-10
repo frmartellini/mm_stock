@@ -36,6 +36,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
+import { MovimentacaoGrafComponent } from './movimentacao-graf/movimentacao-graf.component';
 import { CustomPaginator } from './custom-paginator';
 import { DatePipe } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
@@ -45,6 +46,7 @@ import { LOCALE_ID } from '@angular/core';
 import locale_pt from '@angular/common/locales/pt';
 registerLocaleData(locale_pt);
 
+import { ChartModule } from 'primeng/chart';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
 import { SortingDirective } from './SortingCache.directive';
 import { PersistPaginatorDirective } from './PersistPaginator.directive';
@@ -52,6 +54,8 @@ import { PersistPaginatorDirective } from './PersistPaginator.directive';
 //import de acessibilidade
 import {A11yModule} from '@angular/cdk/a11y';
 import { ToggleHighContrast } from './components/toggle-highcontrast.component';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapterPT } from './pt-date-adapter';
 
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -81,6 +85,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,ProdutoEntradaComponent
     ,ProdutoSaidaComponent
     ,MovimentacaoCsComponent
+    ,MovimentacaoGrafComponent
     ,ProdutoSaidaComponent
     ,AlterSenhaComponent
     ,SortingDirective
@@ -107,6 +112,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatAutocompleteModule
     , MatDatepickerModule
     , MatListModule
+    , ChartModule
     , MatTooltipModule
     , CurrencyMaskModule
     ,A11yModule
@@ -120,6 +126,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
     provideNativeDateAdapter()
     ,DatePipe
+    ,{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    ,{ provide: DateAdapter, useClass: DateAdapterPT }
     ,CookieService
   ],
   bootstrap: [AppComponent]

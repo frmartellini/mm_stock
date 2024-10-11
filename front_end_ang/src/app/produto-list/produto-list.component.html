@@ -1,107 +1,112 @@
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo produto -->
   <a routerLink="/produto-det/0">
-    <button type="button" mat-raised-button color="basic">Incluir novo</button>
+    <button type="button" mat-raised-button color="basic" [attr.aria-label]="'Incluir novo produto'">Incluir novo</button>
   </a>
   <h2>Cadastro de Produtos</h2>
-  <!-- Filtro-->
+  
+  <!-- Filtro -->
   <mat-form-field subscriptSizing="dynamic">
-    <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
+    <mat-label for="filter-input">Filtro</mat-label>
+    <input matInput id="filter-input" (keyup)="applyFilter($event)" #input [attr.aria-label]="'Digite para filtrar produtos'">
   </mat-form-field>
 </div>
-<!--Tabela-->
+
+<!-- Tabela -->
 <div class="table-responsive">
-  <table class="table" mat-table [dataSource]="dataSource" matSort>
+  <table class="table" mat-table [dataSource]="dataSource" matSort [attr.aria-label]="'Tabela de Produtos'">
     <ng-container matColumnDef="id_produto">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Produto" [matTooltipPosition]="'above'">
-             ID
-        </th>
-        <td mat-cell *matCellDef="let element">
-              {{element.id_produto}}
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header
+          matTooltip="ID do Produto" [matTooltipPosition]="'above'">
+          ID
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.id_produto }}</td>
     </ng-container>
 
     <ng-container matColumnDef="descricao">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-               Descrição
-          </th>
-        <td class="centered-sorted-header" mat-cell *matCellDef="let element">
-          <a href='{{"/produto-det/" + element.id_produto+ "?mode=V"}}'>{{ element.descricao }}</a>              
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+          Descrição
+      </th>
+      <td class="centered-sorted-header" mat-cell *matCellDef="let element">
+        <a [routerLink]="['/produto-det', element.id_produto, { mode: 'V' }]" 
+           [attr.aria-label]="'Visualizar detalhes do produto ' + element.descricao">
+            {{ element.descricao }}
+        </a>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="cor">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Cor
-          </th>
-        <td mat-cell *matCellDef="let element">
-              {{ element.cor }}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+          Cor
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.cor }}</td>
     </ng-container>
 
     <ng-container matColumnDef="tamanho">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tamanho
-          </th>
-        <td mat-cell *matCellDef="let element">
-              {{ element.tamanho }}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+          Tamanho
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.tamanho }}</td>
     </ng-container>
 
     <ng-container matColumnDef="tipo_material">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tipo de Material
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.tipo_material }}
-        </td>
+          Tipo de Material
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.tipo_material }}</td>
     </ng-container>
 
     <ng-container matColumnDef="preco_venda">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Preço de Venda
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.preco_venda | number:'1.2-2':'pt' }}
-        </td>
+          Preço de Venda
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.preco_venda | number:'1.2-2':'pt' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="quantidade_atual">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-             Quantidade Atual
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.quantidade_atual }}
-        </td>
+          Quantidade Atual
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.quantidade_atual }}</td>
     </ng-container>
 
-<!-- Botões Editar e Exlcuir-->
-      <ng-container  matColumnDef="actions" >
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef >
-          Ações
-        </th>
-        <td mat-cell *matCellDef="let row" class="text-center">
-          <div class="d-flex align-items-center justify-content-center">
-            <a class="d-flex" href='/produto-det/{{row.id_produto}}?mode=E' matTooltip="Editar" [matTooltipPosition]="'above'" aria-label="Editar">
-                <mat-icon class="edit-icon">edit</mat-icon>
-            </a>
-            <button mat-stroked-button class="" color="warn" (click)="excluirItem(row.id_produto)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar">
-              <!-- Adicione uma classe de estilo para o botão quadrado -->
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
+    <!-- Botões Editar e Excluir -->
+    <ng-container matColumnDef="actions">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef>
+        Ações
+      </th>
+      <td mat-cell *matCellDef="let row" class="text-center">
+        <div class="d-flex align-items-center justify-content-center">
+          <a class="d-flex" [routerLink]="['/produto-det', row.id_produto, { mode: 'E' }]" 
+             matTooltip="Editar" 
+             [matTooltipPosition]="'above'" 
+             [attr.aria-label]="'Editar produto ' + row.descricao">
+            <mat-icon class="edit-icon">edit</mat-icon>
+          </a>
+          <button mat-stroked-button color="warn" (click)="excluirItem(row.id_produto)" 
+                  matTooltip="Excluir" 
+                  [matTooltipPosition]="'above'" 
+                  [attr.aria-label]="'Deletar produto ' + row.descricao">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
 
-<!-- Row shown when there is no matching data. -->
+    <!-- Mensagem quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="8">Nada encontrado para o filtro "{{ input.value }}"</td>
     </tr>
 
-    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
-    <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayColumn"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumn;"></tr>
   </table>
-<!--Paginador-->
-<mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True"></mat-paginator>
+
+  <!-- Paginador -->
+  <mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" 
+                 [pageSize]="10" 
+                 itemsPerPageLabel="Itens por Página" 
+                 showFirstLastButtons="true" 
+                 [attr.aria-label]="'Controles de paginação para a tabela de produtos'">
+  </mat-paginator>
 </div>

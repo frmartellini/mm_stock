@@ -1,126 +1,159 @@
 
 <div class="form-group col-md-6  mx-auto" >
   
-<h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
-
-<!--&todo& talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
-
-<form [formGroup]="cliente_form" (ngSubmit)="onSubmit(cliente_form.value)">
-
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 100%">
-    <mat-label>Nome completo</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Nome" name="Cad_Cliente_Nome" formControlName="Cad_Cliente_Nome"
-           [(ngModel)]="cliente.nome_completo" required="true" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 100%">
-    <mat-label>Email</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Email" name="Cad_Cliente_Email" formControlName="Cad_Cliente_Email"
-           [(ngModel)]="cliente.email" required="true" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 50%">
-    <mat-label>Telefone</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Telefone" name="Cad_Cliente_Telefone" formControlName="Cad_Cliente_Telefone"
-           [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 100%">
-    <mat-label>Nome da loja</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Nome_Loja" name="Cad_Cliente_Nome_Loja" formControlName="Cad_Cliente_Nome_Loja"
-           [(ngModel)]="cliente.nome_loja" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" style="width: 40%">
-    <mat-label>Tipo do cliente</mat-label> 
-    <mat-select #Cad_Cliente_Tipo id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
-                [(value)]="cliente.tipo_cliente" required="true"
-                (ngModelChange)="on_Cad_Cliente_Tipo_Change($event)" >
-      <mat-option value="Pessoa Física">Pessoa Física</mat-option>
-      <mat-option value="Pessoa Jurídica">Pessoa Jurídica</mat-option>
-    </mat-select> 
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cpf" [matTooltipPosition]="'below'" >
-    <mat-label>CPF</mat-label>
-    <input #Cad_Cliente_CPF matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
-           [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cnpj" [matTooltipPosition]="'below'" >
-    <mat-label>CNPJ</mat-label>
-    <input #Cad_Cliente_CNPJ matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
-           [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 100%">
-    <mat-label>Endereço</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Endereco" name="Cad_Cliente_Endereco" formControlName="Cad_Cliente_Endereco"
-           [(ngModel)]="cliente.endereco" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 30%">
-    <mat-label>Número</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Numero" name="Cad_Cliente_Numero" formControlName="Cad_Cliente_Numero"
-           [(ngModel)]="cliente.numero" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 50%">
-    <mat-label>Complemento</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Complemento" name="Cad_Cliente_Complemento" formControlName="Cad_Cliente_Complemento"
-           [(ngModel)]="cliente.complemento" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" class="" style="width: 100%">
-    <mat-label>Cidade</mat-label>
-    <input matInput type="text" id="Cad_Cliente_Cidade" name="Cad_Cliente_Cidade" formControlName="Cad_Cliente_Cidade"
-           [(ngModel)]="cliente.cidade" />
-  </mat-form-field>
-  <br />
-  <mat-form-field appearance="fill" style="width: 20%">
-    <mat-label>Estado</mat-label> 
-    <mat-select id="Cad_Cliente_Estado" name="Cad_Cliente_Estado" formControlName="Cad_Cliente_Estado"
-                [(value)]="cliente.uf" >
-      <mat-option value="AC">AC</mat-option>
-      <mat-option value="AL">AL</mat-option>
-      <mat-option value="AP">AP</mat-option>
-      <mat-option value="AM">AM</mat-option>
-      <mat-option value="BA">BA</mat-option>
-      <mat-option value="CE">CE</mat-option>
-      <mat-option value="DF">DF</mat-option>
-      <mat-option value="ES">ES</mat-option>
-      <mat-option value="GO">GO</mat-option>
-      <mat-option value="MA">MA</mat-option>
-      <mat-option value="MT">MT</mat-option>
-      <mat-option value="MS">MS</mat-option>
-      <mat-option value="MG">MG</mat-option>
-      <mat-option value="PA">PA</mat-option>
-      <mat-option value="PB">PB</mat-option>
-      <mat-option value="PR">PR</mat-option>
-      <mat-option value="PE">PE</mat-option>
-      <mat-option value="PI">PI</mat-option>
-      <mat-option value="RJ">RJ</mat-option>
-      <mat-option value="RN">RN</mat-option>
-      <mat-option value="RS">RS</mat-option>
-      <mat-option value="RO">RO</mat-option>
-      <mat-option value="RR">RR</mat-option>
-      <mat-option value="SC">SC</mat-option>
-      <mat-option value="SP">SP</mat-option>
-      <mat-option value="SE">SE</mat-option>
-      <mat-option value="TO">TO</mat-option>
-    </mat-select> 
-  </mat-form-field>
-  <div class="form-group">
-    <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!cliente_form.valid"
-            id="SubmitButton" name="SubmitButton" >
-        <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
-        {{ this.SubmitButtonText }}
-    </button>
-    &nbsp;&nbsp;
-    <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+  <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
+  
+  <!--&todo& talvez poderia vamos colocar um botao excluir para excluir o cliente que o usuario estiver vendo os detalhes (somente se estiver visualizando um cliente)-->
+  
+  <form [formGroup]="cliente_form" (ngSubmit)="onSubmit(cliente_form.value)" aria-labelledby="PageTitle">
+  
+    <br />
+    <!-- Nome completo -->
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Nome completo</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Nome" name="Cad_Cliente_Nome" formControlName="Cad_Cliente_Nome"
+             [(ngModel)]="cliente.nome_completo" required="true" aria-required="true" aria-labelledby="PageTitle Cad_Cliente_Nome"/>
+    </mat-form-field>
+  
+    <br />
+     <!-- Email -->
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Email</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Email" name="Cad_Cliente_Email" formControlName="Cad_Cliente_Email"
+             [(ngModel)]="cliente.email" required="true" aria-required="true" aria-labelledby="PageTitle Cad_Cliente_Email" aria-describedby="email-feedback"/>
+    </mat-form-field>
+  
+    <!-- Mensagem de erro email -->
+    <div class="alert alert-danger" id="email-feedback" aria-live="polite" *ngIf="cliente_form.controls['Cad_Cliente_Email']?.invalid && cliente_form.controls['Cad_Cliente_Email']?.touched">
+      <span *ngIf="cliente_form.controls['Cad_Cliente_Email']?.errors?.['required']">Email é obrigatório.</span>
+      <span *ngIf="cliente_form.controls['Cad_Cliente_Email']?.errors?.['email']">Formato de email inválido.</span>
+    </div>
+  
+    <br />
+    <!-- Telefone -->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Telefone</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Telefone" name="Cad_Cliente_Telefone" formControlName="Cad_Cliente_Telefone"
+             [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" aria-labelledby="PageTitle Cad_Cliente_Telefone" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Nome da Loja -->
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Nome da loja</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Nome_Loja" name="Cad_Cliente_Nome_Loja" formControlName="Cad_Cliente_Nome_Loja"
+             [(ngModel)]="cliente.nome_loja" aria-labelledby="PageTitle Cad_Cliente_Nome_Loja" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Tipo do cliente -->
+    <mat-form-field appearance="fill" style="width: 40%">
+      <mat-label>Tipo do cliente</mat-label> 
+      <mat-select #Cad_Cliente_Tipo id="Cad_Cliente_Tipo" name="Cad_Cliente_Tipo" formControlName="Cad_Cliente_Tipo"
+                  [(value)]="cliente.tipo_cliente" required="true"
+                  (ngModelChange)="on_Cad_Cliente_Tipo_Change($event)" 
+                  aria-required="true"
+                  aria-labelledby="PageTitle Cad_Cliente_Tipo">
+        <mat-option value="Pessoa Física">Pessoa Física</mat-option>
+        <mat-option value="Pessoa Jurídica">Pessoa Jurídica</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <br />
+     <!-- CPF -->
+    <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cpf" [matTooltipPosition]="'below'" >
+      <mat-label>CPF</mat-label>
+      <input #Cad_Cliente_CPF matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
+             [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" aria-labelledby="PageTitle Cad_Cliente_CPF" />
+    </mat-form-field>
+  
+    <br />
+    <!-- CNPJ -->
+    <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cnpj" [matTooltipPosition]="'below'" >
+      <mat-label>CNPJ</mat-label>
+      <input #Cad_Cliente_CNPJ matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
+             [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" aria-labelledby="PageTitle Cad_Cliente_CNPJ" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Endereço -->
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Endereço</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Endereco" name="Cad_Cliente_Endereco" formControlName="Cad_Cliente_Endereco"
+             [(ngModel)]="cliente.endereco" aria-labelledby="PageTitle Cad_Cliente_Endereco" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Número -->
+    <mat-form-field appearance="fill" class="" style="width: 30%">
+      <mat-label>Número</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Numero" name="Cad_Cliente_Numero" formControlName="Cad_Cliente_Numero"
+             [(ngModel)]="cliente.numero" aria-labelledby="PageTitle Cad_Cliente_Numero" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Complemento-->
+    <mat-form-field appearance="fill" class="" style="width: 50%">
+      <mat-label>Complemento</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Complemento" name="Cad_Cliente_Complemento" formControlName="Cad_Cliente_Complemento"
+             [(ngModel)]="cliente.complemento" aria-labelledby="PageTitle Cad_Cliente_Complemento" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Cidade -->
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label>Cidade</mat-label>
+      <input matInput type="text" id="Cad_Cliente_Cidade" name="Cad_Cliente_Cidade" formControlName="Cad_Cliente_Cidade"
+             [(ngModel)]="cliente.cidade" aria-labelledby="PageTitle Cad_Cliente_Cidade" />
+    </mat-form-field>
+  
+    <br />
+    <!-- Estado -->
+    <mat-form-field appearance="fill" style="width: 20%">
+      <mat-label>Estado</mat-label> 
+      <mat-select id="Cad_Cliente_Estado" name="Cad_Cliente_Estado" formControlName="Cad_Cliente_Estado"
+                  [(value)]="cliente.uf" aria-labelledby="PageTitle Cad_Cliente_Estado">
+        <mat-option value="AC">AC</mat-option>
+        <mat-option value="AL">AL</mat-option>
+        <mat-option value="AP">AP</mat-option>
+        <mat-option value="AM">AM</mat-option>
+        <mat-option value="BA">BA</mat-option>
+        <mat-option value="CE">CE</mat-option>
+        <mat-option value="DF">DF</mat-option>
+        <mat-option value="ES">ES</mat-option>
+        <mat-option value="GO">GO</mat-option>
+        <mat-option value="MA">MA</mat-option>
+        <mat-option value="MT">MT</mat-option>
+        <mat-option value="MS">MS</mat-option>
+        <mat-option value="MG">MG</mat-option>
+        <mat-option value="PA">PA</mat-option>
+        <mat-option value="PB">PB</mat-option>
+        <mat-option value="PR">PR</mat-option>
+        <mat-option value="PE">PE</mat-option>
+        <mat-option value="PI">PI</mat-option>
+        <mat-option value="RJ">RJ</mat-option>
+        <mat-option value="RN">RN</mat-option>
+        <mat-option value="RS">RS</mat-option>
+        <mat-option value="RO">RO</mat-option>
+        <mat-option value="RR">RR</mat-option>
+        <mat-option value="SC">SC</mat-option>
+        <mat-option value="SP">SP</mat-option>
+        <mat-option value="SE">SE</mat-option>
+        <mat-option value="TO">TO</mat-option>
+      </mat-select> 
+    </mat-form-field>
+  
+    <!-- Botões -->
+    <div class="form-group">
+      <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!cliente_form.valid"
+              id="SubmitButton" name="SubmitButton" aria-labelledby="PageTitle SubmitButton">
+          <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+          {{ this.SubmitButtonText }}
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
+    </div>
+  
+  </form>
+  
   </div>
-
-</form>
-
-</div>

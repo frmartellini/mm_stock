@@ -27,6 +27,7 @@
     </mat-form-field> 
     -->
 
+    <!-- Campo de Produto com rótulo acessível e autocomplete -->
     <mat-form-field appearance="fill" class="" style="width: 100%">
       <mat-label>Produto</mat-label>
       <input #Produto_Input matInput type="text"
@@ -34,7 +35,8 @@
            [matAutocomplete]="Produto_Auto"
            (input)="FilterProdutos(Produto_Input.value, 'input')"
            (focus)="FilterProdutos(Produto_Input.value, 'focus')"
-           >
+           aria-labelledby="produtoLabel produtoDescription"
+           aria-describedby="produtoDescription">
       <mat-autocomplete autoActiveFirstOption requireSelection #Produto_Auto="matAutocomplete" id="Produto_Auto" name="Produto_Auto" 
                         [displayWith]="Produto_Auto_DisplayFn">
          @for (produto of filtered_produtos; track produto) {
@@ -42,31 +44,72 @@
         }
       </mat-autocomplete>
     </mat-form-field>
+
+    <!-- Campo Quantidade com mensagens de erro acessíveis -->
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 20%">
+      <mat-label id="quantidadeLabel">Quantidade</mat-label>
+      <input type="number" id="QuantidadeInput" name="QuantidadeInput"
+             formControlName="QuantidadeInput" matInput min="1" step="1" 
+             pattern="^[0-9]+$" [(ngModel)]="movimentacao.quantidade"
+             aria-labelledby="quantidadeLabel quantidadeDescription"
+             aria-required="true" required>
+    </mat-form-field>
+    <!-- 
     <br />
     <mat-form-field appearance="fill" class="" style="width: 20%">
       <mat-label>Quantidade</mat-label>
       <input type="number" id="QuantidadeInput" name="QuantidadeInput" formControlName="QuantidadeInput"
              matInput min="1" step="1" pattern="^[0|1|2|3|4|5|6|7|8|9]+$" [(ngModel)]="movimentacao.quantidade" required="true" />
     </mat-form-field>
+     -->
+
+    <!-- Campo de Observação com acessibilidade -->
+    <br />
+    <mat-form-field appearance="fill" class="" style="width: 100%">
+      <mat-label id="obsLabel">Observação</mat-label>
+      <textarea id="ObsTextArea" name="ObsTextArea" formControlName="ObsTextArea"
+                matInput placeholder="" rows="3" [(ngModel)]="movimentacao.obs"
+                aria-labelledby="obsLabel obsDescription"></textarea>
+    </mat-form-field>
+    <!-- 
     <br />
     <mat-form-field appearance="fill" class="" style="width: 100%">
       <mat-label>Observação</mat-label>
       <textarea id="ObsTextArea" name="ObsTextArea" formControlName="ObsTextArea"
                 matInput placeholder="" rows="3" [(ngModel)]="movimentacao.obs" ></textarea>
     </mat-form-field>
+    -->
 
+        <!-- Botões com foco e acessibilidade aprimorada -->
+        <div class="form-group">
+          <button type="submit" mat-raised-button color="primary"
+                  *ngIf="!IsInViewMode()" [disabled]="!form.valid"
+                  aria-live="polite" aria-label="Confirmar entrada de produto" 
+                  style="min-width: 48px;">
+            Confirmar
+          </button>
+          &nbsp;&nbsp;
+          <button type="button" mat-raised-button color="basic" 
+                  (click)="voltar()" aria-label="Voltar à página anterior" style="min-width: 48px;">
+            Voltar
+          </button>
+        </div>      
+      
+    <!-- 
     <div class="form-group">
       <button type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!form.valid">Confirmar</button>
       &nbsp;&nbsp;
       <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
     </div>
-
-    <!-- <div class="form-group col-md-6 mb-3  ">
+    
+    
+    <div class="form-group col-md-6 mb-3  ">
       <label for="data_hora ">Data/hora</label>
       <input [(ngModel)]="movimentacao.data_hora" type="text" class="form-control" id="data_hora">
     </div> -->
 
-  </form>
+  </form> 
 
   <!-- <pre>
     {{ movimentacao | json }}

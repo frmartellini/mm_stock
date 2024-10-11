@@ -42,66 +42,70 @@ ng-click="setActive('produto-entrada')" ng-class="{ 'active': activeTab === 'pro
 ng-click="setActive('produto-saida')" ng-class="{ 'active': activeTab === 'produto-saida' }"
 ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'movimentacao-cs' }" -->
 
-<header id="Header" *ngIf="menu" class="admin-header">
+<header id="Header" *ngIf="menu" class="admin-header" aria-label="Cabeçalho administrativo">
   <a routerLink="/home" class="home">
     <div class="logo">
       <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
-      <img src="../assets/images/logo-mm-stock.jpg" alt="Logo">
+      <img src="../assets/images/logo-mm-stock.jpg" alt="MM Stock - Sistema de Gerenciamento de Estoque">
     </div>
   </a>
-  <nav class="admin-nav">
+  
+  <nav class="admin-nav" aria-label="Menu de navegação">
     <ul>
-      <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Clientes</a></li>
-      <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Fornecedores</a></li>
-      <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Produtos</a></li>
-      <li><a routerLink="/usuario-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">Cadastro de Usuários</a></li>
+      <li><a routerLink="/cliente-list" routerLinkActive="active" aria-current="page">Cadastro de Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" routerLinkActive="active" aria-current="page">Cadastro de Fornecedores</a></li>
+      <li><a routerLink="/produto-list" routerLinkActive="active" aria-current="page">Cadastro de Produtos</a></li>
 
-      <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page">Entrada de Produto</a></li>
-      <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page">Saída de Produto</a></li>
+      <!-- Melhorar acessibilidade de link desabilitado com aria-disabled -->
+      <li>
+        <a routerLink="/usuario-list" routerLinkActive="active" aria-current="page" 
+           [attr.aria-disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')" 
+           [class.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">
+          Cadastro de Usuários
+        </a>
+      </li>
 
-      <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page">Consulta de Movimentação do Estoque</a></li>
+      <li><a routerLink="/produto-entrada" routerLinkActive="active" aria-current="page">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" routerLinkActive="active" aria-current="page">Saída de Produto</a></li>
+      <li><a routerLink="/movimentacao-cs" routerLinkActive="active" aria-current="page">Consulta de Movimentação do Estoque</a></li>
     </ul>
   </nav>
+
   <div class="admin-actions">
-    <toggle-highcontrast/>
+    <toggle-highcontrast></toggle-highcontrast>
+    
     <button mat-icon-button (click)="deslogar()" aria-label="Sair">
-      <mat-icon>exit_to_app</mat-icon>
+      <mat-icon aria-hidden="true">exit_to_app</mat-icon>
     </button>
+    
     <button mat-icon-button routerLink="/altersenha" aria-label="Alterar Senha">
-      <mat-icon>settings</mat-icon>
+      <mat-icon aria-hidden="true">settings</mat-icon>
     </button>
   </div>
-  <!-- &todo& exibicao temporaria do usuario logado -->
-  <div style="color: yellow; text-align: right;"> {{ this.authenticationService.UsuarioLogado?.login }} </div>
+  
+  <!-- Melhorar contraste da cor do texto do usuário logado -->
+  <div style="color: #FFBF00; text-align: right;"> <!-- Sugestão de cor melhor para contraste -->
+    {{ this.authenticationService.UsuarioLogado?.login }}
+  </div>
 </header>
 
-
 <main id="Main" role="main" class="main">
-
   <div id="ContentDiv" class="ContentDivClass">
-
-    <!--
-      as duas divsabaixo consistem no esquema para remover o flicker (piscada) da tela de login
-      quando jah estava logado e fazia um F5 na pagina aberta.
-    -->
+    <!-- Remoção de flicker da tela de login -->
     <div style="display: none" *ngIf="isServer">
-      <router-outlet (activate)="showMenu($event)"/>
+      <router-outlet (activate)="showMenu($event)"></router-outlet>
     </div>
+    
     <div id="BrowserRouterOutletDiv" *ngIf="isBrowser">
-      <router-outlet (activate)="showMenu($event)"/>
+      <router-outlet (activate)="showMenu($event)"></router-outlet>
     </div>
-      
   </div>
-
 </main>
 
-<footer id="Footer" class="footer">
+<footer id="Footer" class="footer" aria-label="Rodapé com informações de direitos reservados">
   <p class="p">&copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</p>
-  <!-- <div class="container">
-    
-    <span class="text-muted">© 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</span>
-  </div> -->
 </footer>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->

@@ -1,79 +1,77 @@
-
-<div class="form-group col-md-6  mx-auto" >
-
-  <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
-
-  <!--&todo& talvez poderia vamos colocar um botao excluir para excluir o fornecedor que o usuario estiver vendo os detalhes (somente se estiver visualizando um fornecedor)-->
+<div class="form-group col-md-6 mx-auto">
+  <h2 #h2 id="PageTitle" name="PageTitle">{{ PageTitle }}</h2>
 
   <form [formGroup]="fornecedor_form" (ngSubmit)="onSubmit(fornecedor_form.value)">
 
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Nome do Fornecedor</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Nome" name="Cad_fornecedor_Nome" formControlName="Cad_fornecedor_Nome"
-             [(ngModel)]="fornecedor.nome_fornecedor" required="true" />
+             [(ngModel)]="fornecedor.nome_fornecedor" required [attr.aria-label]="'Nome do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Nome do Responsável</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Responsavel" name="Cad_fornecedor_Responsavel" formControlName="Cad_fornecedor_Responsavel"
-             [(ngModel)]="fornecedor.nome_responsavel" required="true" />
+             [(ngModel)]="fornecedor.nome_responsavel" required [attr.aria-label]="'Nome do Responsável'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 50%">
+    <mat-form-field appearance="fill" style="width: 50%">
       <mat-label>Telefone</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Contato_Telefonico" name="Cad_fornecedor_Contato_Telefonico" formControlName="Cad_fornecedor_Contato_Telefonico"
-             [(ngModel)]="fornecedor.contato_telefonico" pattern="^[0123456789\-\(\)]+$" />
+             [(ngModel)]="fornecedor.contato_telefonico" pattern="^[0123456789\-\(\)]+$" [attr.aria-label]="'Telefone do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Redes Sociais</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Redes_Sociais" name="Cad_fornecedor_Redes_Sociais" formControlName="Cad_fornecedor_Redes_Sociais"
-             [(ngModel)]="fornecedor.redes_sociais" />
+             [(ngModel)]="fornecedor.redes_sociais" [attr.aria-label]="'Redes Sociais do Fornecedor'" />
     </mat-form-field>
     <br />
     
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Materiais Fornecidos</mat-label>
       <textarea id="Cad_fornecedor_Materiais_Fornecidos" name="Cad_fornecedor_Materiais_Fornecidos" formControlName="Cad_fornecedor_Materiais_Fornecidos"
-             matInput placeholder="Digite os materiais fornecidos por este fornecedor" rows="3" [(ngModel)]="fornecedor.materiais_fornecidos" ></textarea>
+             matInput placeholder="Digite os materiais fornecidos por este fornecedor" rows="3" [(ngModel)]="fornecedor.materiais_fornecidos" 
+             [attr.aria-label]="'Materiais Fornecidos pelo Fornecedor'"></textarea>
     </mat-form-field>
 
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 70%">
+    <mat-form-field appearance="fill" style="width: 70%">
       <mat-label>CNPJ</mat-label>
       <input matInput type="text" id="Cad_fornecedor_CNPJ" name="Cad_fornecedor_CNPJ" formControlName="Cad_fornecedor_CNPJ"
-             [(ngModel)]="fornecedor.cnpj" pattern="^[0123456789\.\/\-]+$" />
+             [(ngModel)]="fornecedor.cnpj" pattern="^[0123456789\.\/\-]+$" [attr.aria-label]="'CNPJ do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Endereço</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Endereco" name="Cad_fornecedor_Endereco" formControlName="Cad_fornecedor_Endereco"
-             [(ngModel)]="fornecedor.endereco" />
+             [(ngModel)]="fornecedor.endereco" [attr.aria-label]="'Endereço do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 30%">
+    <mat-form-field appearance="fill" style="width: 30%">
       <mat-label>Número</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Numero" name="Cad_fornecedor_Numero" formControlName="Cad_fornecedor_Numero"
-             [(ngModel)]="fornecedor.numero" />
+             [(ngModel)]="fornecedor.numero" [attr.aria-label]="'Número do Endereço do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 50%">
+    <mat-form-field appearance="fill" style="width: 50%">
       <mat-label>Complemento</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Complemento" name="Cad_fornecedor_Complemento" formControlName="Cad_fornecedor_Complemento"
-             [(ngModel)]="fornecedor.complemento" />
+             [(ngModel)]="fornecedor.complemento" [attr.aria-label]="'Complemento do Endereço do Fornecedor'" />
     </mat-form-field>
     <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Cidade</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Cidade" name="Cad_fornecedor_Cidade" formControlName="Cad_fornecedor_Cidade"
-             [(ngModel)]="fornecedor.cidade" />
+             [(ngModel)]="fornecedor.cidade" [attr.aria-label]="'Cidade do Fornecedor'" />
     </mat-form-field>
     <br />
     <mat-form-field appearance="fill" style="width: 20%">
       <mat-label>Estado</mat-label>
       <mat-select id="Cad_fornecedor_Estado" name="Cad_fornecedor_Estado" formControlName="Cad_fornecedor_Estado"
-                  [(value)]="fornecedor.uf" >
+                  [(value)]="fornecedor.uf" [attr.aria-label]="'Estado do Fornecedor'">
+        <!-- Lista de opções dos estados -->
         <mat-option value="AC">AC</mat-option>
         <mat-option value="AL">AL</mat-option>
         <mat-option value="AP">AP</mat-option>
@@ -103,16 +101,16 @@
         <mat-option value="TO">TO</mat-option>
       </mat-select>
     </mat-form-field>
+
     <div class="form-group">
       <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!fornecedor_form.valid"
-              id="SubmitButton" name="SubmitButton" >
-          <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
-          {{ this.SubmitButtonText }}
+              id="SubmitButton" name="SubmitButton" [attr.aria-label]="SubmitButtonText">
+        <!-- vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+        {{ SubmitButtonText }}
       </button>
       &nbsp;&nbsp;
-      <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+      <button type="button" mat-raised-button color="basic" (click)="voltar()" [attr.aria-label]="'Voltar'">Voltar</button>
     </div>
 
   </form>
-
-  </div>
+</div>

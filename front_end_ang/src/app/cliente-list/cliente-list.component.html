@@ -1,8 +1,14 @@
 <div class="button-and-filter-container">
 <!-- Botão de inclusão de novo cliente -->
-<a routerLink="/cliente-det/000">
-  <button type="button" mat-raised-button color="basic">Incluir novo</button>
+ 
+
+
+<a [routerLink]="bPodeIncluir ? '/cliente-det/000' : null" >
+  <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir">Incluir novo</button>
 </a>
+
+
+
 <h2>Cadastro de Clientes</h2>
 <!-- Filtro-->
 <mat-form-field subscriptSizing="dynamic">
@@ -136,10 +142,13 @@
       </th>
       <td mat-cell *matCellDef="let row" class="text-center">
         <div class="d-flex align-items-center justify-content-center">
-          <a class="d-flex" aria-label="Editar" href='/cliente-det/{{row.id_cliente}}?mode=E' matTooltip="Editar" [matTooltipPosition]="'above'">
-            <mat-icon class="edit-icon">edit</mat-icon>
+
+          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_cliente, bPodeEditar, 'Editar') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+            <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
           </a>
-          <button mat-stroked-button color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar">
+
+          <button mat-stroked-button color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar" disabled="{{!bPodeExcluir}}">
+          
             <!-- Adicione uma classe de estilo para o botão quadrado -->
             <mat-icon>delete</mat-icon>
           </button>

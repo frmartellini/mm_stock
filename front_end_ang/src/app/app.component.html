@@ -51,9 +51,10 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   </a>
   <nav class="admin-nav">
     <ul>
-      <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Clientes</a></li>
-      <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Fornecedores</a></li>
-      <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Produtos</a></li>
+      <!--<li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page">Cadastro de Clientes</a></li>-->
+      <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadCliCon')">Cadastro de Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadFornCon')">Cadastro de Fornecedores</a></li>
+      <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadProdCon')">Cadastro de Produtos</a></li>
       <li><a routerLink="/usuario-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">Cadastro de Usuários</a></li>
 
       <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page">Entrada de Produto</a></li>

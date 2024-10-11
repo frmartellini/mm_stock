@@ -1,16 +1,19 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { ClienteService } from '../services/cliente.service';
 import { clienteData } from '../CLIENTEDATA';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UsuarioService } from '../services/usuario.service';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-cliente-det',
   templateUrl: './cliente-det.component.html',
   styleUrl: './cliente-det.component.scss'
 })
+
 export class ClienteDetComponent implements OnInit {
 
   @Input() cliente: clienteData;
@@ -28,10 +31,13 @@ export class ClienteDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando cliente";
   public SubmitButtonText: String = "Confirmar";
 
+  public PrivilegiosObj = UsuarioService.PrivilegiosObj;
+
+  @ViewChild('privilegios') ListPrivilegios: MatSelectionList = {} as MatSelectionList;
+  
   // vars que contem o texto a ser exibido no tooltip dos controles do CPF e CNPJ
   public tooltip_cpf: string = "";
   public tooltip_cnpj: string = "";
-
   constructor(
     private route: ActivatedRoute
     ,private location: Location
@@ -147,6 +153,52 @@ export class ClienteDetComponent implements OnInit {
     return this.mode;
   }
 
+    // obter uma string com zeros e uns (a partir do controle mat-selection-list) representando os privilegios do usuario
+    public GetStrPriv(pCtrlList :MatSelectionList) : string {
+
+      let str_privs : string = ""; // var que serah retornada pela funcao
+  
+      // se o pCtrlList eh valido e possui opcoes
+      if ( pCtrlList && pCtrlList.options) {
+        // inicializar a strng com zero em cada char da string
+        str_privs = "0".repeat(pCtrlList.options.length);
+        //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
+        // passar pelos itens (privilegios)
+        for ( let i = 0; i < pCtrlList.options.length; i++ ) {
+  
+          if ( pCtrlList.options.get(i)?.selected ) {
+            // remontar a string trocando o char da posicao i de 0 para 1
+            str_privs = str_privs.substring(0,i) + "1" + str_privs.substring(i+1);
+          }
+  
+          //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
+        } // for
+        
+      } // if
+  
+      //console.log("str_privs final="+str_privs + " length="+ str_privs.length);
+      return str_privs;
+    } // GetStrPriv
+  
+    // selecionar os itens do mat-selection-list a partir da string contendo os zeros e uns indicando os privilegios
+    public RestoreStrPriv(pCtrlList :MatSelectionList, pStrPrivs :String) {
+      //console.log("RestoreStrPriv - inicio");
+      //console.log("pStrPrivs=" + pStrPrivs);
+      let str_privs : string = "";
+  
+      if ( pCtrlList && pCtrlList.options && pStrPrivs ) {
+        //console.log("RestoreStrPriv - entrou no if");
+        // passar por cada opcao e selecionar a opcao se o char da string for 1
+        for (let i = 0; i < pCtrlList.options.length; i++ ) {
+          if ( pStrPrivs.charAt(i) == '1' ) {
+            pCtrlList.options.get(i)?._setSelected(true);
+          }
+        } // for
+      } // if
+      //console.log("RestoreStrPriv - fim");
+      return str_privs;
+    } // RestoreStrPriv
+  
   // obter o dados do cliente conforme o id recebido na url
   getCliente(): void {
 

@@ -7,6 +7,11 @@ import { MatTableDataSource} from '@angular/material/table';
 import { FornecedorService } from '../services/fornecedor.service';
 import { FORNECEDOR } from '../FORNECEDOR';
 import { ToastrService } from 'ngx-toastr';
+import { AuthenticationService } from '../services/authentication.service';
+import Utils from '../utils';
+import { MatSelectionList } from '@angular/material/list';
+import { UsuarioService } from '../services/usuario.service';
+
 
 let FORNECEDOR_DATA: FORNECEDOR[]=[];
 @Component({
@@ -20,19 +25,35 @@ export class FornecedorListComponent implements OnInit {
   public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+  public bPodeIncluir : boolean = false;
+  public bPodeEditar : boolean = false;
+  public bPodeExcluir : boolean = false;
+  // precisa ter esta declaracao public para poder chamar do template HTML
+  public GetEditarLink = Utils.GetEditarLink;
 
   constructor(private http: HttpClient
+              ,private authservice : AuthenticationService
               ,private fornecedorService: FornecedorService
               ,private toastr: ToastrService
             )
   {
 
-  }
+  // inicializar as vars
+  this.bPodeIncluir = this.authservice.CheckPrivilegio("CadUsuInc");
+  //console.log("bPodeIncluir=" + this.bPodeIncluir);
+  this.bPodeEditar = this.authservice.CheckPrivilegio("CadUsuEdi");
+  //console.log("bPodeEditar=" + this.bPodeEditar);
+  this.bPodeExcluir = this.authservice.CheckPrivilegio("CadUsuExc");
+  //console.log("bPodeExcluir=" + this.bPodeExcluir);
 
+
+  }
+  public PrivilegiosObj = UsuarioService.PrivilegiosObj;
+  @ViewChild('privilegios') ListPrivilegios: MatSelectionList = {} as MatSelectionList;
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-
+//console.log("UsuarioListComponent.ngOnInit - this.authservice.UsuarioLogado=" + JSON.stringify(this.authservice.UsuarioLogado));
 
   }
 

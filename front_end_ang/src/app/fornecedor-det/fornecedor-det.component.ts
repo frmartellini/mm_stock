@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
+import { UsuarioService } from '../services/usuario.service';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-fornecedor-det',
@@ -28,6 +29,7 @@ export class FornecedorDetComponent implements OnInit{
 
   public PageTitle: String = "Incluindo ou editando fornecedor";
   public SubmitButtonText: String = "Confirmar";
+  public PrivilegiosObj = UsuarioService.PrivilegiosObj;
 
   constructor(
     private route: ActivatedRoute
@@ -124,6 +126,9 @@ export class FornecedorDetComponent implements OnInit{
         this.PageTitle = "Editando Fornecedor";
       }
 
+
+      
+
     }
 
   } // ngOnInit
@@ -137,6 +142,35 @@ export class FornecedorDetComponent implements OnInit{
   public GetMode() : string {
     return this.mode;
   }
+
+  // obter uma string com zeros e uns (a partir do controle mat-selection-list) representando os privilegios do usuario
+  public GetStrPriv(pCtrlList :MatSelectionList) : string {
+
+    let str_privs : string = ""; // var que serah retornada pela funcao
+
+    // se o pCtrlList eh valido e possui opcoes
+    if ( pCtrlList && pCtrlList.options) {
+      // inicializar a strng com zero em cada char da string
+      str_privs = "0".repeat(pCtrlList.options.length);
+      //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
+      // passar pelos itens (privilegios)
+      for ( let i = 0; i < pCtrlList.options.length; i++ ) {
+
+        if ( pCtrlList.options.get(i)?.selected ) {
+          // remontar a string trocando o char da posicao i de 0 para 1
+          str_privs = str_privs.substring(0,i) + "1" + str_privs.substring(i+1);
+        }
+
+        //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
+      } // for
+      
+    } // if
+
+    //console.log("str_privs final="+str_privs + " length="+ str_privs.length);
+    return str_privs;
+  } // GetStrPriv
+
+
 
   // obter o dados do fornecedor conforme o id recebido na url
   getFornecedor(): void {

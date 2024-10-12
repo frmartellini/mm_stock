@@ -35,7 +35,7 @@
 
     <!-- ID Movimentação -->
     <ng-container matColumnDef="id_movimentacao">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna de ID da movimentação">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header  sortingCache matTooltip="ID da movimentação" [matTooltipPosition]="'above'" aria-label="Coluna de ID da movimentação">
         ID
       </th>
       <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID da movimentação ' + element.id_movimentacao">
@@ -55,7 +55,7 @@
 
     <!-- Produto -->
     <ng-container matColumnDef="produto">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do produto movimentado">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID e Descrição do Produto" [matTooltipPosition]="'above'" aria-label="Coluna do produto movimentado">
         Produto
       </th>
       <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Produto: ' + element.id_produto + ' - ' + element.descricao">

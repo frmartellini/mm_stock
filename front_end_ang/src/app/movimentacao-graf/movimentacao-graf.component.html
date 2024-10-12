@@ -1,21 +1,26 @@
 
 <div id="TopTableDiv" class="table-responsive TopTableDiv" >
   <div style="display: flex; align-items: center;">
-    <mat-form-field class="TopTable_filtro_periodo" subscriptSizing=dynamic>
+    <mat-form-field class="TopTable_filtro_periodo" subscriptSizing=dynamic aria-label="Selecione o período para visualizar o gráfico">
       <mat-label>Período</mat-label>
       <mat-date-range-input [formGroup]="periodo_range" [rangePicker]="periodo_filtro_daterangepicker">
-        <input matStartDate formControlName="dhinicio" placeholder="Data inicial">
-        <input matEndDate formControlName="dhfim" placeholder="Data final">
+        <input matStartDate formControlName="dhinicio" placeholder="Data inicial" aria-label="Selecionar data inicial do período">
+        <input matEndDate formControlName="dhfim" placeholder="Data final" aria-label="Selecionar data final do período">
       </mat-date-range-input>
       <mat-datepicker-toggle matIconSuffix [for]="periodo_filtro_daterangepicker"></mat-datepicker-toggle>
       <mat-date-range-picker #periodo_filtro_daterangepicker></mat-date-range-picker>
     </mat-form-field>
-    <button type="button" mat-raised-button color="basic" (click)="BtnAtualizarPeriodoClick($event)" style="margin-left: 10px;">Atualizar</button>
+    <button type="button" mat-raised-button color="basic" (click)="BtnAtualizarPeriodoClick($event)" style="margin-left: 10px;" aria-label="Atualizar gráfico com o período selecionado">Atualizar</button>
   </div>
   <div style="flex: 1; text-align: center;">
     <h2 style="margin: 0;">Gráfico de Movimentação do Estoque</h2>
   </div>
 </div>
-<div class="card">
+<div class="card" role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-descricao">
   <p-chart #chart type="bar" [data]="data" [options]="options" />
+</div>
+
+<!-- Descrição invisível para leitores de tela -->
+<div id="grafico-descricao" class="sr-only">
+  Este gráfico exibe a movimentação de entrada e saída de produtos no estoque ao longo do período selecionado. Use as setas para explorar os dados.
 </div>

@@ -23,12 +23,6 @@
              [(ngModel)]="cliente.email" required="true" aria-required="true" aria-labelledby="PageTitle Cad_Cliente_Email" aria-describedby="email-feedback"/>
     </mat-form-field>
   
-    <!-- Mensagem de erro email -->
-    <div class="alert alert-danger" id="email-feedback" aria-live="polite" *ngIf="cliente_form.controls['Cad_Cliente_Email']?.invalid && cliente_form.controls['Cad_Cliente_Email']?.touched">
-      <span *ngIf="cliente_form.controls['Cad_Cliente_Email']?.errors?.['required']">Email é obrigatório.</span>
-      <span *ngIf="cliente_form.controls['Cad_Cliente_Email']?.errors?.['email']">Formato de email inválido.</span>
-    </div>
-  
     <br />
     <!-- Telefone -->
     <mat-form-field appearance="fill" class="" style="width: 50%">
@@ -151,7 +145,7 @@
           {{ this.SubmitButtonText }}
       </button>
       &nbsp;&nbsp;
-      <button type="button" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
+      <button type="button" id="voltarButton" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
     </div>
   
   </form>

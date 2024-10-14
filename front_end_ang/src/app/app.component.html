@@ -46,7 +46,7 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   <a routerLink="/home" class="home">
     <div class="logo">
       <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
-      <img src="../assets/images/logo-mm-stock.jpg" alt="MM Stock - Sistema de Gerenciamento de Estoque">
+      <img id="logo" src="../assets/images/logo-mm-stock.jpg" alt="Home de MM Stock - Sistema de Gerenciamento de Estoque">
     </div>
   </a>
   
@@ -84,8 +84,12 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   </div>
   
   <!-- Melhorar contraste da cor do texto do usuário logado -->
-  <div style="color: #FFBF00; text-align: right;"> <!-- Sugestão de cor melhor para contraste -->
+  <!-- <div id="UserDiv" style="color: #FFBF00; text-align: right;" tabindex="0" aria-labelledby="Header UserDiv"> 
     {{ this.authenticationService.UsuarioLogado?.login }}
+  </div> -->
+  <div id="UserDiv" style="color: #FFBF00; text-align: right;" tabindex="0" aria-live="polite">
+    <span class="sr-only">Usuário logado</span> <!-- Melhorar acessibilidade com texto oculto -->
+      {{ this.authenticationService.UsuarioLogado?.login }}
   </div>
 </header>
 
@@ -102,7 +106,7 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   </div>
 </main>
 
-<footer id="Footer" class="footer" aria-label="Rodapé com informações de direitos reservados">
+<footer id="Footer" class="footer" aria-label="Rodapé com informações de direitos reservados" tabindex="0">
   <p class="p">&copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</p>
 </footer>
 

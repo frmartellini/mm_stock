@@ -60,8 +60,7 @@
           {{ this.SubmitButtonText }}
       </button>
       &nbsp;&nbsp;
-      <button type="button" mat-raised-button color="basic" (click)="voltar()" 
-              [attr.aria-label]="'Voltar para a tela anterior'">Voltar</button>
+      <button type="button" id="voltarButton" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
     </div>
 
   </form>

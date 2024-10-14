@@ -74,6 +74,7 @@
         <mat-option *ngFor="let tipo of filtered_tipos_material" [value]="tipo.tipo_material">{{ tipo.tipo_material }}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    <br />
 
     <!-- Preço venda -->
     <mat-form-field appearance="fill" style="width: 30%">
@@ -81,6 +82,7 @@
       <input matInput id="Cad_Produto_Preco_Venda" name="Cad_Produto_Preco_Venda" formControlName="Cad_Produto_Preco_Venda"
              [(ngModel)]="produto.preco_venda" currencyMask [min]="0" />
     </mat-form-field>
+    <br />
 
     <!-- exibir o preco_venda com formato pt-BR para testes -->
     <!-- {{this.produto.preco_venda | number:'1.2-2':'pt'}} -->
@@ -99,7 +101,7 @@
           {{ this.SubmitButtonText }}
       </button>
       &nbsp;&nbsp;
-      <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+      <button type="button" id="voltarButton" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
     </div>
 
   </form>

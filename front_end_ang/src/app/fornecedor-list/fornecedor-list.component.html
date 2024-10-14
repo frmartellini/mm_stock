@@ -1,6 +1,6 @@
 <div class="button-and-filter-container" role="search">
   <!-- Botão de inclusão de novo fornecedor -->
-  <a routerLink="/fornecedor-det/0">
+  <a routerLink="/fornecedor-det/0" tabindex="-1">
     <button type="button" mat-raised-button color="basic" aria-label="Incluir novo fornecedor">Incluir novo</button>
   </a>
   <h2>Cadastro de Fornecedores</h2>
@@ -31,8 +31,8 @@
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do Nome do fornecedor">
         Nome
       </th>
-      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Nome do fornecedor ' + element.nome_fornecedor">
-        <a href='{{"/fornecedor-det/" + element.id_fornecedor + "?mode=V"}}'>{{ element.nome_fornecedor }}</a>
+      <td mat-cell *matCellDef="let element">
+        <a href='{{"/fornecedor-det/" + element.id_fornecedor + "?mode=V"}}' tabindex="0" [attr.aria-label]="'Nome do fornecedor ' + element.nome_fornecedor">{{ element.nome_fornecedor }}</a>
       </td>
     </ng-container>
 
@@ -125,7 +125,7 @@
 
     <!-- UF -->
     <ng-container matColumnDef="uf">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do Estado">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do UF">
         UF
       </th>
       <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'UF do fornecedor ' + element.uf">
@@ -135,10 +135,10 @@
 
     <!-- Ações (Editar e Excluir) -->
     <ng-container matColumnDef="actions">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">
         Ações
       </th>
-      <td mat-cell *matCellDef="let row" class="text-center" tabindex="0">
+      <td mat-cell *matCellDef="let row" class="text-center">
         <div class="d-flex align-items-center justify-content-center">
           <a class="d-flex" href='/fornecedor-det/{{row.id_fornecedor}}?mode=E' matTooltip="Editar fornecedor" 
              [attr.aria-label]="'Editar fornecedor ' + row.nome_fornecedor">
@@ -152,9 +152,9 @@
       </td>
     </ng-container>
 
-    <!-- Row shown when there is no matching data. -->
+    <!-- Linha exibida quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite">
+      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite" aria-label="Nada encontrado para o filtro +'{input.value}'">
         Nada encontrado para o filtro "{{input.value}}"
       </td>
     </tr>

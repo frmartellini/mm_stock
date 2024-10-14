@@ -1,6 +1,6 @@
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo cliente -->
-  <a routerLink="/cliente-det/000">
+  <a routerLink="/cliente-det/000" tabindex="-1">
     <button type="button" mat-raised-button color="basic" [attr.aria-label]="'Incluir novo cliente'">
       Incluir novo
     </button>
@@ -11,7 +11,7 @@
   <!-- Filtro com rótulo acessível -->
   <mat-form-field subscriptSizing="dynamic">
     <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input [attr.aria-label]="'Filtro de clientes'">
+    <input matInput (keyup)="applyFilter($event)" #input [attr.aria-label]="'Filtro de clientes'" aria-live="polite">
   </mat-form-field>
 </div>
 
@@ -23,7 +23,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         ID
       </th>
-      <td mat-cell *matCellDef="let element">{{element.id_cliente}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID do cliente ' + element.id_cliente">{{element.id_cliente}}</td>
     </ng-container>
 
     <!-- Coluna de Nome Completo -->
@@ -32,7 +32,7 @@
         Nome
       </th>
       <td mat-cell *matCellDef="let element">
-        <a [attr.href]="'/cliente-det/' + element.id_cliente + '?mode=V'" [attr.aria-label]="'Ver detalhes de ' + element.nome_completo">
+        <a [attr.href]="'/cliente-det/' + element.id_cliente + '?mode=V'" tabindex="0" [attr.aria-label]="'Nome do Cliente ' + element.nome_completo">
           {{ element.nome_completo }}
         </a>
       </td>
@@ -43,7 +43,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Telefone
       </th>
-      <td mat-cell *matCellDef="let element">{{element.telefone}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Telefone do Cliente ' + element.telefone">{{element.telefone}}</td>
     </ng-container>
 
     <!-- Coluna de Email -->
@@ -51,7 +51,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Email
       </th>
-      <td mat-cell *matCellDef="let element">{{element.email}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Email do cliente  ' + element.email">{{element.email}}</td>
     </ng-container>
 
     <!-- Coluna de Nome da Loja -->
@@ -59,7 +59,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Nome da Loja
       </th>
-      <td mat-cell *matCellDef="let element">{{element.nome_loja}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Nome da Loja do Cliente  ' + element.nome_loja">{{element.nome_loja}}</td>
     </ng-container>
 
     <!-- Coluna de CNPJ -->
@@ -67,7 +67,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         CNPJ
       </th>
-      <td mat-cell *matCellDef="let element">{{element.cnpj}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'CNPJ do cliente  ' + element.cnpj">{{element.cnpj}}</td>
     </ng-container>
 
     <!-- Coluna de CPF -->
@@ -75,7 +75,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         CPF
       </th>
-      <td mat-cell *matCellDef="let element">{{element.cpf}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'CPF do cliente  ' + element.cpf">{{element.cpf}}</td>
     </ng-container>
 
     <!-- Coluna de Tipo de Cliente -->
@@ -83,7 +83,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Tipo de Cliente
       </th>
-      <td mat-cell *matCellDef="let element">{{element.tipo_cliente}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Tipo de cliente ' + element.tipo_cliente">{{element.tipo_cliente}}</td>
     </ng-container>
 
     <!--
@@ -120,7 +120,7 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Cidade
       </th>
-      <td mat-cell *matCellDef="let element">{{element.cidade}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Cidade do Cliente ' + element.cidade">{{element.cidade}}</td>
     </ng-container>
 
     <!-- Coluna de Estado (UF) -->
@@ -128,12 +128,12 @@
       <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         UF
       </th>
-      <td mat-cell *matCellDef="let element">{{element.uf}}</td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'UF do cliente ' + element.uf">{{element.uf}}</td>
     </ng-container>
 
     <!-- Coluna de Ações -->
     <ng-container matColumnDef="actions">
-      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">
         Ações
       </th>
       <td mat-cell *matCellDef="let row" class="text-center">
@@ -153,7 +153,9 @@
 
     <!-- Linha exibida quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="8">Nenhum cliente encontrado com o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite" aria-label="Nada encontrado para o filtro +'{input.value}'">
+        Nada encontrado para o filtro "{{input.value}}"
+      </td>
     </tr>
 
     <!-- Header e linhas da tabela -->

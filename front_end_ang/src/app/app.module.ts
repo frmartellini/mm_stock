@@ -53,6 +53,9 @@ import { PersistPaginatorDirective } from './PersistPaginator.directive';
 import {A11yModule} from '@angular/cdk/a11y';
 import { ToggleHighContrast } from './components/toggle-highcontrast.component';
 
+//import de mascáras de entrada
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "right",
@@ -110,6 +113,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     , MatTooltipModule
     , CurrencyMaskModule
     ,A11yModule
+    , NgxMaskDirective
 
   ],
   providers: [
@@ -121,6 +125,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     provideNativeDateAdapter()
     ,DatePipe
     ,CookieService
+    ,provideNgxMask()
   ],
   bootstrap: [AppComponent]
 })

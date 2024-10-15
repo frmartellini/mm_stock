@@ -130,7 +130,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
     provideNativeDateAdapter()
     ,DatePipe
-    ,{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    ,{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
     ,{ provide: DateAdapter, useClass: DateAdapterPT }
     ,CookieService
     ,provideNgxMask()

@@ -16,11 +16,6 @@
     <h2 style="margin: 0;">Gráfico de Movimentação do Estoque</h2>
   </div>
 </div>
-<div class="card" role="img" aria-labelledby="grafico-titulo" aria-describedby="grafico-descricao">
+<div class="card" role="img" aria-label="Este gráfico exibe a movimentação de entrada e saída de produtos no estoque ao longo do período selecionado. Use as setas para explorar os dados." tabindex="0">
   <p-chart #chart type="bar" [data]="data" [options]="options" />
-</div>
-
-<!-- Descrição invisível para leitores de tela -->
-<div id="grafico-descricao" class="sr-only">
-  Este gráfico exibe a movimentação de entrada e saída de produtos no estoque ao longo do período selecionado. Use as setas para explorar os dados.
 </div>

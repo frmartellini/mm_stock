@@ -733,7 +733,7 @@ app.get('/vendas_graf_por_periodo', (req, res) => {
   const values = [ req.query.dhinicio , req.query.dhfim ];
   db.query(query, values, (err, results) => {
     if (err) {
-      res.status(500).send('Erro retornando dadso de vendas para o grafico: ' + err);
+      res.status(500).send('Erro retornando dados de vendas para o gráfico: ' + err);
       return;
     }
     res.json(results);

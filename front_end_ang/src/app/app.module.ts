@@ -37,6 +37,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { MovimentacaoGrafComponent } from './movimentacao-graf/movimentacao-graf.component';
+import { VendasGrafComponent } from './vendas-graf/vendas-graf.component';
 import { CustomPaginator } from './custom-paginator';
 import { DatePipe } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
@@ -89,6 +90,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,ProdutoSaidaComponent
     ,MovimentacaoCsComponent
     ,MovimentacaoGrafComponent
+    ,VendasGrafComponent
     ,ProdutoSaidaComponent
     ,AlterSenhaComponent
     ,SortingDirective

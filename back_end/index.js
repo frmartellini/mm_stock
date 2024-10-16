@@ -718,6 +718,29 @@ app.get('/movimentacao_graf_por_periodo', (req, res) => {
   });
 });
 
+// Retorna os dados de vendas (com base nas movimentacoes) para o grafico de vendas.
+// Precisa passar os params como o exemplo abaixo:
+//     /vendas_graf_por_periodo?dhinicio=2024/05/15&dhfim=2024/12/31
+app.get('/vendas_graf_por_periodo', (req, res) => {
+  console.log("/vendas_graf_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
+  console.log("/vendas_graf_por_periodo - req.query.dhfim=" + req.query.dhfim);
+  const query = "select DATE_FORMAT(t.data_hora, '%Y/%m') as \"mes\", sum(t.quantidade * p.preco_venda) valor_total " +
+                "from movimentacao t " +
+                "join produto p on (p.id_produto = t.id_produto) " +
+                "where ( t.tipo_mov = 'E' ) " +
+                "group by mes, t.tipo_mov " +
+                "order by mes asc " ;
+  const values = [ req.query.dhinicio , req.query.dhfim ];
+  db.query(query, values, (err, results) => {
+    if (err) {
+      res.status(500).send('Erro retornando dados de vendas para o gráfico: ' + err);
+      return;
+    }
+    res.json(results);
+    console.log('get /vendas_graf_por_periodo executado. Registros retornados com sucesso!');
+  });
+});
+
 /* Create a new post */
 app.post('/movimentacao/create', async (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;

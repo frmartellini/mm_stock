@@ -23,7 +23,7 @@
     <mat-form-field appearance="fill" class="" style="width: 50%">
       <mat-label>Telefone</mat-label>
       <input matInput type="text" id="Cad_fornecedor_Contato_Telefonico" name="Cad_fornecedor_Contato_Telefonico" formControlName="Cad_fornecedor_Contato_Telefonico"
-             [(ngModel)]="fornecedor.contato_telefonico" pattern="^[0123456789\-\(\)]+$" />
+             [(ngModel)]="fornecedor.contato_telefonico" pattern="^[0123456789\-\(\)]+$" mask="(00) 0000-0000||(00) 0 0000-0000" />
     </mat-form-field>
     <br />
     <mat-form-field appearance="fill" class="" style="width: 100%">
@@ -32,7 +32,7 @@
              [(ngModel)]="fornecedor.redes_sociais" />
     </mat-form-field>
     <br />
-    
+
     <mat-form-field appearance="fill" class="" style="width: 100%">
       <mat-label>Materiais Fornecidos</mat-label>
       <textarea id="Cad_fornecedor_Materiais_Fornecidos" name="Cad_fornecedor_Materiais_Fornecidos" formControlName="Cad_fornecedor_Materiais_Fornecidos"
@@ -43,7 +43,7 @@
     <mat-form-field appearance="fill" class="" style="width: 70%">
       <mat-label>CNPJ</mat-label>
       <input matInput type="text" id="Cad_fornecedor_CNPJ" name="Cad_fornecedor_CNPJ" formControlName="Cad_fornecedor_CNPJ"
-             [(ngModel)]="fornecedor.cnpj" pattern="^[0123456789\.\/\-]+$" />
+             [(ngModel)]="fornecedor.cnpj" pattern="^[0123456789\.\/\-]+$" mask="00.000.000/0000-00" />
     </mat-form-field>
     <br />
     <mat-form-field appearance="fill" class="" style="width: 100%">

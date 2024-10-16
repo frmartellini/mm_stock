@@ -19,6 +19,8 @@ import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.compo
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
 import { AlterSenhaComponent } from './altersenha/altersenha.component';
+import { MovimentacaoGrafComponent } from './movimentacao-graf/movimentacao-graf.component';
+import { VendasGrafComponent } from './vendas-graf/vendas-graf.component';
 
 const routes: Routes = [
 
@@ -44,6 +46,8 @@ const routes: Routes = [
   ,{ path: 'produto-saida', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-saida/:id', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'movimentacao-cs', component: MovimentacaoCsComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'movimentacao-graf', component: MovimentacaoGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'vendas-graf', component: VendasGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'altersenha', component: AlterSenhaComponent , canActivate: [UsuarioAutenticadoGuard] }
 

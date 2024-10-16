@@ -226,7 +226,7 @@ export class AuthenticationService {
                     ,pNewPW: string
                     ,pOldPW : string
                     ,pOnPwChangeSuccess_CallBackFunction: () => void
-                    ,pOnPwChangeError_CallBackFunction: (error :any) => void
+                    ,pOnPwChangeError_CallBackFunction: (error : any) => void
                     ) : void {
 
     //console.log(Utils.getDateTimeString() + " AlterSenhaUsuario - pNewPW=" + pNewPW);

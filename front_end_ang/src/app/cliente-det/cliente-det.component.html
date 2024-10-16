@@ -28,7 +28,7 @@
     <mat-form-field appearance="fill" class="" style="width: 50%">
       <mat-label>Telefone</mat-label>
       <input matInput type="text" id="Cad_Cliente_Telefone" name="Cad_Cliente_Telefone" formControlName="Cad_Cliente_Telefone"
-             [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" aria-labelledby="PageTitle Cad_Cliente_Telefone" />
+             [(ngModel)]="cliente.telefone" pattern="^[0123456789\-\(\)]+$" mask="(00) 0000-0000||(00) 0 0000-0000" aria-labelledby="PageTitle Cad_Cliente_Telefone" />
     </mat-form-field>
   
     <br />
@@ -58,7 +58,7 @@
     <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cpf" [matTooltipPosition]="'below'" >
       <mat-label>CPF</mat-label>
       <input #Cad_Cliente_CPF matInput type="text" id="Cad_Cliente_CPF" name="Cad_Cliente_CPF" formControlName="Cad_Cliente_CPF"
-             [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" aria-labelledby="PageTitle Cad_Cliente_CPF" />
+             [(ngModel)]="cliente.cpf" pattern="^^[0123456789\.\-]+$" mask="000.000.000-00" aria-labelledby="PageTitle Cad_Cliente_CPF" />
     </mat-form-field>
   
     <br />
@@ -66,7 +66,7 @@
     <mat-form-field appearance="fill" class="" style="width: 70%" [matTooltip]="tooltip_cnpj" [matTooltipPosition]="'below'" >
       <mat-label>CNPJ</mat-label>
       <input #Cad_Cliente_CNPJ matInput type="text" id="Cad_Cliente_CNPJ" name="Cad_Cliente_CNPJ" formControlName="Cad_Cliente_CNPJ"
-             [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" aria-labelledby="PageTitle Cad_Cliente_CNPJ" />
+             [(ngModel)]="cliente.cnpj" pattern="^[0123456789\.\/\-]+$" mask="00.000.000/0000-00" aria-labelledby="PageTitle Cad_Cliente_CNPJ" />
     </mat-form-field>
   
     <br />

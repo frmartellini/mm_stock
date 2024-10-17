@@ -85,17 +85,11 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
     <button mat-icon-button routerLink="/altersenha"  matTooltip="Alterar senha" aria-label="Alterar Senha">
       <mat-icon aria-hidden="true">settings</mat-icon>
     </button>
-    <!-- &todo& exibicao temporaria do usuario logado -->
-    <div style="color: yellow; text-align: right; margin-left: 30px;">{{ this.authenticationService.UsuarioLogado?.login }}</div>
-  </div>
-  
-  <!-- Melhorar contraste da cor do texto do usuário logado -->
-  <!-- <div id="UserDiv" style="color: #FFBF00; text-align: right;" tabindex="0" aria-labelledby="Header UserDiv"> 
-    {{ this.authenticationService.UsuarioLogado?.login }}
-  </div> -->
-  <div id="UserDiv" style="color: #FFBF00; text-align: right;" tabindex="0" aria-live="polite">
-    <span class="sr-only">Usuário logado</span> <!-- Melhorar acessibilidade com texto oculto -->
-      {{ this.authenticationService.UsuarioLogado?.login }}
+    <!-- &todo& exibicao temporaria do usuario logado, cor yellow; -->
+    <div style="color: #FFBF00; text-align: right; margin-left: 30px;"tabindex="0" aria-live="polite">
+      <span class="sr-only">Usuário logado</span> <!-- Melhorar acessibilidade com texto oculto -->
+        {{ this.authenticationService.UsuarioLogado?.login }}
+    </div>
   </div>
 </header>
 

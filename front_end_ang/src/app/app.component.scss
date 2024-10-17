@@ -132,7 +132,6 @@ tyle: solid; */
   border: none;
   color: #fff;
   cursor: pointer;
-  margin-left: 10px;
   @include cdk.high-contrast() {
     outline: solid 1px;
   }
@@ -152,14 +151,14 @@ tyle: solid; */
   transition: color 0.3s ease;
 }
 
+.admin-nav li {
+  width: auto;
+}
+
 /* Estilos para tornar o menu responsivo */
 @media screen and (max-width: 768px) {
   .admin-nav {
     display: none;
-  }
-
-  .admin-actions button {
-    margin-left: 0;
   }
 }
 /*

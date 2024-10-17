@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FornecedorService } from '../services/fornecedor.service';
 import { FORNECEDOR } from '../FORNECEDOR';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,10 @@ export class FornecedorDetComponent implements OnInit{
 
   public PageTitle: String = "Incluindo ou editando fornecedor";
   public SubmitButtonText: String = "Confirmar";
+  
   public PrivilegiosObj = UsuarioService.PrivilegiosObj;
+  
+  @ViewChild('privilegios') ListPrivilegios: MatSelectionList = {} as MatSelectionList;
 
   constructor(
     private route: ActivatedRoute
@@ -142,36 +145,6 @@ export class FornecedorDetComponent implements OnInit{
   public GetMode() : string {
     return this.mode;
   }
-
-  // obter uma string com zeros e uns (a partir do controle mat-selection-list) representando os privilegios do usuario
-  public GetStrPriv(pCtrlList :MatSelectionList) : string {
-
-    let str_privs : string = ""; // var que serah retornada pela funcao
-
-    // se o pCtrlList eh valido e possui opcoes
-    if ( pCtrlList && pCtrlList.options) {
-      // inicializar a strng com zero em cada char da string
-      str_privs = "0".repeat(pCtrlList.options.length);
-      //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
-      // passar pelos itens (privilegios)
-      for ( let i = 0; i < pCtrlList.options.length; i++ ) {
-
-        if ( pCtrlList.options.get(i)?.selected ) {
-          // remontar a string trocando o char da posicao i de 0 para 1
-          str_privs = str_privs.substring(0,i) + "1" + str_privs.substring(i+1);
-        }
-
-        //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
-      } // for
-      
-    } // if
-
-    //console.log("str_privs final="+str_privs + " length="+ str_privs.length);
-    return str_privs;
-  } // GetStrPriv
-
-
-
   // obter o dados do fornecedor conforme o id recebido na url
   getFornecedor(): void {
 
@@ -185,6 +158,73 @@ export class FornecedorDetComponent implements OnInit{
       // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }
   }
+
+  // obter uma string com zeros e uns (a partir do controle mat-selection-list) representando os privilegios do usuario
+  public GetStrPriv(pCtrlList :MatSelectionList) : string {
+    
+    let str_privs : string = ""; // var que serah retornada pela funcao
+    
+    let pos : number;
+
+    // se o pCtrlList eh valido e possui opcoes
+    if ( pCtrlList && pCtrlList.options) {
+
+      // inicializar a strng com zero em cada char da string
+      str_privs = "0".repeat(pCtrlList.options.length);
+      //console.log("str_privs inicialziado="+str_privs+ " length="+ str_privs.length);
+
+      // passar pelos itens (privilegios) do controle mat-selection-list
+      for ( let i = 0; i < pCtrlList.options.length; i++ ) {
+        // se o item estah selecionado
+        if ( pCtrlList.options.get(i)?.selected ) {
+          // obter a posicao do privilegio na string
+          pos = pCtrlList.options.get(i)?.value;
+          //console.log("pos="+pos);
+
+          // se a posicao NAO eh a primeira
+          if ( pos > 0 ) {
+          // remontar a string colocando "1" na posicao "pos" da string
+          str_privs = str_privs.substring(0,pos-1) + "1" + str_privs.substring(pos);
+          }
+          // se a posicao EH a primeira
+          else {
+            str_privs = "1" + str_privs.substring(pos+1);
+          }
+        } // for
+
+        //console.log(i + "  str_privs final="+str_privs + " length="+ str_privs.length);
+      } // for
+      
+    } // if
+
+    //console.log("str_privs final="+str_privs + " length="+ str_privs.length);
+    return str_privs;
+  } // GetStrPriv
+
+  // selecionar os itens do mat-selection-list a partir da string contendo os zeros e uns indicando os privilegios
+  public RestoreStrPriv(pCtrlList :MatSelectionList, pStrPrivs :String) {
+    //console.log("RestoreStrPriv - inicio");
+    //console.log("pStrPrivs=" + pStrPrivs);
+    let str_privs : string = "";
+    
+    let pos : number;
+
+    if ( pCtrlList && pCtrlList.options && pStrPrivs ) {
+      //console.log("RestoreStrPriv - entrou no if");
+      // passar por cada opcao e selecionar a opcao se o char da string for 1
+      for (let i = 0; i < pCtrlList.options.length; i++ ) {
+        
+        pos = pCtrlList.options.get(i)?.value;
+        //console.log("RestoreStrPriv - pos=" + pos);
+        if ( pStrPrivs.charAt(pos-1) == "1" ) {
+          //console.log("RestoreStrPriv - entrou no if == 1");
+          pCtrlList.options.get(i)?._setSelected(true);
+        }
+      } // for
+    } // if
+    //console.log("RestoreStrPriv - fim");
+    return str_privs;
+  } // RestoreStrPriv
 
   // executado quando o botao type submit eh clicado
   onSubmit(pFormValues: any): void {

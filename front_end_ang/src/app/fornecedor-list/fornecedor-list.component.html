@@ -133,7 +133,7 @@
             <div class="d-flex align-items-center justify-content-center">
 
 
-              <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_fornecedor, bPodeEditar, 'usuario') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+              <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_fornecedor, bPodeEditar, 'fornecedor') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
                 <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
               </a>
 

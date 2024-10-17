@@ -143,7 +143,7 @@
       <td mat-cell *matCellDef="let row" class="text-center">
         <div class="d-flex align-items-center justify-content-center">
 
-          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_cliente, bPodeEditar, 'Editar') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_cliente, bPodeEditar, 'cliente') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
             <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
           </a>
 

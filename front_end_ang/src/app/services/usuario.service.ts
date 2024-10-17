@@ -32,14 +32,16 @@ export class UsuarioService {
   ,{ "pos": "11", "cod": "CadFornEdi", "desc":"Cadastro de Fornecedores - Edição" }
   ,{ "pos": "12", "cod": "CadFornExc", "desc":"Cadastro de Fornecedores - Exclusão" }
 
-  ,{ "pos": "16", "cod": "CadUsuCon", "desc":"Cadastro de Usuários - Consulta" }
-  ,{ "pos": "17", "cod": "CadUsuInc", "desc":"Cadastro de Usuários - Inclusão" }
-  ,{ "pos": "18", "cod": "CadUsuEdi", "desc":"Cadastro de Usuários - Edição" }
-  ,{ "pos": "19", "cod": "CadUsuExc", "desc":"Cadastro de Usuários - Exclusão" }
+  ,{ "pos": "13", "cod": "CadUsuCon", "desc":"Cadastro de Usuários - Consulta" }
+  ,{ "pos": "14", "cod": "CadUsuInc", "desc":"Cadastro de Usuários - Inclusão" }
+  ,{ "pos": "15", "cod": "CadUsuEdi", "desc":"Cadastro de Usuários - Edição" }
+  ,{ "pos": "16", "cod": "CadUsuExc", "desc":"Cadastro de Usuários - Exclusão" }
 
-  ,{ "pos": "13", "cod": "Entrada",   "desc":"Entrada de Produto" }
-  ,{ "pos": "14", "cod": "Saida",     "desc":"Saída de Produto" }
-  ,{ "pos": "15", "cod": "CsMovEstq", "desc":"Consulta de Movimentação do Estoque" }
+  ,{ "pos": "17", "cod": "Entrada",   "desc":"Entrada de Produto" }
+  ,{ "pos": "18", "cod": "Saida",     "desc":"Saída de Produto" }
+  ,{ "pos": "19", "cod": "CsMovEstq", "desc":"Consulta de Movimentação do Estoque" }
+  ,{ "pos": "20", "cod": "AnEstoque", "desc":"Gráfico de Análise de Estoque" }
+  ,{ "pos": "21", "cod": "AnVendas", "desc":"Gráfico de Análise de Vendas" }
 
 ];
 

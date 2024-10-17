@@ -46,6 +46,7 @@ export class ProdutoDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando produto";
   public SubmitButtonText: String = "Confirmar";
 
+
   constructor(
     private route: ActivatedRoute
     ,private location: Location

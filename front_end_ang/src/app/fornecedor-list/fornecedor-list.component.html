@@ -1,8 +1,10 @@
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo fornecedor -->
-  <a routerLink="/fornecedor-det/0">
-    <button type="button" mat-raised-button color="basic">Incluir novo</button>
-  </a>
+
+
+  <a [routerLink]="bPodeIncluir ? '/fornecedor-det/0' : null" >
+    <button type="button" mat-raised-button color="basic"  [disabled]="!bPodeIncluir">Incluir novo</button></a>
+
   <h2>Cadastro de Fornecedores</h2>
   <!-- Filtro-->
   <mat-form-field subscriptSizing="dynamic">
@@ -10,6 +12,7 @@
     <input matInput (keyup)="applyFilter($event)" #input>
   </mat-form-field>
 </div>
+
 <!--Tabela-->
 <div class="table-responsive">
   <table class="table" mat-table [dataSource]="dataSource" matSort>
@@ -128,10 +131,15 @@
           </th>
           <td mat-cell *matCellDef="let row" class="text-center">
             <div class="d-flex align-items-center justify-content-center">
-              <a class="d-flex" href='/fornecedor-det/{{row.id_fornecedor}}?mode=E' matTooltip="Editar" [matTooltipPosition]="'above'" aria-label="Editar">
-                <mat-icon class="edit-icon">edit</mat-icon>
+
+
+              <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_fornecedor, bPodeEditar, 'fornecedor') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+                <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
               </a>
-              <button mat-stroked-button color="warn" (click)="excluirFornecedor(row.id_fornecedor)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar">
+
+
+
+              <button mat-stroked-button color="warn" (click)="excluirFornecedor(row.id_fornecedor)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar" disabled="{{!bPodeExcluir}}">
                 <!-- Adicione uma classe de estilo para o botão quadrado -->
                 <mat-icon>delete</mat-icon>
               </button>

@@ -37,7 +37,7 @@
   </div>
 
   <div >
-    <h3>Privilégios</h3>
+    <h2>Privilégios</h2>
 
     <mat-selection-list #privilegios id="privilegios_sel_list" name="Cad_Usuario_Privs" formControlName="Cad_Usuario_Privs">
         <mat-list-option *ngFor="let priv of PrivilegiosObj" [value]="priv.pos">{{priv.desc}}</mat-list-option>

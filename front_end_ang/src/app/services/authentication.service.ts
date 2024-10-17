@@ -397,6 +397,14 @@ export class AuthenticationService {
         CodPriv = "CsMovEstq";
         break; 
       }
+      case "/movimentacao-graf": { 
+        CodPriv = "AnEstoque";
+        break; 
+      }
+      case "/vendas-graf": { 
+        CodPriv = "AnVendas";
+        break; 
+      }
       
       default: { 
          //statements; 

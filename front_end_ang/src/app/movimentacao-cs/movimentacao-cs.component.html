@@ -1,111 +1,119 @@
-<!-- &todo& adicionar um filtro obrigatorio por periodo onde o usuario deverah selecionar a data inicial e a data final e
-     quando clicar no botao "Filtrar por periodo" vai carregar apenas as movimentacoes com data/hora dentro do periodo informado pelo usuario.
-     Vai usar o controle "datepicker" do angular material (https://material.angular.io/components/datepicker/overview)
--->
-<div id="TopTableDiv" class="table-responsive TopTableDiv" >
-
+<div id="TopTableDiv" class="table-responsive TopTableDiv" role="search">
   <div style="display: flex; align-items: center;">
-    <mat-form-field class="TopTable_filtro_periodo" subscriptSizing=dynamic>
+    <!-- Campo de Período -->
+    <mat-form-field class="TopTable_filtro_periodo" subscriptSizing="dynamic">
       <mat-label>Período</mat-label>
-      <mat-date-range-input [formGroup]="periodo_range" [rangePicker]="periodo_filtro_daterangepicker">
-        <input matStartDate formControlName="dhinicio" placeholder="Data inicial">
-        <input matEndDate formControlName="dhfim" placeholder="Data final">
+      <mat-date-range-input [formGroup]="periodo_range" [rangePicker]="periodo_filtro_daterangepicker" aria-label="Selecione o período">
+        <input matStartDate formControlName="dhinicio" placeholder="Data inicial" aria-label="Data inicial">
+        <input matEndDate formControlName="dhfim" placeholder="Data final" aria-label="Data final">
       </mat-date-range-input>
-      <mat-datepicker-toggle matIconSuffix [for]="periodo_filtro_daterangepicker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matIconSuffix [for]="periodo_filtro_daterangepicker" aria-label="Abrir seletor de data"></mat-datepicker-toggle>
       <mat-date-range-picker #periodo_filtro_daterangepicker></mat-date-range-picker>
     </mat-form-field>
-    
-    <button type="button" mat-raised-button color="basic" (click)="BtnFiltroPeriodoClick($event)" style="margin-left: 10px;">Filtrar</button>
+
+    <!-- Botão de Filtrar -->
+    <button type="button" mat-raised-button color="basic" (click)="BtnFiltroPeriodoClick($event)" style="margin-left: 10px;" aria-label="Filtrar período">Filtrar</button>
   </div>
 
+  <!-- Título da página -->
   <div style="flex: 1; text-align: center;">
-    <h2 style="margin: 0;">Consulta de Movimentação do Estoque</h2>
+    <h2 style="margin: 0;" aria-label="Consulta de Movimentação do Estoque">Consulta de Movimentação do Estoque</h2>
   </div>
-  
+
   <div style="min-width: 200px;"></div> <!-- Espaço flexível -->
-  
-  <mat-form-field class="TopTable_filtro" subscriptSizing=dynamic>
+
+  <!-- Campo de Filtro -->
+  <mat-form-field class="TopTable_filtro" subscriptSizing="dynamic">
     <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
+    <input matInput (keyup)="applyFilter($event)" #input aria-label="Filtrar movimentações do estoque">
   </mat-form-field>
 </div>
 
-<!--Tabela-->
-<div class="table-responsive">
-  <table class="table" mat-table [dataSource]="dataSource" matSort>
+<!-- Tabela de Movimentações -->
+<div class="table-responsive" role="main" aria-label="Tabela de movimentações do estoque">
+  <table class="table" mat-table [dataSource]="dataSource" matSort aria-label="Movimentações do estoque">
+
+    <!-- ID Movimentação -->
     <ng-container matColumnDef="id_movimentacao">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID da movimentação" [matTooltipPosition]="'above'">
-            ID
-          </th>
-        <td mat-cell *matCellDef="let element">
-              {{element.id_movimentacao}}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header  sortingCache matTooltip="ID da movimentação" [matTooltipPosition]="'above'" aria-label="Coluna de ID da movimentação">
+        ID
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID da movimentação ' + element.id_movimentacao">
+        {{element.id_movimentacao}}
+      </td>
     </ng-container>
 
+    <!-- Data/Hora -->
     <ng-container matColumnDef="data_hora">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-               Data/hora
-          </th>
-        <td mat-cell *matCellDef="let element">
-              {{ element.data_hora | date:'dd/MM/yyyy HH:mm:ss' }}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna de Data e Hora da movimentação">
+        Data/hora
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Data e hora da movimentação ' + (element.data_hora | date:'dd/MM/yyyy HH:mm:ss')">
+        {{ element.data_hora | date:'dd/MM/yyyy HH:mm:ss' }}
+      </td>
     </ng-container>
 
+    <!-- Produto -->
     <ng-container matColumnDef="produto">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID e Descrição do Produto" [matTooltipPosition]="'above'">
-              Produto
-          </th>
-        <td mat-cell *matCellDef="let element">
-              {{ element.id_produto + " - " + element.descricao }}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="ID e Descrição do Produto" [matTooltipPosition]="'above'" aria-label="Coluna do produto movimentado">
+        Produto
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Produto: ' + element.id_produto + ' - ' + element.descricao">
+        {{ element.id_produto + " - " + element.descricao }}
+      </td>
     </ng-container>
 
+    <!-- Tipo de Movimentação -->
     <ng-container matColumnDef="tipo_mov">
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Tipo
-          </th>
-        <td  mat-cell *matCellDef="let element" class="mat-column-data-center">
-              {{ getTipoMovText(element.tipo_mov) }}
-          </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do tipo de movimentação">
+        Tipo
+      </th>
+      <td mat-cell *matCellDef="let element" class="mat-column-data-center" tabindex="0" [attr.aria-label]="'Tipo de movimentação: ' + getTipoMovText(element.tipo_mov)">
+        {{ getTipoMovText(element.tipo_mov) }}
+      </td>
     </ng-container>
 
+    <!-- Quantidade -->
     <ng-container matColumnDef="quantidade">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-           Quantidade
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.quantidade }}
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna da quantidade movimentada">
+        Quantidade
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Quantidade movimentada: ' + element.quantidade">
+        {{ element.quantidade }}
+      </td>
     </ng-container>
 
+    <!-- Número do Pedido -->
     <ng-container matColumnDef="num_pedido">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-            Núm. Pedido
-        </th>
-      <td mat-cell *matCellDef="let element" class="mat-column-data-right">
-            {{ element.num_pedido }}
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do número do pedido">
+        Núm. Pedido
+      </th>
+      <td mat-cell *matCellDef="let element" class="mat-column-data-right" tabindex="0" [attr.aria-label]="'Número do pedido: ' + element.num_pedido">
+        {{ element.num_pedido }}
+      </td>
     </ng-container>
 
+    <!-- Cliente -->
     <ng-container matColumnDef="cliente">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Cliente
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.nome_completo }}
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna do nome do cliente">
+        Cliente
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Nome do cliente: ' + element.nome_completo">
+        {{ element.nome_completo }}
+      </td>
     </ng-container>
 
+    <!-- Observação -->
     <ng-container matColumnDef="obs">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-              Observação
-        </th>
-      <td mat-cell *matCellDef="let element">
-            {{ element.obs }}
-        </td>
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header aria-label="Coluna de observações da movimentação">
+        Observação
+      </th>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Observação da movimentação: ' + element.obs">
+        {{ element.obs }}
+      </td>
     </ng-container>
 
-    <!-- Botões Editar e Exlcuir-->
+     <!-- Botões Editar e Exlcuir-->
     <!-- &todo& provavelmente nao vamos ter estas opcoes editar e excluir nesta tela,
       pois a exclusao ou edicao de uma movimentacao pode ter consequencias na qtde atual do produto envolvido e aih teria que atualizar a qtde atual do produto an tabela produto.
     -->
@@ -125,15 +133,15 @@
       </td>
     </ng-container> -->
 
-<!-- Row shown when there is no matching data. -->
+    <!-- Linha para quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4" aria-live="polite">Nada encontrado para o filtro "{{input.value}}"</td>
     </tr>
 
-    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
-    <tr mat-row *matRowDef="let row; columns: displayColumn ;" [ngClass]="getCSSClassForRow(row)"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayColumn"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumn;" [ngClass]="getCSSClassForRow(row)"></tr>
   </table>
-<!--Paginador-->
-<mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True"></mat-paginator>
-</div>
 
+  <!-- Paginador -->
+  <mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" itemsPerPageLabel="Itens por Página" showFirstLastButtons="true" aria-label="Paginador de movimentações de estoque"></mat-paginator>
+</div>

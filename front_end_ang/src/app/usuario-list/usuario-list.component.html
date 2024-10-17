@@ -1,73 +1,75 @@
 <div class="button-and-filter-container">
-<!-- Botão de inclusão de novo usuario -->
-<a [routerLink]="bPodeIncluir ? '/usuario-det/000' : null" >
-  <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir">Incluir novo</button>
-</a>
-<h2>Cadastro de Usuários</h2>
-<!-- Filtro-->
-<mat-form-field subscriptSizing="dynamic">
-  <mat-label>Filtro</mat-label>
-  <input matInput (keyup)="applyFilter($event)" #input>
-</mat-form-field>
-</div>
-<!--Tabela-->
-<div class="table-responsive">
-  <table class="table" mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="id_usuario">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Usuário" [matTooltipPosition]="'above'">
-        ID
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.id_usuario}}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="login">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-        Login
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <a href='{{"/usuario-det/" + element.id_usuario + "?mode=V"}}'>{{ element.login}}</a>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="nome">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
-        Nome
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <a href='{{"/usuario-det/" + element.id_usuario + "?mode=V"}}'>{{ element.nome}}</a>        
-      </td>
-    </ng-container>
-
-    <!-- Botões Editar e Excluir-->
-    <ng-container  matColumnDef="actions" >
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef >
-        Ações
-      </th>
-      <td mat-cell *matCellDef="let row" class="text-center">
-        <div class="d-flex align-items-center justify-content-center">
+  <!-- Botão de inclusão de novo usuario -->
+  <a [routerLink]="bPodeIncluir ? '/usuario-det/000' : null" tabindex="-1">
+    <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir" aria-label="Incluir novo usuário">Incluir novo</button>
+  </a>
+  <h2>Cadastro de Usuários</h2>
+  <!-- Filtro-->
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Filtro</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input aria-label="Digite para filtrar usuários">
+  </mat-form-field>
+  </div>
+  <!--Tabela-->
+  <div class="table-responsive">
+    <table class="table" mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="id_usuario">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Usuário" [matTooltipPosition]="'above'">
+          ID
+        </th>
+        <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID do usuário ' + element.id_usuario">
+          {{element.id_usuario}}
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="login">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+          Login
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <a href='{{"/usuario-det/" + element.id_usuario + "?mode=V"}}' [attr.aria-label]="'Login do usuário ' + element.login">{{ element.login}}</a>
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="nome">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+          Nome
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <a href='{{"/usuario-det/" + element.id_usuario + "?mode=V"}}' [attr.aria-label]="'Nome do usuário ' + element.nome">{{ element.nome}}</a>        
+        </td>
+      </ng-container>
+  
+      <!-- Botões Editar e Excluir-->
+      <ng-container  matColumnDef="actions" >
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">
+          Ações
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <div class="d-flex align-items-center justify-content-center">
+            
+            <a class="d-flex" attr.aria-label="Editar {{row.nome}}" href="{{ GetEditarLink(row.id_usuario, bPodeEditar, 'usuario') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+              <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
+            </a>
           
-          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_usuario, bPodeEditar, 'usuario') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
-            <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
-          </a>
-        
-          <button mat-stroked-button color="warn" (click)="excluirUsuario(row.id_usuario)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar" disabled="{{!bPodeExcluir}}">
-            <!-- Adicione uma classe de estilo para o botão quadrado -->
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </td>
-    </ng-container>
-
-    <!-- Row shown when there is no matching data. -->
+            <button mat-stroked-button color="warn" (click)="excluirUsuario(row.id_usuario)" matTooltip="Excluir" [matTooltipPosition]="'above'" attr.aria-label="Excluir {{row.nome}}" disabled="{{!bPodeExcluir}}">
+              <!-- Adicione uma classe de estilo para o botão quadrado -->
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+  
+    <!-- Linha exibida quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite" aria-label="Nada encontrado para o filtro +'{input.value}'">
+        Nada encontrado para o filtro "{{input.value}}"
+      </td>
     </tr>
-
-    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
-    <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
-  </table>
-  <!--Paginador-->
-  <mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True"></mat-paginator>
-</div>
+  
+      <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
+    </table>
+    <!--Paginador-->
+    <mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True" aria-label="Navegação de páginas"></mat-paginator>
+  </div>

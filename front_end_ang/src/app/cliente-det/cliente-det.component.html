@@ -110,8 +110,6 @@
       <mat-option value="SE">SE</mat-option>
       <mat-option value="TO">TO</mat-option>
     </mat-select> 
-    <mat-list-option *ngFor="let priv of PrivilegiosObj" [value]="priv.pos">{{priv.desc}}
-    </mat-list-option>
   </mat-form-field>
   <div class="form-group">
     <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!cliente_form.valid"

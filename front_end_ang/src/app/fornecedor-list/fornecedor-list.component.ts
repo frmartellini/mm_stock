@@ -51,7 +51,6 @@ export class FornecedorListComponent implements OnInit {
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-//console.log("UsuarioListComponent.ngOnInit - this.authservice.UsuarioLogado=" + JSON.stringify(this.authservice.UsuarioLogado));
 
   }
 

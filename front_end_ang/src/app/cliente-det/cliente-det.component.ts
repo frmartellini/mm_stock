@@ -11,6 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   templateUrl: './cliente-det.component.html',
   styleUrl: './cliente-det.component.scss'
 })
+
 export class ClienteDetComponent implements OnInit {
 
   @Input() cliente: clienteData;
@@ -28,10 +29,10 @@ export class ClienteDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando cliente";
   public SubmitButtonText: String = "Confirmar";
 
+  
   // vars que contem o texto a ser exibido no tooltip dos controles do CPF e CNPJ
   public tooltip_cpf: string = "";
   public tooltip_cnpj: string = "";
-
   constructor(
     private route: ActivatedRoute
     ,private location: Location
@@ -147,6 +148,8 @@ export class ClienteDetComponent implements OnInit {
     return this.mode;
   }
 
+ 
+  
   // obter o dados do cliente conforme o id recebido na url
   getCliente(): void {
 
@@ -159,6 +162,7 @@ export class ClienteDetComponent implements OnInit {
       // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }
   }
+
 
   // executado quando o usuario seleciona algum "tipo do cliente" no respectivo select
   on_Cad_Cliente_Tipo_Change(value :String) {

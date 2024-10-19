@@ -1,16 +1,11 @@
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo cliente -->
- 
 
-
-  <a [routerLink]="bPodeIncluir ? '/cliente-det/000" tabindex="-1' : null" >
+  <a [routerLink]="bPodeIncluir ? '/cliente-det/000' : null" tabindex="-1">
     <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir" [attr.aria-label]="'Incluir novo cliente'">
       Incluir novo
     </button>
   </a>
-
-
-
 
   <h2 id="PageTitle">Cadastro de Clientes</h2>
 

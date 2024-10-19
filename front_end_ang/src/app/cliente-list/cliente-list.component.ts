@@ -7,6 +7,8 @@ import { MatTableDataSource} from '@angular/material/table';
 import { ClienteService } from '../services/cliente.service';
 import { clienteData } from '../CLIENTEDATA';
 import { ToastrService } from 'ngx-toastr';
+import { AuthenticationService } from '../services/authentication.service';
+import Utils from '../utils';
 
 let CLIENT_DATA: clienteData[] = [];
 
@@ -23,17 +25,34 @@ export class ClienteListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
+public bPodeIncluir : boolean = false;
+public bPodeEditar : boolean = false;
+public bPodeExcluir : boolean = false;
+
+// precisa ter esta declaracao public para poder chamar do template HTML
+public GetEditarLink = Utils.GetEditarLink;
+
+
   constructor(private http: HttpClient
-              ,private clienteService: ClienteService
-              ,private toastr: ToastrService
-            )
-  {
+    ,private authservice: AuthenticationService
+    ,private clienteService: ClienteService
+    ,private toastr: ToastrService
+  )
+{
 
-  }
-
-    //Inicialização dos dados na tabela
+  // inicializar as vars
+  this.bPodeIncluir = this.authservice.CheckPrivilegio("CadCliInc");
+  //console.log("bPodeIncluir=" + this.bPodeIncluir);
+  this.bPodeEditar = this.authservice.CheckPrivilegio("CadCliEdi");
+  //console.log("bPodeEditar=" + this.bPodeEditar);
+  this.bPodeExcluir = this.authservice.CheckPrivilegio("CadCliExc");
+  //console.log("bPodeExcluir=" + this.bPodeExcluir);
+}
+  
+  //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
+    //console.log("UsuarioListComponent.ngOnInit - this.authservice.UsuarioLogado=" + JSON.stringify(this.authservice.UsuarioLogado));
   }
   // Obtenção dos Dados da API
     fetchData(): void {

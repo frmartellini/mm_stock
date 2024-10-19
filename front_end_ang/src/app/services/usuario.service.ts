@@ -40,6 +40,8 @@ export class UsuarioService {
   ,{ "pos": "13", "cod": "Entrada",   "desc":"Entrada de Produto" }
   ,{ "pos": "14", "cod": "Saida",     "desc":"Saída de Produto" }
   ,{ "pos": "15", "cod": "CsMovEstq", "desc":"Consulta de Movimentação do Estoque" }
+  ,{ "pos": "20", "cod": "AnEstoque", "desc":"Gráfico de Análise de Estoque" }
+  ,{ "pos": "21", "cod": "AnVendas", "desc":"Gráfico de Análise de Vendas" }
 
 ];
 

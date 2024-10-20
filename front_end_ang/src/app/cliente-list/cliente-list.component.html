@@ -1,95 +1,92 @@
 <div class="button-and-filter-container">
-<!-- Botão de inclusão de novo cliente -->
- 
+  <!-- Botão de inclusão de novo cliente -->
 
+  <a [routerLink]="bPodeIncluir ? '/cliente-det/000' : null" tabindex="-1">
+    <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir" [attr.aria-label]="'Incluir novo cliente'">
+      Incluir novo
+    </button>
+  </a>
 
-<a [routerLink]="bPodeIncluir ? '/cliente-det/000' : null" >
-  <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir">Incluir novo</button>
-</a>
+  <h2 id="PageTitle">Cadastro de Clientes</h2>
 
-
-
-<h2>Cadastro de Clientes</h2>
-<!-- Filtro-->
-<mat-form-field subscriptSizing="dynamic">
-  <mat-label>Filtro</mat-label>
-  <input matInput (keyup)="applyFilter($event)" #input>
-</mat-form-field>
+  <!-- Filtro com rótulo acessível -->
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Filtro</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input [attr.aria-label]="'Filtro de clientes'" aria-live="polite">
+  </mat-form-field>
 </div>
-<!--Tabela-->
+
+<!-- Tabela de listagem de clientes -->
 <div class="table-responsive">
-  <table class="table" mat-table [dataSource]="dataSource" matSort>
+  <table class="table" mat-table [dataSource]="dataSource" matSort aria-labelledby="PageTitle">
+    <!-- Coluna de ID do Cliente -->
     <ng-container matColumnDef="id_cliente">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Cliente" [matTooltipPosition]="'above'">
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         ID
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{element.id_cliente}}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID do cliente ' + element.id_cliente">{{element.id_cliente}}</td>
     </ng-container>
 
+    <!-- Coluna de Nome Completo -->
     <ng-container matColumnDef="nome_completo">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Nome
       </th>
       <td mat-cell *matCellDef="let element">
-        <a href='{{"/cliente-det/" + element.id_cliente + "?mode=V"}}'>{{ element.nome_completo}}</a>        
+        <a [attr.href]="'/cliente-det/' + element.id_cliente + '?mode=V'" tabindex="0" [attr.aria-label]="'Nome do Cliente ' + element.nome_completo">
+          {{ element.nome_completo }}
+        </a>
       </td>
     </ng-container>
 
+    <!-- Coluna de Telefone -->
     <ng-container matColumnDef="telefone">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Telefone
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.telefone }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Telefone do Cliente ' + element.telefone">{{element.telefone}}</td>
     </ng-container>
 
+    <!-- Coluna de Email -->
     <ng-container matColumnDef="email">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Email
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.email }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Email do cliente  ' + element.email">{{element.email}}</td>
     </ng-container>
 
+    <!-- Coluna de Nome da Loja -->
     <ng-container matColumnDef="nome_loja">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Nome da Loja
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.nome_loja }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Nome da Loja do Cliente  ' + element.nome_loja">{{element.nome_loja}}</td>
     </ng-container>
 
+    <!-- Coluna de CNPJ -->
     <ng-container matColumnDef="cnpj">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         CNPJ
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.cnpj }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'CNPJ do cliente  ' + element.cnpj">{{element.cnpj}}</td>
     </ng-container>
 
+    <!-- Coluna de CPF -->
     <ng-container matColumnDef="cpf">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         CPF
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.cpf }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'CPF do cliente  ' + element.cpf">{{element.cpf}}</td>
     </ng-container>
 
+    <!-- Coluna de Tipo de Cliente -->
     <ng-container matColumnDef="tipo_cliente">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Tipo de Cliente
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.tipo_cliente }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Tipo de cliente ' + element.tipo_cliente">{{element.tipo_cliente}}</td>
     </ng-container>
+
     <!--
     <ng-container matColumnDef="endereco">
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -118,36 +115,36 @@
       </td>
     </ng-container>
     -->
+
+    <!-- Coluna de Cidade -->
     <ng-container matColumnDef="cidade">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         Cidade
       </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.cidade }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Cidade do Cliente ' + element.cidade">{{element.cidade}}</td>
     </ng-container>
 
+    <!-- Coluna de Estado (UF) -->
     <ng-container matColumnDef="uf">
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header> <!-- class="divider-cell" -->
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
         UF
       </th>
-      <td mat-cell *matCellDef="let element"> <!-- class="divider-cell" -->
-        {{ element.uf }}
-      </td>
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'UF do cliente ' + element.uf">{{element.uf}}</td>
     </ng-container>
-    <!-- Botões Editar e Excluir-->
-    <ng-container  matColumnDef="actions" >
-      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef >
+
+    <!-- Coluna de Ações -->
+    <ng-container matColumnDef="actions">
+      <th scope="col" class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">
         Ações
       </th>
       <td mat-cell *matCellDef="let row" class="text-center">
         <div class="d-flex align-items-center justify-content-center">
-
-          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_cliente, bPodeEditar, 'cliente') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+          <!-- Botão de editar -->
+          <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_cliente, bPodeEditar, 'cliente') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'" [attr.aria-label]="'Editar cliente ' + row.nome_completo">
             <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
           </a>
-
-          <button mat-stroked-button color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar" disabled="{{!bPodeExcluir}}">
+          <!-- Botão de excluir -->
+          <button mat-stroked-button color="warn" (click)="excluirCliente(row.id_cliente)" matTooltip="Excluir" [matTooltipPosition]="'above'" [attr.aria-label]="'Excluir cliente ' + row.nome_completo" disabled="{{!bPodeExcluir}}">
           
             <!-- Adicione uma classe de estilo para o botão quadrado -->
             <mat-icon>delete</mat-icon>
@@ -156,14 +153,18 @@
       </td>
     </ng-container>
 
-    <!-- Row shown when there is no matching data. -->
+    <!-- Linha exibida quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite" aria-label="Nada encontrado para o filtro +'{input.value}'">
+        Nada encontrado para o filtro "{{input.value}}"
+      </td>
     </tr>
 
-    <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
-    <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
+    <!-- Header e linhas da tabela -->
+    <tr mat-header-row *matHeaderRowDef="displayColumn"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumn;"></tr>
   </table>
-  <!--Paginador-->
-  <mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True"></mat-paginator>
+
+  <!-- Paginador -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10" [attr.aria-label]="'Paginador de clientes'" showFirstLastButtons></mat-paginator>
 </div>

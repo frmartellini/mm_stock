@@ -1,24 +1,24 @@
 <div class="button-and-filter-container">
   <!-- Botão de inclusão de novo produto -->
-  <a [routerLink]="bPodeIncluir ? '/produto-det/0' : null" >
-    <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir">Incluir novo</button>
+  <a [routerLink]="bPodeIncluir ? '/produto-det/0' : null" tabindex="-1">
+    <button type="button" mat-raised-button color="basic" [disabled]="!bPodeIncluir" [attr.aria-label]="'Incluir novo produto'">Incluir novo</button>
   </a>
 
   <h2>Cadastro de Produtos</h2>
   <!-- Filtro-->
   <mat-form-field subscriptSizing="dynamic">
     <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input>
+    <input matInput (keyup)="applyFilter($event)" #input [attr.aria-label]="'Digite para filtrar produtos'">
   </mat-form-field>
 </div>
 <!--Tabela-->
 <div class="table-responsive">
-  <table class="table" mat-table [dataSource]="dataSource" matSort>
+  <table class="table" mat-table [dataSource]="dataSource" matSort [attr.aria-label]="'Tabela de Produtos'">
     <ng-container matColumnDef="id_produto">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header sortingCache matTooltip="ID do Produto" [matTooltipPosition]="'above'">
              ID
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'ID do produto ' + element.id_produto">
               {{element.id_produto}}
         </td>
     </ng-container>
@@ -28,7 +28,7 @@
                Descrição
           </th>
         <td class="centered-sorted-header" mat-cell *matCellDef="let element">
-          <a href='{{"/produto-det/" + element.id_produto+ "?mode=V"}}'>{{ element.descricao }}</a>              
+          <a href='{{"/produto-det/" + element.id_produto+ "?mode=V"}}' [attr.aria-label]="'Descrição do produto ' + element.descricao">{{ element.descricao }}</a>              
         </td>
     </ng-container>
 
@@ -36,7 +36,7 @@
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Cor
           </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Cor do produto ' + element.cor">
               {{ element.cor }}
           </td>
     </ng-container>
@@ -45,7 +45,7 @@
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Tamanho
           </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Tamanho do produto ' + element.tamanho">
               {{ element.tamanho }}
           </td>
     </ng-container>
@@ -54,7 +54,7 @@
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Tipo de Material
         </th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Tipo de material do produto ' + element.tipo_material">
             {{ element.tipo_material }}
         </td>
     </ng-container>
@@ -63,7 +63,7 @@
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
               Preço de Venda
         </th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Preço de venda do produto ' + element.preco_venda">
             {{ element.preco_venda | number:'1.2-2':'pt' }}
         </td>
     </ng-container>
@@ -72,24 +72,24 @@
       <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
              Quantidade Atual
         </th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" tabindex="0" [attr.aria-label]="'Quantidade Atual do produto ' + element.quantidade_atual">
             {{ element.quantidade_atual }}
         </td>
     </ng-container>
 
 <!-- Botões Editar e Exlcuir-->
-      <ng-container  matColumnDef="actions" >
-        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef >
+      <ng-container  matColumnDef="actions">
+        <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">
           Ações
         </th>
         <td mat-cell *matCellDef="let row" class="text-center">
           <div class="d-flex align-items-center justify-content-center">
 
 
-           <a class="d-flex" aria-label="Editar" href="{{ GetEditarLink(row.id_produto, bPodeEditar, 'produto') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'">
+           <a class="d-flex" href="{{ GetEditarLink(row.id_produto, bPodeEditar, 'produto') }}" [attr.disabled]="!bPodeEditar" matTooltip="Editar" [matTooltipPosition]="'above'" [attr.aria-label]="'Editar produto ' + row.descricao">
             <mat-icon class="edit-icon {{ !bPodeEditar ? 'adisabled' : '' }}" >edit</mat-icon>
             </a>
-            <button mat-stroked-button color="warn" (click)="excluirItem(row.id_produto)" matTooltip="Excluir" [matTooltipPosition]="'above'" aria-label="Deletar" disabled="{{!bPodeExcluir}}">
+            <button mat-stroked-button color="warn" (click)="excluirItem(row.id_produto)" matTooltip="Excluir" [matTooltipPosition]="'above'" [attr.aria-label]="'Deletar produto ' + row.descricao" disabled="{{!bPodeExcluir}}">
            
               <!-- Adicione uma classe de estilo para o botão quadrado -->
               <mat-icon>delete</mat-icon>
@@ -98,14 +98,16 @@
         </td>
       </ng-container>
 
-<!-- Row shown when there is no matching data. -->
+    <!-- Linha exibida quando não há dados -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nada encontrado para o filtro "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4" tabindex="0" aria-live="polite" aria-label="Nada encontrado para o filtro +'{input.value}'">
+        Nada encontrado para o filtro "{{input.value}}"
+      </td>
     </tr>
 
     <tr mat-header-row *matHeaderRowDef=" displayColumn "></tr>
     <tr mat-row *matRowDef="let row; columns: displayColumn ;"></tr>
   </table>
 <!--Paginador-->
-<mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True"></mat-paginator>
+<mat-paginator PersistPaginator [pageSizeOptions]="[5, 10, 15, 25]" [pageSize]="10"  itemsPerPageLabel="Itens por Página" showFirstLastButtons="True" [attr.aria-label]="'Controles de paginação para a tabela de produtos'"></mat-paginator>
 </div>

@@ -56,21 +56,12 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
       <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadCliCon')">Clientes</a></li>
       <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadFornCon')">Fornecedores</a></li>
       <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadProdCon')">Produtos</a></li>
-
-        <!-- Melhorar acessibilidade de link desabilitado com aria-disabled -->
-      <li>
-        <a routerLink="/usuario-list" routerLinkActive="active" ariaCurrentWhenActive="page" 
-           [attr.aria-disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')" 
-           [class.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">
-          Usuários
-        </a>
-      </li>
-
-        <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Entrada')">Entrada de Produto</a></li>
-        <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Saida')">Saída de Produto</a></li>
-        <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CsMovEstq')">Movimentação de Estoque</a></li>
-        <li><a routerLink="/movimentacao-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnEstoque')">Análise de Estoque</a></li>
-        <li><a routerLink="/vendas-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Análise de Vendas</a></li>
+      <li><a routerLink="/usuario-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">Usuários</a></li>
+      <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Entrada')">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Saida')">Saída de Produto</a></li>
+      <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CsMovEstq')">Movimentação de Estoque</a></li>
+      <li><a routerLink="/movimentacao-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnEstoque')">Análise de Estoque</a></li>
+      <li><a routerLink="/vendas-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Análise de Vendas</a></li>
       </ul>
     </nav>
   </div>

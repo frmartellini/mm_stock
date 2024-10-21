@@ -98,7 +98,11 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
 </main>
 
 <footer id="Footer" class="footer" aria-label="Rodapé com informações de direitos reservados" tabindex="0">
-  <p class="p">&copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</p>
+  <p class="p">
+    <span *ngIf="this.IsInProduction"  class="TEXTO_PROD_CSS">[ PRODUÇÃO ]</span>
+    <span *ngIf="!this.IsInProduction" class="TEXTO_DEV_CSS">[ DESENVOLVIMENTO ]</span>
+    &copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.
+  </p>
 </footer>
 
 

@@ -5,6 +5,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   isServer: boolean;
   isBrowser: boolean;
   platformId: Object;  // Declare platformId as a property
+  IsInProduction: Boolean; // indica se o sistema estah rodando em producao (true)
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit {
     this.platformId = platformId; // Assign the platformId to the property
     this.isServer = isPlatformServer(platformId);
     this.isBrowser = isPlatformBrowser(platformId);
+    this.IsInProduction = environment.production;
   }
 
   ngOnInit() {

@@ -226,14 +226,6 @@ export class ProdutoSaidaComponent implements OnInit {
     }
   }
 
-  permitirSomenteNumeros(event: KeyboardEvent) {
-    const charCode = event.charCode;
-    // Permitir apenas caracteres de '0' a '9'
-    if (charCode < 48 || charCode > 57) {
-      event.preventDefault();
-    }
-  }
-
   voltar(): void {
     this.location.back();
   }

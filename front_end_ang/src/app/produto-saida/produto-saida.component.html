@@ -89,7 +89,8 @@
     <mat-form-field appearance="fill" style="width: 20%">
       <mat-label>Núm. Pedido</mat-label>
       <input type="number" id="NumPedidoInput" name="NumPedidoInput" formControlName="NumPedidoInput"
-             matInput [(ngModel)]="movimentacao.num_pedido"
+             matInput min="1" step="1" pattern="^[0-9]+$"
+             [(ngModel)]="movimentacao.num_pedido"
              [attr.aria-label]="'Insira o número do pedido'" />
     </mat-form-field>
 

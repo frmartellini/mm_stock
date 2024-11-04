@@ -13,10 +13,10 @@
 
 ## Team members
 <p>- Adriano Barbella Arvatti</p>
-<p>- Guilherme Gurat</p>
 <p>- Danilo de Oliveira Nunes</p>
 <p>- Erik Neves Machado</p>
 <p>- Francisco Martellini</p>
+<p>- Guilherme da Costa Guatura</p>
 <p>- José Carlos Marcusso Junior</p>
 <p>- Marcos de Lima Buhl</p>
 <p>- Matheus Eduardo Peixoto de Carvalho</p>

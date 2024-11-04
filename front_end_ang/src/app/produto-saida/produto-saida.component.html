@@ -1,5 +1,4 @@
-
-<div class="form-group col-md-6  mx-auto" >
+<div class="form-group col-md-6 mx-auto">
   
   <h2>Saída de Produto</h2>
 
@@ -11,7 +10,7 @@
   -->
 
   <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
-  
+
     <!--
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Produto</mat-label> 
@@ -25,29 +24,35 @@
       </mat-select> 
     </mat-form-field>
     -->
-
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+  
+    <!-- Campo de seleção de produto com autocomplete -->
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Produto</mat-label>
       <input #Produto_Input matInput type="text"
-           id="Produto_Input" name="Produto_Input" formControlName="Produto_Input" [(ngModel)]="movimentacao.id_produto"
+           id="Produto_Input" name="Produto_Input" formControlName="Produto_Input" 
+           [(ngModel)]="movimentacao.id_produto" required="true"
            [matAutocomplete]="Produto_Auto"
            (input)="FilterProdutos(Produto_Input.value, 'input')"
            (focus)="FilterProdutos(Produto_Input.value, 'focus')"
-           >
-      <mat-autocomplete autoActiveFirstOption requireSelection #Produto_Auto="matAutocomplete" id="Produto_Auto" name="Produto_Auto" 
+           [attr.aria-label]="'Selecione o produto'">
+      <mat-autocomplete autoActiveFirstOption requireSelection #Produto_Auto="matAutocomplete" 
+                        id="Produto_Auto" name="Produto_Auto" 
                         [displayWith]="Produto_Auto_DisplayFn">
-         @for (produto of filtered_produtos; track produto) {
-          <mat-option [value]="produto">{{produto.descricao}}</mat-option>
-        }
+         <mat-option *ngFor="let produto of filtered_produtos" [value]="produto">{{produto.descricao}}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
     <br />
 
-    <mat-form-field appearance="fill" class="" style="width: 20%">
+    <!-- Campo de entrada de quantidade -->
+    <mat-form-field appearance="fill" style="width: 20%">
       <mat-label>Quantidade</mat-label>
       <input type="number" id="QuantidadeInput" name="QuantidadeInput" formControlName="QuantidadeInput"
-             matInput min="1" step="1" pattern="^[0|1|2|3|4|5|6|7|8|9]+$" [(ngModel)]="movimentacao.quantidade" required="true" />
+             matInput min="1" step="1" pattern="^[0|1|2|3|4|5|6|7|8|9]+$" 
+             [(ngModel)]="movimentacao.quantidade" required="true"
+             [attr.aria-label]="'Insira a quantidade'"/>
     </mat-form-field>
+    <br />
+
     <!--
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Cliente</mat-label> 
@@ -61,43 +66,52 @@
       </mat-select> 
     </mat-form-field>
     -->
-    <br />
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+
+    <!-- Campo de seleção de cliente com autocomplete -->
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Cliente</mat-label>
       <input #Cliente_Input matInput type="text"
-           id="Cliente_Input" name="Cliente_Input" formControlName="Cliente_Input" [(ngModel)]="movimentacao.id_cliente"
+           id="Cliente_Input" name="Cliente_Input" formControlName="Cliente_Input" 
+           [(ngModel)]="movimentacao.id_cliente"
            [matAutocomplete]="Cliente_Auto"
            (input)="FilterClientes(Cliente_Input.value, 'input')"
            (focus)="FilterClientes(Cliente_Input.value, 'focus')"
-           >
-      <mat-autocomplete autoActiveFirstOption requireSelection #Cliente_Auto="matAutocomplete" id="Cliente_Auto" name="Cliente_Auto" 
+           [attr.aria-label]="'Selecione o cliente'">
+      <mat-autocomplete autoActiveFirstOption requireSelection #Cliente_Auto="matAutocomplete" 
+                        id="Cliente_Auto" name="Cliente_Auto" 
                         [displayWith]="Cliente_Auto_DisplayFn">
-         @for (cliente of filtered_clientes; track cliente) {
-          <mat-option [value]="cliente">{{cliente.nome_completo}}</mat-option>
-        }
+         <mat-option *ngFor="let cliente of filtered_clientes" [value]="cliente">{{cliente.nome_completo}}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
     <br />
 
-    <mat-form-field appearance="fill" class="" style="width: 20%">
+    <!-- Campo de entrada do número do pedido -->
+    <mat-form-field appearance="fill" style="width: 20%">
       <mat-label>Núm. Pedido</mat-label>
       <input type="number" id="NumPedidoInput" name="NumPedidoInput" formControlName="NumPedidoInput"
-             matInput [(ngModel)]="movimentacao.num_pedido" />
+             matInput min="1" step="1" pattern="^[0-9]+$"
+             [(ngModel)]="movimentacao.num_pedido"
+             [attr.aria-label]="'Insira o número do pedido'" />
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="" style="width: 100%">
+    <!-- Campo de observação -->
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Observação</mat-label>
       <textarea id="ObsTextArea" name="ObsTextArea" formControlName="ObsTextArea"
-                matInput placeholder="" rows="3" [(ngModel)]="movimentacao.obs" ></textarea>
+                matInput rows="3" [(ngModel)]="movimentacao.obs"
+                [attr.aria-label]="'Insira observações'"></textarea>
     </mat-form-field>
 
+    <!-- Botões de ação -->
     <div class="form-group">
-      <button type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!form.valid">Confirmar</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!form.valid" 
+              [attr.aria-label]="'Confirmar saída de produto'">Confirmar</button>
       &nbsp;&nbsp;
-      <button type="button" mat-raised-button color="basic" (click)="voltar()">Voltar</button>
+      <button type="button" mat-raised-button color="basic" (click)="voltar()" 
+              [attr.aria-label]="'Voltar para a tela anterior'">Voltar</button>
     </div>
 
-    <!-- <div class="form-group col-md-6 mb-3  ">
+     <!-- <div class="form-group col-md-6 mb-3  ">
       <label for="data_hora ">Data/hora</label>
       <input [(ngModel)]="movimentacao.data_hora" type="text" class="form-control" id="data_hora">
     </div> -->

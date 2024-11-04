@@ -9,6 +9,8 @@ import { FornecedorListComponent } from './fornecedor-list/fornecedor-list.compo
 import { FornecedorDetComponent } from './fornecedor-det/fornecedor-det.component';
 import { ClienteDetComponent } from './cliente-det/cliente-det.component';
 import { ProdutoDetComponent } from './produto-det/produto-det.component';
+import { UsuarioListComponent } from './usuario-list/usuario-list.component';
+import { UsuarioDetComponent } from './usuario-det/usuario-det.component';
 import { LoginComponent } from './login/login.component';
 import { UsuarioNaoAutenticadoGuard } from './services/guards/usuario-nao-autenticado.guard';
 import { UsuarioAutenticadoGuard } from './services/guards/usuario-autenticado.guard';
@@ -16,6 +18,9 @@ import { ConfigComponent } from './config/config.component';
 import { ProdutoEntradaComponent } from './produto-entrada/produto-entrada.component';
 import { ProdutoSaidaComponent } from './produto-saida/produto-saida.component';
 import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.component';
+import { AlterSenhaComponent } from './altersenha/altersenha.component';
+import { MovimentacaoGrafComponent } from './movimentacao-graf/movimentacao-graf.component';
+import { VendasGrafComponent } from './vendas-graf/vendas-graf.component';
 
 const routes: Routes = [
 
@@ -33,14 +38,18 @@ const routes: Routes = [
   ,{ path: 'produto-det/:id', component: ProdutoDetComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'cliente-det/:id', component: ClienteDetComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'fornecedor-det/:id', component: FornecedorDetComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'usuario-list', component: UsuarioListComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'usuario-det/:id', component: UsuarioDetComponent , canActivate: [UsuarioAutenticadoGuard] }
 
   ,{ path: 'produto-entrada', component: ProdutoEntradaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-entrada/:id', component: ProdutoEntradaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-saida', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'produto-saida/:id', component: ProdutoSaidaComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'movimentacao-cs', component: MovimentacaoCsComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'movimentacao-graf', component: MovimentacaoGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'vendas-graf', component: VendasGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
-
+  ,{ path: 'altersenha', component: AlterSenhaComponent , canActivate: [UsuarioAutenticadoGuard] }
 
 
 ];

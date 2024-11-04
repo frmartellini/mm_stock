@@ -15,8 +15,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 @Component({
   selector: 'app-produto-entrada',
   templateUrl: './produto-entrada.component.html',
-  styleUrl: './produto-entrada.component.css'
-  
+  styleUrl: './produto-entrada.component.scss'
+
 })
 
 export class ProdutoEntradaComponent implements OnInit {
@@ -92,7 +92,7 @@ export class ProdutoEntradaComponent implements OnInit {
   }
 
   getMovimentacao(): void {
-    
+
     //console.log("id=" + this.id);
 
     if ( this.id ) {
@@ -152,7 +152,7 @@ export class ProdutoEntradaComponent implements OnInit {
         timeOut: 3000
         ,positionClass: 'toast-top-center'
       });
-  
+
     } // OnSaveError_CallBackFunction
 
     if (this.movimentacao) {
@@ -173,7 +173,7 @@ export class ProdutoEntradaComponent implements OnInit {
 
       this.movservice.createMovimentacao_http(this.movimentacao)
         .subscribe( {
-          
+
           next: response => {},
 
           error: error => {
@@ -183,7 +183,7 @@ export class ProdutoEntradaComponent implements OnInit {
           complete() {
             OnSaveSuccess_CallBackFunction();
           }
- 
+
         });
     }
   } // onSubmit

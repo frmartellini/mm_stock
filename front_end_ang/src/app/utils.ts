@@ -46,4 +46,8 @@ export default class Utils {
     });
   } // reloadCurrentRoute
 
+  static GetEditarLink(pID :number, pbPodeEditar :boolean, pRoutePart :string) : string {
+    return pbPodeEditar ? '/'+pRoutePart+'-det/' + pID + '?mode=E' : '';
+  }
+
 } // class

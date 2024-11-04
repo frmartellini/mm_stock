@@ -9,8 +9,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 @Component({
   selector: 'app-cliente-det',
   templateUrl: './cliente-det.component.html',
-  styleUrl: './cliente-det.component.css'
+  styleUrl: './cliente-det.component.scss'
 })
+
 export class ClienteDetComponent implements OnInit {
 
   @Input() cliente: clienteData;
@@ -25,13 +26,13 @@ export class ClienteDetComponent implements OnInit {
 
   public cliente_form: any;
 
-  public PageTitle: String = "Incluindo ou editando cliente"; 
+  public PageTitle: String = "Incluindo ou editando cliente";
   public SubmitButtonText: String = "Confirmar";
 
+  
   // vars que contem o texto a ser exibido no tooltip dos controles do CPF e CNPJ
   public tooltip_cpf: string = "";
   public tooltip_cnpj: string = "";
-
   constructor(
     private route: ActivatedRoute
     ,private location: Location
@@ -72,7 +73,7 @@ export class ClienteDetComponent implements OnInit {
     this.mode = String(this.route.snapshot.queryParamMap.get('mode'));
     //console.log("this.id=" + this.id);
     //console.log("this.mode inicial=" + this.mode);
-    
+
     // se o param id recebido nao for um numero, vai forcar que seja 0 para forcar a tela no modo inclusao
     if ( Number.isNaN(this.id) ) {
       this.id = 0;
@@ -147,9 +148,11 @@ export class ClienteDetComponent implements OnInit {
     return this.mode;
   }
 
+ 
+  
   // obter o dados do cliente conforme o id recebido na url
   getCliente(): void {
-    
+
     //console.log("id=" + this.id);
 
     if ( this.id ) {
@@ -160,6 +163,7 @@ export class ClienteDetComponent implements OnInit {
     }
   }
 
+
   // executado quando o usuario seleciona algum "tipo do cliente" no respectivo select
   on_Cad_Cliente_Tipo_Change(value :String) {
 
@@ -169,7 +173,7 @@ export class ClienteDetComponent implements OnInit {
     this.cliente_form.get("Cad_Cliente_CNPJ")?.disable();
     this.cliente_form.get("Cad_Cliente_CPF")?.disable();
 
-    // se nao estah no modo de visualizacao, eh inclusao ou edicao e 
+    // se nao estah no modo de visualizacao, eh inclusao ou edicao e
     // deve habilitar algum dos campos CPF ou CNPJ e limpar o outro
     if ( !this.IsInViewMode() ) {
       // ativar o campo CPF ou CNPJ de acordo com o tipo cliente selecionado pelo usuario
@@ -215,9 +219,9 @@ export class ClienteDetComponent implements OnInit {
          ,enableHtml: true
          ,positionClass: 'toast-top-center'
       });
-      
+
       local_router.navigate(['/cliente-list']);
-  
+
     } // OnSaveSuccess_CallBackFunction
 
     // funcao executada quando ha erro
@@ -228,7 +232,7 @@ export class ClienteDetComponent implements OnInit {
          ,enableHtml: true
          ,positionClass: 'toast-top-center'
       });
-      
+
     } // OnSaveError_CallBackFunction
 
     //console.log("this.cliente=" + JSON.stringify(this.cliente));
@@ -257,9 +261,9 @@ export class ClienteDetComponent implements OnInit {
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
-              
+
             }); // subscribe
-          
+
         } // if
         else if (this.mode == "E") {
 
@@ -267,7 +271,7 @@ export class ClienteDetComponent implements OnInit {
 
           this.clientsApiService.editarCliente(this.cliente, this.id)
             .subscribe( {
-              
+
               next: response => {},
 
               error: error => {
@@ -278,7 +282,7 @@ export class ClienteDetComponent implements OnInit {
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
-    
+
             }); // subscribe
 
         } // else if

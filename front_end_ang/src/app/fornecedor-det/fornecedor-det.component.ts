@@ -6,11 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-fornecedor-det',
   templateUrl: './fornecedor-det.component.html',
-  styleUrl: './fornecedor-det.component.css'
+  styleUrl: './fornecedor-det.component.scss'
 })
 export class FornecedorDetComponent implements OnInit{
 
@@ -28,6 +27,7 @@ export class FornecedorDetComponent implements OnInit{
 
   public PageTitle: String = "Incluindo ou editando fornecedor";
   public SubmitButtonText: String = "Confirmar";
+  
 
   constructor(
     private route: ActivatedRoute
@@ -108,7 +108,7 @@ export class FornecedorDetComponent implements OnInit{
       this.fornecedor_form.get("Cad_fornecedor_Complemento")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Cidade")?.disable();
       this.fornecedor_form.get("Cad_fornecedor_Estado")?.disable();
-    
+
       this.PageTitle = "Visualizando fornecedor";
 }
     else {
@@ -124,6 +124,9 @@ export class FornecedorDetComponent implements OnInit{
         this.PageTitle = "Editando Fornecedor";
       }
 
+
+      
+
     }
 
   } // ngOnInit
@@ -137,7 +140,6 @@ export class FornecedorDetComponent implements OnInit{
   public GetMode() : string {
     return this.mode;
   }
-
   // obter o dados do fornecedor conforme o id recebido na url
   getFornecedor(): void {
 
@@ -151,6 +153,7 @@ export class FornecedorDetComponent implements OnInit{
       // a ideia eh exibir uma msg avisando usando o toastr e redirecionar para a tela do cadastro
     }
   }
+
 
   // executado quando o botao type submit eh clicado
   onSubmit(pFormValues: any): void {

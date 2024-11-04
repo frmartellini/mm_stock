@@ -1,5 +1,7 @@
+/*import de acessibilidade*/
+@use '@angular/cdk';
 :host {
-  
+
 
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -130,12 +132,18 @@ tyle: solid; */
   border: none;
   color: #fff;
   cursor: pointer;
-  margin-left: 10px;
+  @include cdk.high-contrast() {
+    outline: solid 1px;
+  }
+
 }
 
 /* Estilo dos links quando estão ativos */
 .admin-nav ul li a.active {
-  color: #7CB9E8; 
+  color: #7CB9E8;
+  @include cdk.high-contrast() {
+    color: yellow;
+  }
 }
 
 /* Animação de transição */
@@ -143,23 +151,33 @@ tyle: solid; */
   transition: color 0.3s ease;
 }
 
+.admin-nav li {
+  width: auto;
+}
+
 /* Estilos para tornar o menu responsivo */
 @media screen and (max-width: 768px) {
   .admin-nav {
     display: none;
   }
-
-  .admin-actions button {
-    margin-left: 0;
-  }
 }
-
-
 /*
 @media screen and (max-width: 650px) {
   .content {
     flex-direction: column;
     width: max-content;
   }
-} 
-*/ 
+}
+*/
+
+/* formatacao do texto PRODUCAO do rodape */
+.TEXTO_PROD_CSS {
+  Color: #0bc7ed;
+  font-weight: bold;
+}
+
+/* formatacao do texto DESENVOLVIMENTO do rodape */
+.TEXTO_DEV_CSS {
+  Color: #d5d524;
+  font-weight: bold;
+}

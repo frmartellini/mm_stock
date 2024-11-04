@@ -7,12 +7,16 @@ import { MatTableDataSource} from '@angular/material/table';
 import { FornecedorService } from '../services/fornecedor.service';
 import { FORNECEDOR } from '../FORNECEDOR';
 import { ToastrService } from 'ngx-toastr';
+import { AuthenticationService } from '../services/authentication.service';
+import Utils from '../utils';
 
 let FORNECEDOR_DATA: FORNECEDOR[]=[];
+
 @Component({
   selector: 'app-fornecedor-list',
   templateUrl: './fornecedor-list.component.html',
-  styleUrl: './fornecedor-list.component.css'
+  styleUrl: './fornecedor-list.component.scss'
+
 })
 
 export class FornecedorListComponent implements OnInit {
@@ -20,19 +24,33 @@ export class FornecedorListComponent implements OnInit {
   public displayColumn: string[] = ['id_fornecedor','nome_fornecedor','nome_responsavel','contato_telefonico','redes_sociais','cnpj','cidade','uf','actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+  
+  public bPodeIncluir : boolean = false;
+  public bPodeEditar : boolean = false;
+  public bPodeExcluir : boolean = false;
+  
+  // precisa ter esta declaracao public para poder chamar do template HTML
+  public GetEditarLink = Utils.GetEditarLink;
 
   constructor(private http: HttpClient
+              ,private authservice : AuthenticationService
               ,private fornecedorService: FornecedorService
               ,private toastr: ToastrService
             )
-  {
+{
 
-  }
-
+  // inicializar as vars
+  this.bPodeIncluir = this.authservice.CheckPrivilegio("CadFornInc");
+  //console.log("bPodeIncluir=" + this.bPodeIncluir);
+  this.bPodeEditar = this.authservice.CheckPrivilegio("CadFornEdi");
+  //console.log("bPodeEditar=" + this.bPodeEditar);
+  this.bPodeExcluir = this.authservice.CheckPrivilegio("CadFornExc");
+  //console.log("bPodeExcluir=" + this.bPodeExcluir);
+}
+  
     //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
-
 
   }
 

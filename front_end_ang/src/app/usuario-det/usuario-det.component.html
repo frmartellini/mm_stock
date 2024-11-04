@@ -1,0 +1,68 @@
+<div class="form-group col-md-6 mx-auto">
+  
+  <h2 #h2 id="PageTitle" name="PageTitle" [attr.aria-label]="'Título da página: ' + this.PageTitle">{{ this.PageTitle }}</h2>
+
+  <form [formGroup]="usuario_form" (ngSubmit)="onSubmit(usuario_form.value)">
+
+    <br />
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Login</mat-label>
+      <input matInput type="text" id="Cad_Usuario_Login" name="Cad_Usuario_Login" formControlName="Cad_Usuario_Login"
+             [(ngModel)]="usuario.login" required="true" 
+             [attr.aria-label]="'Insira o login do usuário'" />
+    </mat-form-field>
+    <br />
+    
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Nome</mat-label>
+      <input matInput type="text" id="Cad_Usuario_Nome" name="Cad_Usuario_Nome" formControlName="Cad_Usuario_Nome"
+             [(ngModel)]="usuario.nome" required="true" 
+             [attr.aria-label]="'Insira o nome do usuário'" />
+    </mat-form-field>
+    <br />
+
+    <!-- Exibir esta div apenas se estiver incluindo -->
+    <div *ngIf="GetMode() == 'I'">
+      <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" id="Cad_Usuario_Senha" name="Cad_Usuario_Senha" formControlName="Cad_Usuario_Senha"
+               required="true" 
+               [attr.aria-label]="'Insira a senha do usuário'" />
+      </mat-form-field>
+      <br />
+      
+      <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Confirmação da Senha</mat-label>
+        <input matInput type="password" id="Cad_Usuario_SenhaConf" name="Cad_Usuario_SenhaConf" formControlName="Cad_Usuario_SenhaConf"
+               required="true" 
+               [attr.aria-label]="'Confirme a senha do usuário'" />
+      </mat-form-field>
+      <br />
+    </div>
+
+  <div >
+    <h2 [attr.aria-label]="'Selecione os privilégios'">Privilégios</h2>
+
+      <mat-selection-list #privilegios id="privilegios_sel_list" name="Cad_Usuario_Privs" formControlName="Cad_Usuario_Privs"
+                          [attr.aria-label]="'Selecione os privilégios do usuário'">
+          <mat-list-option *ngFor="let priv of PrivilegiosObj" [value]="priv.pos">{{priv.desc}}</mat-list-option>
+      </mat-selection-list>
+      <!-- <p>Options selected: {{privilegios.selectedOptions.selected.length}}</p> -->
+    </div>
+    
+    <br />
+
+    <div class="form-group">
+      <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" 
+              [disabled]="!usuario_form.valid" id="SubmitButton" name="SubmitButton" 
+              [attr.aria-label]="'Enviar o formulário de cadastro de usuário'">
+          <!-- Vai exibir "Confirmar Inclusão" ou "Confirmar Edição" -->
+          {{ this.SubmitButtonText }}
+      </button>
+      &nbsp;&nbsp;
+      <button type="button" id="voltarButton" mat-raised-button color="basic" (click)="voltar()" aria-labelledby="PageTitle voltarButton">Voltar</button>
+    </div>
+
+  </form>
+
+</div>

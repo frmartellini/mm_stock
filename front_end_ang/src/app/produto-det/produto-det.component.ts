@@ -12,7 +12,7 @@ import { PRODUTO_TIPOMATERIAL } from '../PRODUTO_TIPOMATERIAL';
 @Component({
   selector: 'app-produto-det',
   templateUrl: './produto-det.component.html',
-  styleUrl: './produto-det.component.css'
+  styleUrl: './produto-det.component.scss'
 })
 export class ProdutoDetComponent implements OnInit {
 
@@ -22,12 +22,12 @@ export class ProdutoDetComponent implements OnInit {
   public cores: PRODUTO_COR[] = [];
   // contem apenas as cores dos produtos conforme filtrado pela digitacao do usuario no "Cad_Produto_Cor_Input"
   public filtered_cores: PRODUTO_COR[] = [];
-  
+
   // guarda TODOS os tamanhos dos produtos para exibir o controle Autocomplete
   public tamanhos: PRODUTO_TAMANHO[] = [];
   // contem apenas os tamanhos dos produtos conforme filtrado pela digitacao do usuario no "Cad_Produto_Tamanho_Input"
   public filtered_tamanhos: PRODUTO_TAMANHO[] = [];
-  
+
   // guarda TODOS os tipos de material dos produtos para exibir o controle Autocomplete
   public tipos_material: PRODUTO_TIPOMATERIAL[] = [];
   // contem apenas os tipos de material dos produtos conforme filtrado pela digitacao do usuario no "Cad_Produto_Tipo_Material_Input"
@@ -43,8 +43,9 @@ export class ProdutoDetComponent implements OnInit {
 
   public produto_form: any;
 
-  public PageTitle: String = "Incluindo ou editando produto"; 
+  public PageTitle: String = "Incluindo ou editando produto";
   public SubmitButtonText: String = "Confirmar";
+
 
   constructor(
     private route: ActivatedRoute
@@ -80,7 +81,7 @@ export class ProdutoDetComponent implements OnInit {
     this.mode = String(this.route.snapshot.queryParamMap.get('mode'));
     //console.log("this.id=" + this.id);
     //console.log("this.mode inicial=" + this.mode);
-    
+
     // se o param id recebido nao for um numero, vai forcar que seja 0 para forcar a tela no modo inclusao
     if ( Number.isNaN(this.id) ) {
       this.id = 0;
@@ -153,7 +154,7 @@ export class ProdutoDetComponent implements OnInit {
 
   // obter o dados do produto conforme o id recebido na url
   getProduto(): void {
-    
+
     //console.log("id=" + this.id);
 
     if ( this.id ) {
@@ -171,7 +172,7 @@ export class ProdutoDetComponent implements OnInit {
         next : cores => {
           //console.log("executou o 'next' do getCoresProdutos(). Abaixo a this.cores.");
           this.cores = cores;
-          //console.table(this.cores); 
+          //console.table(this.cores);
         } ,
         error: error => { } ,
         complete() {
@@ -187,7 +188,7 @@ export class ProdutoDetComponent implements OnInit {
         next : tamanhos => {
           //console.log("executou o 'next' do getTamanhosProdutos(). Abaixo a this.tamanhos.");
           this.tamanhos = tamanhos;
-          //console.table(this.tamanhos); 
+          //console.table(this.tamanhos);
         } ,
         error: error => { } ,
         complete() {
@@ -203,7 +204,7 @@ export class ProdutoDetComponent implements OnInit {
         next : tipos_material => {
           //console.log("executou o 'next' do getTiposMaterialProdutos(). Abaixo a this.tipos_material.");
           this.tipos_material = tipos_material;
-          //console.table(this.tipos_material); 
+          //console.table(this.tipos_material);
         } ,
         error: error => { } ,
         complete() {
@@ -272,9 +273,9 @@ export class ProdutoDetComponent implements OnInit {
          ,enableHtml: true
          ,positionClass: 'toast-top-center'
       });
-      
+
       local_router.navigate(['/produto-list']);
-  
+
     } // OnSaveSuccess_CallBackFunction
 
     // funcao executada quando ha erro
@@ -285,7 +286,7 @@ export class ProdutoDetComponent implements OnInit {
          ,enableHtml: true
          ,positionClass: 'toast-top-center'
       });
-      
+
     } // OnSaveError_CallBackFunction
 
     //console.log("this.produto=" + JSON.stringify(this.produto));
@@ -314,9 +315,9 @@ export class ProdutoDetComponent implements OnInit {
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
-              
+
             }); // subscribe
-          
+
         } // if
         else if (this.mode == "E") {
 
@@ -324,7 +325,7 @@ export class ProdutoDetComponent implements OnInit {
 
           this.produtoApiService.editarProduto(this.produto, this.id)
             .subscribe( {
-              
+
               next: response => {},
 
               error: error => {
@@ -335,7 +336,7 @@ export class ProdutoDetComponent implements OnInit {
               complete() {
                 OnSaveSuccess_CallBackFunction();
               }
-    
+
             }); // subscribe
 
         } // else if

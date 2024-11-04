@@ -42,62 +42,69 @@ ng-click="setActive('produto-entrada')" ng-class="{ 'active': activeTab === 'pro
 ng-click="setActive('produto-saida')" ng-class="{ 'active': activeTab === 'produto-saida' }"
 ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'movimentacao-cs' }" -->
 
-<header id="Header" *ngIf="menu" class="admin-header">
-  <a routerLink="/home" class="home">
-    <div class="logo">
-      <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
-      <img src="../assets/images/logo-mm-stock.jpg" alt="Logo">
+<header id="Header" *ngIf="menu" class="admin-header" aria-label="Cabeçalho administrativo">
+  <div class="d-flex align-items-center">
+    <a routerLink="/home" class="home">
+      <div class="logo">
+        <!-- <img src="../assets/images/logo-home-small.jpg" alt="Logo"> -->
+        <img id="logo" src="../assets/images/logo-mm-stock.jpg" alt="Home de MM Stock - Sistema de Gerenciamento de Estoque" style="margin-right: 20px;">
+      </div>
+    </a>
+  
+    <nav class="admin-nav" aria-label="Menu de navegação">
+      <ul class="d-flex align-items-center">
+      <li><a routerLink="/cliente-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadCliCon')">Clientes</a></li>
+      <li><a routerLink="/fornecedor-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadFornCon')">Fornecedores</a></li>
+      <li><a routerLink="/produto-list" routerLinkActive="active" ariaCurrentWhenActive="page"[attr.disabled]="!authenticationService.CheckPrivilegio('CadProdCon')">Produtos</a></li>
+      <li><a routerLink="/usuario-list" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CadUsuCon')">Usuários</a></li>
+      <li><a routerLink="/produto-entrada" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Entrada')">Entrada de Produto</a></li>
+      <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Saida')">Saída de Produto</a></li>
+      <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CsMovEstq')">Movimentação de Estoque</a></li>
+      <li><a routerLink="/movimentacao-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnEstoque')">Análise de Estoque</a></li>
+      <li><a routerLink="/vendas-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Análise de Vendas</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="admin-actions d-flex align-items-center" style="margin-left: 20px;">
+    <toggle-highcontrast></toggle-highcontrast>
+    
+    <button mat-icon-button (click)="deslogar()" matTooltip="Sair" aria-label="Sair">
+      <mat-icon aria-hidden="true">exit_to_app</mat-icon>
+    </button>
+    
+    <button mat-icon-button routerLink="/altersenha"  matTooltip="Alterar senha" aria-label="Alterar Senha">
+      <mat-icon aria-hidden="true">settings</mat-icon>
+    </button>
+    <!-- &todo& exibicao temporaria do usuario logado, cor yellow; -->
+    <div style="color: #FFBF00; text-align: right; margin-left: 30px;"tabindex="0" aria-live="polite">
+      <span class="sr-only">Usuário logado</span> <!-- Melhorar acessibilidade com texto oculto -->
+        {{ this.authenticationService.UsuarioLogado?.login }}
     </div>
-  </a>
-  <nav class="admin-nav">
-    <ul>
-      <li><a routerLink="/cliente-list" routerLinkActive="active">Cadastro de Clientes</a></li>
-      <li><a routerLink="/fornecedor-list" routerLinkActive="active">Cadastro de Fornecedores</a></li>
-      <li><a routerLink="/produto-list" routerLinkActive="active">Cadastro de Produtos</a></li>
-
-      <li><a routerLink="/produto-entrada" routerLinkActive="active">Entrada de Produto</a></li>
-      <li><a routerLink="/produto-saida" routerLinkActive="active">Saída de Produto</a></li>
-
-      <li><a routerLink="/movimentacao-cs" routerLinkActive="active">Consulta de Movimentação do Estoque</a></li>
-    </ul>
-  </nav>
-  <div class="admin-actions">
-    <button mat-icon-button (click)="deslogar()">
-      <mat-icon>exit_to_app</mat-icon>
-    </button>
-    <button mat-icon-button routerLink="/config">
-      <mat-icon>settings</mat-icon>
-    </button>
   </div>
 </header>
 
-
 <main id="Main" role="main" class="main">
-
   <div id="ContentDiv" class="ContentDivClass">
-
-    <!--
-      as duas divsabaixo consistem no esquema para remover o flicker (piscada) da tela de login
-      quando jah estava logado e fazia um F5 na pagina aberta.
-    -->
+    <!-- Remoção de flicker da tela de login -->
     <div style="display: none" *ngIf="isServer">
-      <router-outlet (activate)="showMenu($event)"/>
+      <router-outlet (activate)="showMenu($event)"></router-outlet>
     </div>
+    
     <div id="BrowserRouterOutletDiv" *ngIf="isBrowser">
-      <router-outlet (activate)="showMenu($event)"/>
+      <router-outlet (activate)="showMenu($event)"></router-outlet>
     </div>
-      
   </div>
-
 </main>
 
-<footer id="Footer" class="footer">
-  <p class="p">&copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</p>
-  <!-- <div class="container">
-    
-    <span class="text-muted">© 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.</span>
-  </div> -->
+<footer id="Footer" class="footer" aria-label="Rodapé com informações de direitos reservados" tabindex="0">
+  <p class="p">
+    <span *ngIf="this.IsInProduction"  class="TEXTO_PROD_CSS">[ PRODUÇÃO ]</span>
+    <span *ngIf="!this.IsInProduction" class="TEXTO_DEV_CSS">[ DESENVOLVIMENTO ]</span>
+    &copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.
+  </p>
 </footer>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->

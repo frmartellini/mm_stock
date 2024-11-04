@@ -6,6 +6,8 @@ import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { ProdutoService } from '../services/produto.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthenticationService } from '../services/authentication.service';
+import Utils from '../utils';
 
 export interface produtoData{
 
@@ -22,26 +24,42 @@ let PRODUTO_DATA: produtoData[]=[];
 @Component({
   selector: 'app-produto-list',
   templateUrl: './produto-list.component.html',
-  styleUrl: './produto-list.component.css',
+  styleUrl: './produto-list.component.scss',
 
 })
+
 export class ProdutoListComponent implements OnInit {
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual','actions'];
+  public bPodeIncluir : boolean = false;
+  public bPodeEditar : boolean = false;
+  public bPodeExcluir : boolean = false;
+  // precisa ter esta declaracao public para poder chamar do template HTML
+  public GetEditarLink = Utils.GetEditarLink;
+  
+  
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
   constructor(private http: HttpClient
+              ,private authservice : AuthenticationService
               ,private produtoService: ProdutoService
               ,private toastr: ToastrService
               )
   {
-
+    // inicializar as vars
+    this.bPodeIncluir = this.authservice.CheckPrivilegio("CadProdInc");
+    //console.log("bPodeIncluir=" + this.bPodeIncluir);
+    this.bPodeEditar = this.authservice.CheckPrivilegio("CadProdEdi");
+    //console.log("bPodeEditar=" + this.bPodeEditar);
+    this.bPodeExcluir = this.authservice.CheckPrivilegio("CadProdExc");
+    //console.log("bPodeExcluir=" + this.bPodeExcluir);
   }
     
-  //Inicialização dos dados na tabela
+ //Inicialização dos dados na tabela
   ngOnInit(){
     this.fetchData();
+    //console.log("UsuarioListComponent.ngOnInit - this.authservice.UsuarioLogado=" + JSON.stringify(this.authservice.UsuarioLogado));
   }
 
    // Obtenção dos Dados da API
@@ -61,7 +79,7 @@ export class ProdutoListComponent implements OnInit {
           }
     )
   }
-
+  
   //Deletar cadastro
   excluirItem(id_produto: number) {
     if (confirm('Tem certeza que deseja excluir este produto?')) {
@@ -80,7 +98,7 @@ export class ProdutoListComponent implements OnInit {
       }); // subscribe
     } // confirm
   } // excluirItem
-
+ 
   //filtro
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -100,3 +118,4 @@ export class ProdutoListComponent implements OnInit {
   }
 
 }
+

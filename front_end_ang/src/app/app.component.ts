@@ -4,11 +4,13 @@ import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { AuthenticationService } from './services/authentication.service';
 import { LoginComponent } from './login/login.component';
 import { Router, NavigationEnd, Event } from '@angular/router';
+import { filter } from 'rxjs/internal/operators/filter';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'Controle de Estoque';
@@ -18,24 +20,22 @@ export class AppComponent implements OnInit {
   isServer: boolean;
   isBrowser: boolean;
   platformId: Object;  // Declare platformId as a property
+  IsInProduction: Boolean; // indica se o sistema estah rodando em producao (true)
 
   constructor(
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     @Inject(PLATFORM_ID) platformId: Object,
     private router: Router
   ) {
     this.platformId = platformId; // Assign the platformId to the property
     this.isServer = isPlatformServer(platformId);
     this.isBrowser = isPlatformBrowser(platformId);
+    this.IsInProduction = environment.production;
   }
 
   ngOnInit() {
     if (this.isBrowser) {
-      this.router.events.subscribe((event: any) => {
-        if (event instanceof NavigationEnd) {
-          this.updateActiveLinks();
-        }
-      });
+      this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(this.updateActiveLinks);
 
       // Ensure the active link is set on initial load
       this.updateActiveLinks();

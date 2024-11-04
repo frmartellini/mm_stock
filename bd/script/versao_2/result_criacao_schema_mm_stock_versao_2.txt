@@ -1,0 +1,160 @@
+
+-- resultado da execucao do script de criacao do schema "mm_stock" versao 2
+
+
+15:21:11	/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!50503 SET NAMES utf8 */	0 row(s) affected, 1 warning(s): 3719 'utf8' is currently an alias for the character set UTF8MB3, but will be an alias for UTF8MB4 in a future release. Please consider using UTF8MB4 in order to be unambiguous.	0.016 sec
+
+15:21:11	/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!40103 SET TIME_ZONE='+00:00' */	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */	0 row(s) affected	0.015 sec
+
+15:21:11	/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */	0 row(s) affected	0.000 sec
+
+15:21:11	DROP TABLE IF EXISTS `cliente`	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.015 sec
+
+15:21:11	CREATE TABLE `cliente` (   `id_cliente` int NOT NULL AUTO_INCREMENT,   `nome_completo` varchar(100) NOT NULL,   `telefone` varchar(20) DEFAULT NULL,   `email` varchar(100) DEFAULT NULL,   `nome_loja` varchar(100) DEFAULT NULL,   `cnpj` varchar(50) DEFAULT NULL,   `cpf` varchar(50) DEFAULT NULL,   `tipo_cliente` varchar(50) DEFAULT NULL,   `endereco` varchar(100) DEFAULT NULL,   `numero` int DEFAULT NULL,   `complemento` varchar(45) DEFAULT NULL,   `cidade` varchar(45) DEFAULT NULL,   `uf` char(2) DEFAULT NULL,   PRIMARY KEY (`id_cliente`) ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.032 sec
+
+15:21:11	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.015 sec
+
+15:21:11	LOCK TABLES `cliente` WRITE	0 row(s) affected	0.000 sec
+
+15:21:11	/*!40000 ALTER TABLE `cliente` DISABLE KEYS */	0 row(s) affected	0.000 sec
+
+15:21:11	INSERT INTO `cliente` VALUES (1,'Jorge Augusto','(19)981942563','jorgeaugusto@gmail.com','Jorge Presentes','','679.631.590-18','Pessoa Física','Rua Joao Belcastro',352,'','Bebedouro','SP'),(3,'José Carlos da Silva','(19)99785-9285','jose.silva@gmail.com','José Presentes M.E.','01.980.545/0001-09','','Pessoa Jurídica','Avenida Campos Salles',80,'-','Limeira','SP'),(9,'Diego Almeida','(19)3441-3253','diego.almeida@diegopresentes.com','Diego Presentes','153.584.796/0001-25','','Pessoa Jurídica','Rua Tiradentes',250,'','Limeira','SP'),(10,'Rosa Quintino de Oliveira','(19)3452-8351','rosaquadros@rosaquadroseretratos.com.br','Rosa Quadros e Retratos','548.943.879/0001-25','','Pessoa Jurídica','Rua Sete de Setembro',365,'','Americana','SP'),(13,'Pedro Gadelha','(19)34212152','pedro.gadelha@gmail.com','Novidades e Presentes','','556.412.400-60','Pessoa Física','Rua David Pugliese',101,'','Piracicaba','SP'),(17,'Rafaela Gomes','(31)99961-6055','sebastiana.gomes@gmail.com','Rafa Presentes','','433.656.880-48','Pessoa Física','Rua Gumercindo Araujo',30,'-','Juiz de Fora','MG'),(32,'josé das couve','19982699323','zedascouve@gmail.com','Couves do zeh','12345678000190','','Pessoa Jurídica','Rua dois',123,'quitanda da esquina','Brodowski','SP')	7 row(s) affected Records: 7  Duplicates: 0  Warnings: 0	0.031 sec
+
+15:21:11	/*!40000 ALTER TABLE `cliente` ENABLE KEYS */	0 row(s) affected	0.015 sec
+
+15:21:11	UNLOCK TABLES	0 row(s) affected	0.000 sec
+
+15:21:11	DROP TABLE IF EXISTS `config`	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.016 sec
+
+15:21:11	CREATE TABLE `config` (   `CFG01` varchar(200) NOT NULL COMMENT 'senha do usuario fixo "admin" do sistema',   PRIMARY KEY (`CFG01`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.062 sec
+
+15:21:11	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.016 sec
+
+15:21:11	LOCK TABLES `config` WRITE	0 row(s) affected	0.015 sec
+
+15:21:11	/*!40000 ALTER TABLE `config` DISABLE KEYS */	0 row(s) affected	0.000 sec
+
+15:21:11	INSERT INTO `config` VALUES ('$2b$10$eZWvhJ4bf56VVm6rpPTID.Qaug1b/GEk4ncPzV3C16imq7fjqT2LK')	1 row(s) affected	0.016 sec
+
+15:21:11	/*!40000 ALTER TABLE `config` ENABLE KEYS */	0 row(s) affected	0.031 sec
+
+15:21:11	UNLOCK TABLES	0 row(s) affected	0.000 sec
+
+15:21:11	DROP TABLE IF EXISTS `fornecedor`	0 row(s) affected	0.031 sec
+
+15:21:11	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.016 sec
+
+15:21:11	CREATE TABLE `fornecedor` (   `id_fornecedor` int NOT NULL AUTO_INCREMENT,   `nome_fornecedor` varchar(100) NOT NULL,   `nome_responsavel` varchar(100) NOT NULL,   `contato_telefonico` varchar(20) DEFAULT NULL,   `redes_sociais` varchar(255) DEFAULT NULL,   `materiais_fornecidos` text,   `cnpj` varchar(50) DEFAULT NULL,   `endereco` varchar(100) DEFAULT NULL,   `numero` int DEFAULT NULL,   `complemento` varchar(45) DEFAULT NULL,   `cidade` varchar(45) DEFAULT NULL,   `uf` char(2) DEFAULT NULL,   PRIMARY KEY (`id_fornecedor`) ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.125 sec
+
+15:21:11	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.000 sec
+
+15:21:11	LOCK TABLES `fornecedor` WRITE	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40000 ALTER TABLE `fornecedor` DISABLE KEYS */	0 row(s) affected	0.000 sec
+
+15:21:11	INSERT INTO `fornecedor` VALUES (1,'Atacado Madeiras','Carlos Eduardo','17998062529','@atmadeiras','Fornecedor de madeiras de todos os tipos de tamanho e modelos.','49276112000169','Rua Tocantins, Jardim Arapuã',614,'','Jales','SP'),(21,'Atacado Varejeiro','Roberto Araujo','12345678','overejeiro@yahoo.com.br','Caixas\nTinturas\nVerniz\nLixas','4567891313184','Rua Carlos Gomes Moreno',123,'Bazar de esquina','Campinas','SP'),(22,'F5 Brindes','Fernando Marques',NULL,NULL,'Brindes:\ncanetas\ncopos\nsqueezes\nagendas\ncalendários\nchaveiros\nbottom\nbroches\nsqueezes\ngarrafas\nlápis',NULL,NULL,NULL,NULL,'Campinas','SP')	3 row(s) affected Records: 3  Duplicates: 0  Warnings: 0	0.031 sec
+
+15:21:11	/*!40000 ALTER TABLE `fornecedor` ENABLE KEYS */	0 row(s) affected	0.016 sec
+
+15:21:11	UNLOCK TABLES	0 row(s) affected	0.015 sec
+
+15:21:11	DROP TABLE IF EXISTS `movimentacao`	0 row(s) affected	0.000 sec
+
+15:21:11	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.016 sec
+
+15:21:11	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.015 sec
+
+15:21:11	CREATE TABLE `movimentacao` (   `id_movimentacao` int NOT NULL AUTO_INCREMENT,   `data_hora` datetime NOT NULL,   `id_produto` int NOT NULL,   `tipo_mov` varchar(45) NOT NULL COMMENT 'Entrada\nSaida',   `quantidade` int NOT NULL COMMENT 'qtde de produto que entrou ou saiu do estoque',   `num_pedido` int DEFAULT NULL COMMENT 'é o número do pedido de venda para o cliente que gerou a movimentação de saída do estoque',   `id_cliente` int DEFAULT NULL COMMENT 'id do cliente que levou o produto que saiu do estoque',   `obs` text COMMENT 'texto de observacao/comentario sobre a movimentacao',   PRIMARY KEY (`id_movimentacao`),   KEY `id_produto_idx` (`id_produto`),   KEY `id_cliente_idx` (`id_cliente`),   CONSTRAINT `id_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),   CONSTRAINT `id_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`) ) ENGINE=InnoDB AUTO_INCREMENT=327 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.047 sec
+
+15:21:11	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.016 sec
+
+15:21:11	LOCK TABLES `movimentacao` WRITE	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40000 ALTER TABLE `movimentacao` DISABLE KEYS */	0 row(s) affected	0.000 sec
+
+15:21:11	INSERT INTO `movimentacao` VALUES (15,'2024-05-05 20:32:01',1,'E',4,NULL,NULL,'1231231'),(16,'2024-05-05 20:32:11',1,'E',5,NULL,NULL,'1231231'),(17,'2024-05-05 20:42:33',1,'E',4,NULL,NULL,'ggggggg'),(18,'2024-05-05 20:56:24',1,'E',4,NULL,NULL,'1231231'),(19,'2024-05-05 21:05:12',1,'E',7,1,3,'zzzz'),(20,'2024-05-05 22:52:17',1,'E',4,NULL,NULL,'xxxxxxxxxxx'),(21,'2024-05-05 22:54:51',4,'E',6,NULL,NULL,'zzzzz'),(22,'2024-05-05 23:10:35',3,'E',6,NULL,NULL,'zzzzzrtwertwer\nwertwertwe\nwetertwertwretwer'),(23,'2024-05-05 23:13:40',4,'E',6,NULL,NULL,'6666666666666'),(24,'2024-05-05 23:30:37',3,'E',2,NULL,NULL,'qweqweqweq'),(25,'2024-05-05 23:44:10',3,'E',5,NULL,NULL,'1212121'),(26,'2024-05-05 23:48:00',3,'E',5,NULL,NULL,'2323232'),(27,'2024-05-06 00:05:11',3,'E',4,NULL,NULL,'23423423'),(28,'2024-05-06 00:24:39',4,'E',5,NULL,NULL,'55555555555'),(29,'2024-05-06 17:01:55',4,'E',3,NULL,NULL,'3333333'),(30,'2024-05-06 17:06:56',1,'E',1,NULL,NULL,'ssssssssssss'),(31,'2024-05-06 17:17:05',1,'E',1,NULL,NULL,'11111'),(32,'2024-05-06 17:23:25',3,'E',1,NULL,NULL,'11111'),(33,'2024-05-06 17:29:45',3,'E',5,NULL,NULL,'asdasdasdas'),(34,'2024-05-06 18:29:36',1,'E',3,NULL,NULL,NULL),(35,'2024-05-06 18:39:10',1,'E',3,NULL,NULL,'12'),(36,'2024-05-06 18:43:47',1,'E',1,NULL,NULL,'111111111'),(37,'2024-05-06 19:01:43',3,'E',1,NULL,NULL,'111'),(38,'2024-05-06 20:50:39',3,'E',5,NULL,NULL,NULL),(39,'2024-05-06 23:17:39',3,'S',1,NULL,3,'111111111111111'),(40,'2024-05-06 23:21:49',4,'S',2,123,3,'sdfgsdfgsfd'),(41,'2024-05-06 23:22:17',1,'S',5,78,1,'zzzzzzzzzzzzzzz'),(42,'2005-06-24 23:23:00',1,'E',100,1010,1,'Recebimento de mercadoria'),(43,'2005-06-24 23:23:00',1,'E',100,1010,1,'Recebimento de mercadoria'),(44,'2005-06-24 23:23:00',1,'S',100,1010,1,'Recebimento de mercadoria'),(45,'2024-05-07 11:18:55',3,'S',1,43,3,'vvvvvvvvvvvvvvvv'),(46,'2024-05-07 11:19:21',4,'S',4,NULL,1,NULL),(47,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(48,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(49,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(50,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(51,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(52,'2005-06-24 23:23:00',1,'S',304,1010,1,'Recebimento de mercadoria'),(53,'2005-06-24 23:23:00',1,'S',304,1010,1,'que situação hein'),(54,'2005-06-24 23:23:00',1,'S',304,1010,1,'pequenas coisas da vida'),(55,'2005-06-24 23:23:00',1,'S',304,1010,1,'a vida é dura'),(56,'2005-06-24 23:23:00',1,'S',304,1010,1,'a vida é breve'),(57,'2005-06-24 23:23:00',1,'S',304,1010,1,'a vida é bela, as vezes'),(58,'2005-06-24 23:23:00',1,'S',304,1010,1,'a vida as vezes...'),(59,'2005-06-24 23:23:00',1,'S',303,1010,1,'poisé poisé...'),(60,'2005-07-24 18:23:00',1,'E',10,1010,1,'último teste'),(61,'2005-07-24 18:23:00',1,'E',10,1010,NULL,'último teste'),(62,'2024-05-09 23:44:34',1,'E',2,NULL,NULL,'entrada de 10 porta retratos verdes'),(63,'2024-05-10 22:05:28',1,'E',2,NULL,NULL,'Novos portas retratos entrando'),(64,'2024-05-10 22:07:05',1,'E',3,NULL,NULL,'mais porta retratos chegando!'),(66,'2024-05-10 22:21:53',1,'E',9,NULL,NULL,'muitos porta retratos!'),(68,'2024-05-11 00:30:26',3,'E',1,NULL,NULL,'teste'),(69,'2024-05-11 10:35:54',15,'E',1,NULL,NULL,'aasdasdas'),(70,'2024-05-11 10:37:57',4,'E',1,NULL,NULL,NULL),(71,'2024-05-11 10:38:08',5,'E',2,NULL,NULL,NULL),(73,'2024-05-12 16:21:12',1,'E',2,NULL,NULL,NULL),(74,'2024-05-13 21:10:38',1,'E',1,NULL,NULL,'mais um!'),(75,'2024-05-15 08:18:53',3,'E',2,NULL,NULL,'este produto é retorno ao estoque'),(76,'2024-05-15 08:19:19',3,'S',1,5,1,NULL),(77,'2024-05-15 08:19:51',22,'S',1,1,9,NULL),(78,'2024-05-15 12:39:46',28,'S',2,1520,9,'Venda feita através da internet Mercado Livre.'),(79,'2024-05-16 11:29:48',3,'E',4,NULL,NULL,NULL),(80,'2024-05-16 11:31:16',4,'E',4,NULL,NULL,NULL),(81,'2024-05-16 11:33:26',5,'E',1,NULL,NULL,NULL),(82,'2024-05-16 11:36:28',4,'E',1,NULL,NULL,NULL),(83,'2024-05-16 11:40:10',4,'E',1,NULL,NULL,NULL),(84,'2024-05-16 11:44:29',1,'S',1,NULL,9,NULL),(85,'2024-05-16 1...	273 row(s) affected Records: 273  Duplicates: 0  Warnings: 0	0.031 sec
+
+15:21:11	/*!40000 ALTER TABLE `movimentacao` ENABLE KEYS */	0 row(s) affected	0.016 sec
+
+15:21:11	UNLOCK TABLES	0 row(s) affected	0.000 sec
+
+15:21:11	DROP TABLE IF EXISTS `produto`	0 row(s) affected	0.016 sec
+
+15:21:11	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.000 sec
+
+15:21:11	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.000 sec
+
+15:21:11	CREATE TABLE `produto` (   `id_produto` int NOT NULL AUTO_INCREMENT,   `descricao` varchar(80) NOT NULL,   `cor` varchar(50) NOT NULL,   `tamanho` varchar(50) NOT NULL,   `tipo_material` varchar(50) NOT NULL,   `preco_venda` decimal(10,2) NOT NULL,   `quantidade_atual` int NOT NULL,   PRIMARY KEY (`id_produto`) ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.047 sec
+
+15:21:12	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.016 sec
+
+15:21:12	LOCK TABLES `produto` WRITE	0 row(s) affected	0.015 sec
+
+15:21:12	/*!40000 ALTER TABLE `produto` DISABLE KEYS */	0 row(s) affected	0.000 sec
+
+15:21:12	INSERT INTO `produto` VALUES (1,'Porta Retrato 10x15 Amarelo em Madeira','Amarelo','10x15','Madeira',4.50,51),(3,'Porta Retrato 10x15 Bege em Madeira','Bege','10x15','Madeira',4.10,119),(4,'Porta Retrato 10x15 Prata em Madeira','Prata','10x15','Madeira',4.20,54),(5,'Porta Retrato 10x15 Dourado em Madeira','Dourado','10x15','Madeira',4.90,599),(15,'Porta Retrato 10x15 Preto em Madeira','Preto','10x15','Madeira',4.50,6),(19,'Porta Retrato 15x21 Amarelo em Madeira','Amarelo','15x21','Madeira',5.20,150),(21,'Porta Retrato 15x21 Bege em Madeira','Bege','15x21','Madeira',5.20,31),(22,'Porta Retrato 15x21 Prata em Madeira','Prata','15x21','Madeira',5.60,50),(23,'Porta Retrato 15x21 Dourado em Madeira','Dourado','15x21','Madeira',5.60,30),(27,'Porta Retrato 20x30 Amarelo em Madeira','Amarelo','20x30','Madeira',7.50,111),(28,'Porta Retrato 20x30 Bege em Madeira','Bege','20x30','Madeira',7.20,130),(29,'Porta Retrato 20x30 Prata em Madeira','Prata','20x30','Madeira',7.50,120),(30,'Porta Retrato 20x30 Dourado em Madeira','Dourado','20x30','Madeira',7.60,200),(31,'Porta Retrato 20x30 Preto em Madeira','Preto','20x30','Madeira',7.80,320),(32,'Porta Retrato 20x25 Amarelo em Madeira','Amarelo','20x25','Madeira',5.50,100),(33,'Porta Retrato 20x25 Bege em Madeira','Bege','20x25','Madeira',5.60,150),(34,'Porta Retrato 20x25 Prata em Madeira','Prata','20x25','Madeira',5.10,20),(35,'Porta Retrato 20x25 Dourado em Madeira','Dourado','20x25','Madeira',5.30,63),(36,'Porta Retrato 20x25 Preto em Madeira','Preto','20x25','Madeira',5.90,515),(40,'Teste','Teste','1x1','Couro',5.00,2),(44,'Calendário Molduvidro Machado','Bege','1x1','Couro',5.00,10)	21 row(s) affected Records: 21  Duplicates: 0  Warnings: 0	0.016 sec
+
+15:21:12	/*!40000 ALTER TABLE `produto` ENABLE KEYS */	0 row(s) affected	0.016 sec
+
+15:21:12	UNLOCK TABLES	0 row(s) affected	0.000 sec
+
+15:21:12	DROP TABLE IF EXISTS `usuario`	0 row(s) affected	0.015 sec
+
+15:21:12	/*!40101 SET @saved_cs_client     = @@character_set_client */	0 row(s) affected	0.016 sec
+
+15:21:12	/*!50503 SET character_set_client = utf8mb4 */	0 row(s) affected	0.000 sec
+
+15:21:12	CREATE TABLE `usuario` (   `id_usuario` int NOT NULL AUTO_INCREMENT,   `login` varchar(45) NOT NULL,   `nome` varchar(100) NOT NULL,   `senha` varchar(100) NOT NULL,   `privilegios` varchar(100) DEFAULT NULL COMMENT 'Este campo guarda uma string e cada posição da string representa um privilégio do sistema e pode ser 0 ou 1, sendo que 0 indica que o usuário não possui o privilégio e 1 indica que o usuário possui o privilégio. Exemplo deste campo: 11001010111000\nA lista de privilégios com o número da posição de cada privilégio deve ser consultada no arquivo USUARIO.ts do front-end.',   PRIMARY KEY (`id_usuario`) ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci	0 row(s) affected	0.062 sec
+
+15:21:12	/*!40101 SET character_set_client = @saved_cs_client */	0 row(s) affected, 1 warning(s): 1287 'utf8mb3' is deprecated and will be removed in a future release. Please use utf8mb4 instead	0.000 sec
+
+15:21:12	LOCK TABLES `usuario` WRITE	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40000 ALTER TABLE `usuario` DISABLE KEYS */	0 row(s) affected	0.016 sec
+
+15:21:12	INSERT INTO `usuario` VALUES (4,'Admin','Administrador do Sistema','$2b$10$RjP7s.3X7p17SxGVvHy/5u0Pn8c2vTZ047QuufAy.5aMsKIDcl67u','111111111111111111111'),(5,'testando','Testando','$2b$10$tQXd3z67NdbAZG/zKZfDFuDiKAICrbjaanfouI35/.SFR9fmYmgbi','1110000000001010001'),(6,'zeh','zehhhh','$2b$10$8WbvYl64PJcXPO8U7Aasl.IQq1X7AIo17LYM1aKnmT.fEyLGrECEi','111111111111111111111'),(14,'pedro','pedro da silva','$2b$10$kyAsGrCl6CA65mW9qWr6luJl3nhvnHhtDEnlFylfQIkn5SQtDgs/q','000000000000000000000'),(15,'zeh2','zeh2','$2b$10$1sSPWrrtM8dzGXcfItP1r.WStx21NB4SjTbWz8G7oIeFVglUZVZCy','1000000000000000000'),(18,'erik','erik','$2b$10$es5BOWoi3YTpGBrxa9pYeumRk3rBFs89vD.RHceVDn31kf5W6.BpG','1111111111111111111'),(19,'betzabel','betzabel','$2b$10$N5/1lsHNYP6jnciVF5hgHePn1prLYHEfVBB5Qol4pMLEsSfvW/Cpu','1111111111111000111'),(20,'Danilo','Danilo Nunes','$2b$10$Orw5en0/rdWrOEIU/kSwV.JBiQpYFP4zgGL.hur1a5Crt93IWzaCK','111111111111111111111'),(21,'Antedeguemon','Antedeguemon Deftones da Silva','$2b$10$M6v37ktAnZwfEmAkYzeFLe.2LBDoob.wPlwm983BmzWm4hysLoQTa','1111111111110001111'),(26,'semnada','semnada','$2b$10$0VwGyudbpkYvjU7egNvHnup02eCKssar.8KDG8cIKQARGtx.2w7nm','000000000000000000000'),(27,'soconsulta','soconsulta','$2b$10$sPiPYs7a1xC8OJN6MGNktOBlgH5Gvh/C4GNK0/mIv2lbOxrvxPSaC','100010001000001100011'),(28,'inclusao','inclusao','$2b$10$AK3b1fMDzcGkqvreMfBmCO7NxdP8ud4H4WjH9FBYGXRSZFGT493YW','110011001100111110011'),(29,'edicao','edicao','$2b$10$fhlnRaBI1jaDpaTnx5xp5.vaP27qScBVOuW3fjMazYt72qZ..e/T2','111011101110111111011')	13 row(s) affected Records: 13  Duplicates: 0  Warnings: 0	0.015 sec
+
+15:21:12	/*!40000 ALTER TABLE `usuario` ENABLE KEYS */	0 row(s) affected	0.016 sec
+
+15:21:12	UNLOCK TABLES	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */	0 row(s) affected	0.016 sec
+
+15:21:12	/*!40101 SET SQL_MODE=@OLD_SQL_MODE */	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */	0 row(s) affected	0.015 sec
+
+15:21:12	/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */	0 row(s) affected	0.000 sec
+
+15:21:12	/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */	0 row(s) affected	0.016 sec
+

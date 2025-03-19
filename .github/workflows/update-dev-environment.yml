@@ -12,4 +12,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script_path: /home/debian/scripts/update-dev-environment.sh
+          script: |
+            cd /home/debian/mm_stock_dev
+            git checkout develop
+            git pull
+            pm2 restart back-dev
+            echo "O script foi executado com sucesso!"

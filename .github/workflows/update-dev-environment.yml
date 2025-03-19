@@ -1,15 +1,15 @@
-name: remote ssh command
+name: Update Dev Environment
 on: [push]
 jobs:
-  build:
-    name: Build
+  update-dev-environment:
+    name: Update Dev Environment
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using password
+      - name: Executa script de atualização do ambiente de desenvolvimento
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: uname -a
+          script_path: /home/debian/scripts/update-dev-environment.sh

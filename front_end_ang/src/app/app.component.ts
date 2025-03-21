@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   isBrowser: boolean;
   platformId: Object;  // Declare platformId as a property
   IsInProduction: Boolean; // indica se o sistema estah rodando em producao (true)
+  currentYear: number; // Ano corrente no footer da pagina
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
     this.isServer = isPlatformServer(platformId);
     this.isBrowser = isPlatformBrowser(platformId);
     this.IsInProduction = environment.production;
+    this.currentYear = new Date().getFullYear();
   }
 
   ngOnInit() {

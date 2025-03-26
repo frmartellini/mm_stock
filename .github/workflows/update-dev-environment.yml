@@ -1,0 +1,21 @@
+name: Update Dev Environment
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+jobs:
+  update-dev-environment:
+    name: Update Dev Environment
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Executa script de atualização do ambiente de desenvolvimento
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: /home/debian/scripts/update-dev-environment.sh

@@ -7,6 +7,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common'
 import { CookieService } from 'ngx-cookie-service';
 import Utils from '../utils';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-vendas-graf',
@@ -15,7 +17,7 @@ import Utils from '../utils';
 })
 
 export class VendasGrafComponent implements OnInit {
-  
+
   data: any; // dados para o chart
 
   options: any; // opcoes e configuracoes do chart
@@ -26,6 +28,11 @@ export class VendasGrafComponent implements OnInit {
   // vai conter uma string com o mes em cada posicao e o formato eh YYYY/MM
   // eh usado na montagem do grafico para achar a posicao do ponto do grafico mais facilmente a partir do mes retornado do BD
   graf_labels_internal_array : string[] = [];
+
+  // Array para a tabela
+  displayedColumns: string[] = ['mes', 'valor'];
+  tabelaVendas = new MatTableDataSource<any>([]);  // Inicializa com um array vazio
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -50,7 +57,7 @@ export class VendasGrafComponent implements OnInit {
               ,private cookieService: CookieService
               )
   {
-    
+
   }
 
   ngOnInit() {
@@ -58,7 +65,7 @@ export class VendasGrafComponent implements OnInit {
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-    
+
     // obter as datas dos cookies
     this.dhinicio_str = this.cookieService.get('vendas-graf-dhinicio');
     this.dhfim_str = this.cookieService.get('vendas-graf-dhfim');
@@ -147,7 +154,7 @@ export class VendasGrafComponent implements OnInit {
     }; // this.options
 
     this.fetchData();
-  
+
   } // ngOnInit
 
   fetchData(): void {
@@ -187,7 +194,7 @@ export class VendasGrafComponent implements OnInit {
     //var qtde_months = (dini.getFullYear()*12 + dfim.getMonth()) - (dini.getFullYear()*12 + dini.getMonth());
     var qtde_months = Math.round(dfim.diff(dini, 'months', true));
     //console.log("qtde_months=" + qtde_months);
-    
+
     // limpar o array dos labels do eixo X
     this.data.labels = [] ;
     // limpar os arrays que contem os valores das duas series de dados
@@ -219,12 +226,25 @@ export class VendasGrafComponent implements OnInit {
 
       // passar pelos registros obtidos do BD
       for (let i = 0; i < this.graf_data.length; i++) {
-        
+
         // obter o indice do mes do registro no grafico
         char_x_idx = this.graf_labels_internal_array.indexOf(this.graf_data[i].mes);
 
         this.data.datasets[0].data[char_x_idx] = this.graf_data[i].valor_total;
-        
+
+        const tabelaData = this.data.labels.map((mes: string, index: number) => ({
+          mes: mes,
+          valor: this.data.datasets[0].data[index]
+        }));
+
+        // Atribuir os dados à tabela
+        this.tabelaVendas.data = tabelaData;
+
+        // Depois de atualizar os dados, conecta o paginator
+        if (this.paginator) {
+          this.tabelaVendas.paginator = this.paginator;
+        }
+
       } // for
 
       // atualizar o grafico
@@ -232,6 +252,16 @@ export class VendasGrafComponent implements OnInit {
 
     } // if
   } // MontarGrafico
+
+  exportToCSV() {
+    const csvData = this.tabelaVendas.data.map(item => `${item.mes}\t${item.valor}`).join('\n');
+    const currentDateTime = moment().format('YYYY-MM-DD-HH-mm-ss');
+    const blob = new Blob([csvData], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `graf-mov-${currentDateTime}.txt`;
+    link.click();
+  }
 
   // atualizar as vars do tipo Date e string que sao usados no filtro por periodo
   Update_vars_dh_filtro() {
@@ -275,7 +305,7 @@ export class VendasGrafComponent implements OnInit {
       alert("A Data Inicial deve ser o primeiro dia do mês.");
       return;
     }
-    
+
     // a data final deve ser o ultimo dia do mes
     const endOfEndMonthStr = moment(this.val_dhfim_picker).endOf('month').format('YYYY-MM-DD');
     //console.log("endOfEndMonthStr=" + endOfEndMonthStr);

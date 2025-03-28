@@ -19,3 +19,40 @@
 <div class="card" role="img" aria-label="Este gráfico exibe a movimentação de entrada e saída de produtos no estoque ao longo do período selecionado. Use as setas para explorar os dados." tabindex="0">
   <p-chart #chart type="bar" [data]="data" [options]="options" />
 </div>
+
+
+<!-- Tabela de movimentação do estoque -->
+<div class="card">
+  <h3 style="text-align: center;">Tabela de Movimentação do Estoque</h3>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Coluna Mês -->
+    <ng-container matColumnDef="mes">
+      <th mat-header-cell *matHeaderCellDef> Mês </th>
+      <td mat-cell *matCellDef="let element"> {{ element.mes }} </td>
+    </ng-container>
+
+    <!-- Coluna Entrada -->
+    <ng-container matColumnDef="entrada">
+      <th mat-header-cell *matHeaderCellDef> Qtde Entrada </th>
+      <td mat-cell *matCellDef="let element"> {{ element.entrada }} </td>
+    </ng-container>
+
+    <!-- Coluna Saída -->
+    <ng-container matColumnDef="saida">
+      <th mat-header-cell *matHeaderCellDef> Qtde Saída </th>
+      <td mat-cell *matCellDef="let element"> {{ element.saida }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Paginação da tabela de movimentação"></mat-paginator>
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+  <button mat-raised-button color="primary" (click)="exportToCSV()">
+    Exportar para CSV
+  </button>
+</div>

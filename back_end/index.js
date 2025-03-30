@@ -188,9 +188,9 @@ app.get('/produto/tipos_material', (req, res) => {
 
 /* Create a new post */
 app.post('/produto/create', (req, res) => {
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual) VALUES (?, ?, ?, ?, ?, ?)`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual];
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao } = req.body;
+  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao];
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Erro criando produto: ' + err);
@@ -228,9 +228,9 @@ app.get('/produto/:id', (req, res) => {
 /* Update a post */
 app.put('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ? WHERE id_produto = ?`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, produtoId];
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao } = req.body;
+  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ? WHERE id_produto = ?`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, produtoId, localizacao];
 
   db.query(query, values, err => {
     if (err) {

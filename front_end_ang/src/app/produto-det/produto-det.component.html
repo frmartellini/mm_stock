@@ -94,6 +94,12 @@
              matInput min="0" step="1" pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required aria-required="true" />
     </mat-form-field>
 
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label for="Cad_Produto_Localizacao">Localização</mat-label>
+      <input matInput type="text" id="Cad_Produto_Localizacao" name="Cad_Produto_Localizacao" formControlName="Cad_Produto_Localizacao"
+             [(ngModel)]="produto.localizacao"/>
+    </mat-form-field>
+
     <div class="form-group">
       <button #SubmitButton type="submit" mat-raised-button color="primary" *ngIf="!IsInViewMode()" [disabled]="!produto_form.valid"
               id="SubmitButton" name="SubmitButton">

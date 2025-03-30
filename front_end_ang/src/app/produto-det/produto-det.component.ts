@@ -70,6 +70,7 @@ export class ProdutoDetComponent implements OnInit {
         ,Cad_Produto_Tipo_Material: ['', Validators.required]
         ,Cad_Produto_Preco_Venda: ['', Validators.required]
         ,Cad_Produto_Quantidade_Atual: ['', Validators.required]
+        ,Cad_Produto_Localizacao: ['']
       }
     ); // this.formBuilder.group
 
@@ -122,6 +123,7 @@ export class ProdutoDetComponent implements OnInit {
       this.produto_form.get("Cad_Produto_Tipo_Material")?.disable();
       this.produto_form.get("Cad_Produto_Preco_Venda")?.disable();
       this.produto_form.get("Cad_Produto_Quantidade_Atual")?.disable();
+      this.produto_form.get("Cad_Produto_Localizacao")?.disable();
 
       this.PageTitle = "Visualizando produto";
     }

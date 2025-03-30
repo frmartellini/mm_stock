@@ -6,4 +6,5 @@ export interface PRODUTO {
   tipo_material: string;
   preco_venda: number;
   quantidade_atual: number;
+  localizacao: string | null | undefined;
 }

@@ -18,6 +18,7 @@ export interface produtoData{
   tipo_material: string;
   preco_venda: number;
   quantidade_atual: number;
+  localizacao: string | null | undefined;
 }
 
 let PRODUTO_DATA: produtoData[]=[];
@@ -30,7 +31,7 @@ let PRODUTO_DATA: produtoData[]=[];
 
 export class ProdutoListComponent implements OnInit {
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
-  public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual','actions'];
+  public displayColumn: string[] = ['id_produto','descricao','cor','tamanho','tipo_material','preco_venda','quantidade_atual', 'localizacao', 'actions'];
   public bPodeIncluir : boolean = false;
   public bPodeEditar : boolean = false;
   public bPodeExcluir : boolean = false;

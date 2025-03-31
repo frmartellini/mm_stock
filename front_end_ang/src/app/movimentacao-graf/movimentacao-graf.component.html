@@ -22,26 +22,26 @@
 
 
 <!-- Tabela de movimentação do estoque -->
-<div class="card">
-  <h2 style="text-align: center;" aria-label="Tabela de movimentações do estoque">Tabela de Movimentação do Estoque</h2>
+<div class="card table-container" style="text-align: start; margin-top: 20px;" >
+  <h2 style="text-align: start;" aria-label="Tabela de movimentações do estoque">Tabela de Movimentação do Estoque</h2>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- Coluna Mês -->
     <ng-container matColumnDef="mes">
-      <th mat-header-cell *matHeaderCellDef aria-label="Mês da movimentação"> Mês </th>
-      <td mat-cell *matCellDef="let element" [attr.aria-label]="'Mês da movimentação' + element.mes"> {{ element.mes }} </td>
+      <th mat-header-cell *matHeaderCellDef class="center-text border-right" aria-label="Mês da movimentação"> Mês </th>
+      <td mat-cell *matCellDef="let element" class="right-text border-right" [attr.aria-label]="'Mês da movimentação' + element.mes"> {{ element.mes }} </td>
     </ng-container>
 
     <!-- Coluna Entrada -->
     <ng-container matColumnDef="entrada">
-      <th mat-header-cell *matHeaderCellDef aria-label="Quantidade que entrou"> Qtde Entrada </th>
-      <td mat-cell *matCellDef="let element"  [attr.aria-label]="'Quantidade que entrou' + element.entrada"> {{ element.entrada }} </td>
+      <th mat-header-cell *matHeaderCellDef class="center-text border-right" aria-label="Quantidade que entrou"> Qtde Entrada </th>
+      <td mat-cell *matCellDef="let element" class="right-text border-right" [attr.aria-label]="'Quantidade que entrou' + element.entrada"> {{ element.entrada }} </td>
     </ng-container>
 
     <!-- Coluna Saída -->
     <ng-container matColumnDef="saida">
-      <th mat-header-cell *matHeaderCellDef aria-label="Quantidade que saiu"> Qtde Saída </th>
-      <td mat-cell *matCellDef="let element" [attr.aria-label]="'Quantidade que saiu' + element.saida"> {{ element.saida }} </td>
+      <th mat-header-cell *matHeaderCellDef class="center-text" aria-label="Quantidade que saiu"> Qtde Saída </th>
+      <td mat-cell *matCellDef="let element" class="right-text" [attr.aria-label]="'Quantidade que saiu' + element.saida"> {{ element.saida }} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -51,7 +51,7 @@
   <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Paginação da tabela de movimentação"></mat-paginator>
 </div>
 
-<div style="text-align: center; margin-top: 20px;">
+<div style="text-align: start; margin-top: 20px;">
   <button mat-raised-button color="primary" aria-label="Exportar para CSV" (click)="exportToCSV()">
     Exportar para CSV
   </button>

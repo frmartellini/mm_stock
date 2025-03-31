@@ -324,31 +324,36 @@ export class MovimentacaoGrafComponent implements OnInit {
   } // MontarGrafico
 
    //exportar a tabela para csv
-  exportToCSV() {
+   exportToCSV() {
     if (!this.tableData.length) {
-       return;
+      return;
     }
 
-  // Define o nome do arquivo com data e hora
+    // Define o nome do arquivo com data e hora
     const now = new Date();
-    const fileName = `graf-mov-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}.txt`;
+    const fileName = `movimentacao-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}.txt`;
 
     // Cabeçalho da tabela
     const headers = ['Mês', 'Qtde Entrada', 'Qtde Saída'];
 
-    // Converte os dados em linhas separadas por TAB
+    // Converte os dados em linhas separadas por TAB e com quebras de linha CRLF
     const csvContent = [
-      headers.join('\t'),  // Linha do cabeçalho
-      ...this.tableData.map(row => `${row.mes}\t${row.entrada}\t${row.saida}`)  // Dados da tabela
-    ].join('\n');
+      headers.join('\t'), // Linha do cabeçalho
+      ...this.tableData.map(row => `${row.mes}\t${row.entrada}\t${row.saida}`) // Dados da tabela
+    ].join('\r\n');
 
-    // Cria um Blob e força o download
-    const blob = new Blob([csvContent], { type: 'text/plain' });
+    // Criando um Blob com encoding Windows-1252
+    const encoder = new TextEncoder();
+    const win1252Content = encoder.encode(csvContent);
+    const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
+
+    // Criando link para download
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
   }
+
 
   // atualizar as vars do tipo Date e string que sao usados no filtro por periodo
   Update_vars_dh_filtro() {

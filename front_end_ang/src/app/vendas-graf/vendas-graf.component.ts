@@ -254,14 +254,44 @@ export class VendasGrafComponent implements OnInit {
   } // MontarGrafico
 
   exportToCSV() {
-    const csvData = this.tabelaVendas.data.map(item => `${item.mes}\t${item.valor}`).join('\n');
-    const currentDateTime = moment().format('YYYY-MM-DD-HH-mm-ss');
-    const blob = new Blob([csvData], { type: 'text/plain' });
-    const link = document.createElement('a');
+    if (!this.data || !this.data.labels || !this.data.datasets[0].data) {
+      alert("Nenhum dado disponível para exportação.");
+      return;
+    }
+
+    // Construir o conteúdo do arquivo
+    let csvContent = "Mês\tVendas (R$)\r\n"; // Cabeçalho com TAB e CRLF
+    for (let i = 0; i < this.data.labels.length; i++) {
+      const mes = this.data.labels[i]; // Mês
+      const vendas = this.data.datasets[0].data[i] || 0; // Valor da venda
+      csvContent += `${mes}\t${vendas}\r\n`; // CRLF no final de cada linha
+    }
+
+    // Criar o nome do arquivo no formato graf-mov-aaaa-mm-dd-hh-nn-ss.txt
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[-T:]/g, "").split(".")[0]; // yyyyMMddHHmmss
+    const fileName = `graf-mov-${timestamp}.txt`;
+
+    // Criar um Blob com encoding ANSI (Windows-1252)
+    const encoder = new TextEncoder();
+    const utf8Bytes = encoder.encode(csvContent);
+    const win1252Content = new Uint8Array(utf8Bytes.length);
+
+    for (let i = 0; i < utf8Bytes.length; i++) {
+      win1252Content[i] = utf8Bytes[i] < 128 ? utf8Bytes[i] : 63; // Substitui caracteres não suportados por '?'
+    }
+
+    const blob = new Blob([win1252Content], { type: "text/plain;charset=windows-1252" });
+
+    // Criar link para download
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `graf-mov-${currentDateTime}.txt`;
+    link.download = fileName;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   }
+
 
   // atualizar as vars do tipo Date e string que sao usados no filtro por periodo
   Update_vars_dh_filtro() {

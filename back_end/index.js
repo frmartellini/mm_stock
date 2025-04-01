@@ -246,7 +246,7 @@ app.put('/produto/:id', upload.single("foto"), (req, res) => {
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
   const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ?, foto = ? WHERE id_produto = ?`;
   const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto ?? req.file?.buffer, produtoId];
-  console.log(values)
+  
   db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"

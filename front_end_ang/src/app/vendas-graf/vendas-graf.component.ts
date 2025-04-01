@@ -7,8 +7,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common'
 import { CookieService } from 'ngx-cookie-service';
 import Utils from '../utils';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import * as iconv from 'iconv-lite';
 
 @Component({
   selector: 'app-vendas-graf',
@@ -32,7 +32,6 @@ export class VendasGrafComponent implements OnInit {
   // Array para a tabela
   displayedColumns: string[] = ['mes', 'valor'];
   tabelaVendas = new MatTableDataSource<any>([]);  // Inicializa com um array vazio
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -240,10 +239,7 @@ export class VendasGrafComponent implements OnInit {
         // Atribuir os dados à tabela
         this.tabelaVendas.data = tabelaData;
 
-        // Depois de atualizar os dados, conecta o paginator
-        if (this.paginator) {
-          this.tabelaVendas.paginator = this.paginator;
-        }
+
 
       } // for
 
@@ -270,18 +266,12 @@ export class VendasGrafComponent implements OnInit {
     // Criar o nome do arquivo no formato graf-mov-aaaa-mm-dd-hh-nn-ss.txt
     const now = new Date();
     const timestamp = now.toISOString().replace(/[-T:]/g, "").split(".")[0]; // yyyyMMddHHmmss
-    const fileName = `graf-mov-${timestamp}.txt`;
+    const fileName = `vendas-${timestamp}.txt`;
 
-    // Criar um Blob com encoding ANSI (Windows-1252)
-    const encoder = new TextEncoder();
-    const utf8Bytes = encoder.encode(csvContent);
-    const win1252Content = new Uint8Array(utf8Bytes.length);
+    const win1252Content = iconv.encode(csvContent, 'win1252');
 
-    for (let i = 0; i < utf8Bytes.length; i++) {
-      win1252Content[i] = utf8Bytes[i] < 128 ? utf8Bytes[i] : 63; // Substitui caracteres não suportados por '?'
-    }
-
-    const blob = new Blob([win1252Content], { type: "text/plain;charset=windows-1252" });
+    // Criando um Blob com encoding Windows-1252
+    const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
 
     // Criar link para download
     const link = document.createElement("a");

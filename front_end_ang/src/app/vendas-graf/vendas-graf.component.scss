@@ -3,10 +3,9 @@
   width: 400px;
   max-width: 400px;
   margin-left: 0; /* Alinha à esquerda */
-  overflow-x: auto; /* Adiciona rolagem horizontal caso necessário */
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinha conteúdo à esquerda */
+
 }
 
 /* Ajusta a tabela dentro da div */

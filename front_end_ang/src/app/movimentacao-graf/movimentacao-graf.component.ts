@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common'
 import { CookieService } from 'ngx-cookie-service';
 import Utils from '../utils';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import * as iconv from 'iconv-lite';
 
 
 @Component({
@@ -47,7 +47,6 @@ export class MovimentacaoGrafComponent implements OnInit {
   displayedColumns: string[] = ['mes', 'entrada', 'saida'];
   dataSource = new MatTableDataSource<{ mes: string, entrada: number, saida: number }>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   @ViewChild('chart') chart: any;
 
@@ -213,11 +212,6 @@ export class MovimentacaoGrafComponent implements OnInit {
 
   } // ngOnInit
 
-  //Iniciando Páginador
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
 
   fetchData(): void {
 
@@ -316,9 +310,6 @@ export class MovimentacaoGrafComponent implements OnInit {
 
     this.dataSource.data = this.tableData;
 
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
 
 
   } // MontarGrafico
@@ -342,10 +333,11 @@ export class MovimentacaoGrafComponent implements OnInit {
       ...this.tableData.map(row => `${row.mes}\t${row.entrada}\t${row.saida}`) // Dados da tabela
     ].join('\r\n');
 
-    // Criando um Blob com encoding Windows-1252
-    const encoder = new TextEncoder();
-    const win1252Content = encoder.encode(csvContent);
-    const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
+  // Converte para Windows-1252 usando iconv-lite
+  const win1252Content = iconv.encode(csvContent, 'win1252');
+
+  // Criando um Blob com encoding Windows-1252
+  const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
 
     // Criando link para download
     const link = document.createElement('a');

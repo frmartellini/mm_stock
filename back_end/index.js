@@ -6,6 +6,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
   
 const app = express();
 var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
@@ -120,6 +121,20 @@ db.on('release', function (connection) {
 /* Middleware */
 app.use(bodyParser.json());
 app.use(cors());
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB in bytes
+  fileFilter: (_, file, cb) => {
+    if (file.mimetype.startsWith('image/png') || file.mimetype.startsWith('image/jpeg')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas imagens são suportadas'), false);
+    }
+  }
+});
+
+const produtoResponse = row => ({...row, foto: !!row.foto? `data:image/png;base64,${row.foto.toString('base64')}` : null})
   
 /*
 // fechar a conexao com o mysql (deve ser usado apenas para testes)
@@ -145,7 +160,7 @@ app.get('/produto', (req, res) => {
       res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;
     }
-    res.json(results);
+    res.json(results.map(produtoResponse));
   });
   console.log('get /produto executado. Produtos retornados com sucesso!');
 });
@@ -187,10 +202,10 @@ app.get('/produto/tipos_material', (req, res) => {
 });
 
 /* Create a new post */
-app.post('/produto/create', (req, res) => {
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao } = req.body;
-  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao];
+app.post('/produto/create', upload.single('foto'), (req, res) => {
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
+  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto ?? req.file?.buffer];
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Erro criando produto: ' + err);
@@ -202,7 +217,7 @@ app.post('/produto/create', (req, res) => {
         res.status(500).send('Erro recuperando produto criado: ' + err);
         return;
       }
-      res.status(201).json(result[0]);
+      res.status(201).json(produtoResponse(result[0]));
     });
   });
   console.log('post executado, produto criado com sucesso! ');
@@ -220,18 +235,18 @@ app.get('/produto/:id', (req, res) => {
       res.status(404).send('Produto não encontrado: ' + err);
       return;
     }
-    res.json(result[0]);
+    res.json(produtoResponse(result[0]));
   });
   console.log('get /produto/' + produtoId + ' executado. Produto retornado com sucesso!');
 });
   
 /* Update a post */
-app.put('/produto/:id', (req, res) => {
+app.put('/produto/:id', upload.single("foto"), (req, res) => {
   const produtoId = req.params.id;
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao } = req.body;
-  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ? WHERE id_produto = ?`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, produtoId, localizacao];
-
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
+  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ?, foto = ? WHERE id_produto = ?`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto ?? req.file?.buffer, produtoId];
+  console.log(values)
   db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"
@@ -246,7 +261,7 @@ app.put('/produto/:id', (req, res) => {
         res.status(500).send('Erro recuperando o produto alterado: ' + err);
         return;
       }
-      res.json(result[0]);
+      res.json(produtoResponse(result[0]));
     });
   });
   console.log('put /produto/' + produtoId + ' executado. Produto atualizado com sucesso!');
@@ -268,7 +283,6 @@ app.delete('/produto/:id', (req, res) => {
   });
   console.log('delete /produto/' + produtoId + ' executado. Produto deletado com sucesso!');
 });
-
 //
 // cliente table
 //

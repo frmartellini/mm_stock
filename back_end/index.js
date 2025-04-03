@@ -6,6 +6,8 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+const json_2_csv = require('json-2-csv');
+var iconv = require('iconv-lite');
   
 const app = express();
 var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
@@ -186,7 +188,7 @@ app.get('/produto/tipos_material', (req, res) => {
   console.log('get /produto/tipos_material executado. "tipo_material" distintos dos produtos retornados com sucesso!');
 });
 
-/* Create a new post */
+/* adicionar um produto */
 app.post('/produto/create', (req, res) => {
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
   const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual) VALUES (?, ?, ?, ?, ?, ?)`;
@@ -208,7 +210,7 @@ app.post('/produto/create', (req, res) => {
   console.log('post executado, produto criado com sucesso! ');
 });
   
-/* Get a specific post */
+/* obter um produto pelo ID do produto */
 app.get('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
@@ -225,7 +227,7 @@ app.get('/produto/:id', (req, res) => {
   console.log('get /produto/' + produtoId + ' executado. Produto retornado com sucesso!');
 });
   
-/* Update a post */
+/* alterar um produto */
 app.put('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
@@ -252,7 +254,7 @@ app.put('/produto/:id', (req, res) => {
   console.log('put /produto/' + produtoId + ' executado. Produto atualizado com sucesso!');
 });
   
-/* Delete a post */
+/* Deletar um produto */
 app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
@@ -268,6 +270,126 @@ app.delete('/produto/:id', (req, res) => {
   });
   console.log('delete /produto/' + produtoId + ' executado. Produto deletado com sucesso!');
 });
+
+// api para retornar os produtos em formato texto com os campos separados por TAB
+// exemplo para testar: http://localhost:3001/produto_lista
+app.get('/produto_lista', (req, res) => {
+  console.log('get /produto_lista inicio da execucao');
+  db.query('SELECT id_produto , descricao , cor , tamanho , tipo_material , preco_venda , quantidade_atual , IFNULL(localizacao,"") as localizacao , IFNULL(foto,"") as foto FROM produto', (err, results) => {
+    if (err) {
+      console.log('Erro ao retornar a lista de produtos: ' + err);
+      res.status(500).send('Erro ao retornar a lista de produtos: ' + err);
+      return;
+    }
+    //res.json(results);
+
+    // array com os campos (nome do campo na tabela e titulo para o campo)
+    const fields = [
+      {
+        title: 'ID',
+        field: 'id_produto'
+      },
+      {
+        title: 'Descrição',
+        field: 'descricao'
+      },
+      {
+        title: 'Cor',
+        field: 'cor'
+      },
+      {
+        title: 'Tamanho',
+        field: 'tamanho'
+      },
+      {
+        title: 'Tipo material',
+        field: 'tipo_material'
+      },
+      {
+        title: 'Preço Venda',
+        field: 'preco_venda'
+      },
+      {
+        title: 'Qtde Atual',
+        field: 'quantidade_atual'
+      },
+      {
+        title: 'Localização',
+        field: 'localizacao'
+      },
+      {
+        title: 'Foto',
+        field: 'foto'
+      },
+    ]; // fields
+    
+    var options = {
+      keys : fields,
+      prependHeader : true,
+      delimiter : {
+          field : '\t', // TAB for field delimiter
+          eol   : '\r\n' // Newline delimiter = CRLF
+      }
+    };
+
+    // converter os pontos para virgula do campo preco_venda (acertar o separador decimal)
+    results.forEach(reg =>  {
+      reg.preco_venda = reg.preco_venda.replace(".",",");
+      //console.log(reg.preco_venda);
+    }
+    );
+
+    // acertar o campo "foto" colocando a URL da foto de cada produto
+    results.forEach(reg =>  {
+      reg.foto = req.protocol + "://" + req.get("host") + "/produto_foto/" + reg.id_produto;
+      // a url vai ficar como este exemplo:  http://localhost:3001/produto_foto/45
+    }
+    );
+
+    // obter o texto completo com os dados dos produtos
+    var csv_text = json_2_csv.json2csv(results , options );
+
+    // precisa converter o texto para WIN1252 ( ANSI )
+    var csv_text_ansi = iconv.encode( csv_text , 'win1252' );
+
+    // com esta parte, faz o browser receber um arquivo para ser baixado
+    // sem esta parte, o browser exibe o texto direto (plain-text) no browser sem qualquer formatacao
+    //res.setHeader("Content-Type", "text/csv");
+
+    //console.log("req.get('host')=" + req.get('host'));
+
+    res.status(200).end(csv_text_ansi);
+
+    console.log('get /produto_lista executado. Produtos retornados com sucesso!');
+
+  });
+});
+
+// api para retornar a foto de um produto a partir do ID do produto ( vai retornar direto a imagem )
+// exemplo para testar: http://localhost:3001/produto_foto/45    (45 eh o ID do produto)
+app.get('/produto_foto/:id', (req, res) => {
+  const produtoId = req.params.id;
+  const queryString = 'SELECT foto FROM produto WHERE id_produto = ? ';
+  console.log('get /produto_foto/' + produtoId + ' - inicio');
+  db.query( queryString, produtoId , (err, results) => {
+    if (err) {
+      res.status(500).end();
+      console.log('erro:' + err);
+    }
+    else if (results.length === 0) {
+      res.status(404).end();
+    }
+    else { // nao houve erro
+      // montar o retorno com a imagem da foto do produto
+      res.set('Content-Type', 'image/png');
+      res.end(results[0].foto, 'binary');
+      console.log('foto do produto serah retornada');
+    }
+    console.log('get /produto_foto/' + produtoId + ' executado.');
+  })
+  
+});
+
 
 //
 // cliente table

@@ -275,7 +275,8 @@ app.delete('/produto/:id', (req, res) => {
 // exemplo para testar: http://localhost:3001/produto_lista
 app.get('/produto_lista', (req, res) => {
   console.log('get /produto_lista inicio da execucao');
-  db.query('SELECT id_produto , descricao , cor , tamanho , tipo_material , preco_venda , quantidade_atual , IFNULL(localizacao,"") as localizacao , IFNULL(foto,"") as foto FROM produto', (err, results) => {
+  db.query(`SELECT id_produto , descricao , cor , tamanho , tipo_material , preco_venda , quantidade_atual
+                   , IFNULL(localizacao,"") as localizacao , (foto IS NOT NULL) as tem_foto FROM produto`, (err, results) => {
     if (err) {
       console.log('Erro ao retornar a lista de produtos: ' + err);
       res.status(500).send('Erro ao retornar a lista de produtos: ' + err);
@@ -319,7 +320,7 @@ app.get('/produto_lista', (req, res) => {
       },
       {
         title: 'Foto',
-        field: 'foto'
+        field: 'tem_foto'
       },
     ]; // fields
     
@@ -339,9 +340,15 @@ app.get('/produto_lista', (req, res) => {
     }
     );
 
-    // acertar o campo "foto" colocando a URL da foto de cada produto
+    // alterar o campo "tem_foto" colocando a URL da foto de cada produto, se o produto tem foto
+    // se o produto nao temfoto, este campo tem_foto vai ficar vazio (string vazia)
     results.forEach(reg =>  {
-      reg.foto = req.protocol + "://" + req.get("host") + "/produto_foto/" + reg.id_produto;
+      if ( reg.tem_foto == "1" ) {
+        reg.tem_foto = req.protocol + "://" + req.get("host") + "/produto_foto/" + reg.id_produto;
+      }
+      else if ( reg.tem_foto == "0" ) {
+        reg.tem_foto = "";
+      }
       // a url vai ficar como este exemplo:  http://localhost:3001/produto_foto/45
     }
     );

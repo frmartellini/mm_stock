@@ -135,7 +135,19 @@ const upload = multer({
 });
 
 const produtoResponse = row => ({...row, foto: !!row.foto? `data:image/png;base64,${row.foto.toString('base64')}` : null})
-  
+
+function parseBase64Image(dataURL) {
+  const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error('Invalid base64 image string');
+  }
+
+  return {
+    mime: matches[1],
+    buffer: Buffer.from(matches[2], 'base64'),
+  };
+}
+
 /*
 // fechar a conexao com o mysql (deve ser usado apenas para testes)
 app.get('/close_mysql_connection', (req, res) => {
@@ -203,9 +215,9 @@ app.get('/produto/tipos_material', (req, res) => {
 
 /* Create a new post */
 app.post('/produto/create', upload.single('foto'), (req, res) => {
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
-  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto ?? req.file?.buffer];
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao} = JSON.parse(req.body.data);
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, req.file?.buffer];
+  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto) VALUES (${values.map(() => "?").join(", ")})`;
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Erro criando produto: ' + err);
@@ -245,8 +257,8 @@ app.put('/produto/:id', upload.single("foto"), (req, res) => {
   const produtoId = req.params.id;
   const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
   const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ?, foto = ? WHERE id_produto = ?`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto ?? req.file?.buffer, produtoId];
-  
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, !!foto? parseBase64Image(foto).buffer : req.file?.buffer, produtoId];
+
   db.query(query, values, err => {
     if (err) {
       if (err.code === 'ER_ROW_IS_REFERENCED_2') { // Este é um exemplo de código de erro MySQL para "Cannot delete or update a parent row"

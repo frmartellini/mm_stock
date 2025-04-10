@@ -1,10 +1,27 @@
 <div class="form-group col-md-6 mx-auto">
   
-  <h2 #h2 id="PageTitle" name="PageTitle">{{ this.PageTitle }}</h2>
+  <h2 #h2 id="PageTitle" name="PageTitle" class="mb-3">{{ this.PageTitle }}</h2>
   
   <form [formGroup]="produto_form" (ngSubmit)="onSubmit(produto_form.value)" aria-labelledby="PageTitle">
-
     <!-- Descrição -->
+    @if(!IsInViewMode() || produto.foto || !!foto) {
+      <div class="d-flex flex-column mb-5">
+        <mat-label for="Cad_Produto_Foto_input" class="mb-2">Foto</mat-label>
+        @if (produto.foto || !!foto) {
+          <img id="foto" src="{{produto.foto ?? fotoUrl}}"/>
+        }
+        @if (!IsInViewMode()) {
+          <div class="d-flex mt-3">
+            <button type="button" mat-raised-button (click)="fileInput.click()" id="Cad_Produto_Foto" style="margin-right: 15px;">Escolher arquivo</button>
+            @if (produto.foto || !!foto) {
+              <button type="button" mat-raised-button (click)="cleanFoto()" id="Cad_Produto_Foto_Limpar">Limpar</button>
+            }
+          </div>
+          <input type="file" id="Cad_Produto_Foto_input" name="Cad_Produto_Foto_input" hidden #fileInput accept="image/png, image/jpeg" (change)="onFileSelected($event)"/>
+        }
+      </div>
+    }
+
     <mat-form-field appearance="fill" style="width: 100%">
       <mat-label for="Cad_Produto_Descricao">Descrição</mat-label>
       <input matInput type="text" id="Cad_Produto_Descricao" name="Cad_Produto_Descricao" formControlName="Cad_Produto_Descricao"
@@ -92,6 +109,12 @@
       <mat-label for="Cad_Produto_Quantidade_Atual">Qtde atual</mat-label>
       <input type="number" id="Cad_Produto_Quantidade_Atual" name="Cad_Produto_Quantidade_Atual" formControlName="Cad_Produto_Quantidade_Atual"
              matInput min="0" step="1" pattern="^[0123456789]+$" [(ngModel)]="produto.quantidade_atual" required aria-required="true" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label for="Cad_Produto_Localizacao">Localização</mat-label>
+      <input matInput type="text" id="Cad_Produto_Localizacao" name="Cad_Produto_Localizacao" formControlName="Cad_Produto_Localizacao"
+             [(ngModel)]="produto.localizacao"/>
     </mat-form-field>
 
     <div class="form-group">

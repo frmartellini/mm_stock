@@ -77,6 +77,13 @@
         </td>
     </ng-container>
 
+    <ng-container matColumnDef="localizacao">
+      <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+             Localização
+        </th>
+      <td mat-cell *matCellDef="let element" tabindex="0"  [attr.aria-label]="'Localização do produto {{element.localizacao}}'">{{ element.localizacao}}</td> 
+  </ng-container>
+
 <!-- Botões Editar e Exlcuir-->
       <ng-container  matColumnDef="actions">
         <th class="centered-sorted-header" mat-header-cell *matHeaderCellDef aria-label="Coluna de Ações" tabindex="0">

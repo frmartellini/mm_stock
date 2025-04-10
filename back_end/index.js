@@ -6,8 +6,10 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
 const json_2_csv = require('json-2-csv');
 var iconv = require('iconv-lite');
+
   
 const app = express();
 var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
@@ -122,7 +124,33 @@ db.on('release', function (connection) {
 /* Middleware */
 app.use(bodyParser.json());
 app.use(cors());
-  
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB in bytes
+  fileFilter: (_, file, cb) => {
+    if (file.mimetype.startsWith('image/png') || file.mimetype.startsWith('image/jpeg')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas imagens são suportadas'), false);
+    }
+  }
+});
+
+const produtoResponse = row => ({...row, foto: !!row.foto? `data:image/png;base64,${row.foto.toString('base64')}` : null})
+
+function parseBase64Image(dataURL) {
+  const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error('Invalid base64 image string');
+  }
+
+  return {
+    mime: matches[1],
+    buffer: Buffer.from(matches[2], 'base64'),
+  };
+}
+
 /*
 // fechar a conexao com o mysql (deve ser usado apenas para testes)
 app.get('/close_mysql_connection', (req, res) => {
@@ -147,7 +175,7 @@ app.get('/produto', (req, res) => {
       res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;
     }
-    res.json(results);
+    res.json(results.map(produtoResponse));
   });
   console.log('get /produto executado. Produtos retornados com sucesso!');
 });
@@ -188,11 +216,13 @@ app.get('/produto/tipos_material', (req, res) => {
   console.log('get /produto/tipos_material executado. "tipo_material" distintos dos produtos retornados com sucesso!');
 });
 
+
 /* adicionar um produto */
-app.post('/produto/create', (req, res) => {
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual) VALUES (?, ?, ?, ?, ?, ?)`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual];
+app.post('/produto/create', upload.single('foto'), (req, res) => {
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao} = JSON.parse(req.body.data);
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, req.file?.buffer];
+  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto) VALUES (${values.map(() => "?").join(", ")})`;
+
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Erro criando produto: ' + err);
@@ -204,7 +234,7 @@ app.post('/produto/create', (req, res) => {
         res.status(500).send('Erro recuperando produto criado: ' + err);
         return;
       }
-      res.status(201).json(result[0]);
+      res.status(201).json(produtoResponse(result[0]));
     });
   });
   console.log('post executado, produto criado com sucesso! ');
@@ -222,17 +252,19 @@ app.get('/produto/:id', (req, res) => {
       res.status(404).send('Produto não encontrado: ' + err);
       return;
     }
-    res.json(result[0]);
+    res.json(produtoResponse(result[0]));
   });
   console.log('get /produto/' + produtoId + ' executado. Produto retornado com sucesso!');
 });
   
+
 /* alterar um produto */
-app.put('/produto/:id', (req, res) => {
+app.put('/produto/:id', upload.single("foto"), (req, res) => {
+
   const produtoId = req.params.id;
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ? WHERE id_produto = ?`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, produtoId];
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
+  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ?, foto = ? WHERE id_produto = ?`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, !!foto? parseBase64Image(foto).buffer : req.file?.buffer, produtoId];
 
   db.query(query, values, err => {
     if (err) {
@@ -248,7 +280,7 @@ app.put('/produto/:id', (req, res) => {
         res.status(500).send('Erro recuperando o produto alterado: ' + err);
         return;
       }
-      res.json(result[0]);
+      res.json(produtoResponse(result[0]));
     });
   });
   console.log('put /produto/' + produtoId + ' executado. Produto atualizado com sucesso!');
@@ -396,6 +428,7 @@ app.get('/produto_foto/:id', (req, res) => {
   })
   
 });
+
 
 
 //

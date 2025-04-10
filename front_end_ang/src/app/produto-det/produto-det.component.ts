@@ -46,6 +46,9 @@ export class ProdutoDetComponent implements OnInit {
   public PageTitle: String = "Incluindo ou editando produto";
   public SubmitButtonText: String = "Confirmar";
 
+  foto: File | null | undefined = null;
+  fotoUrl: string | null | undefined = null;
+
 
   constructor(
     private route: ActivatedRoute
@@ -70,6 +73,7 @@ export class ProdutoDetComponent implements OnInit {
         ,Cad_Produto_Tipo_Material: ['', Validators.required]
         ,Cad_Produto_Preco_Venda: ['', Validators.required]
         ,Cad_Produto_Quantidade_Atual: ['', Validators.required]
+        ,Cad_Produto_Localizacao: ['']
       }
     ); // this.formBuilder.group
 
@@ -122,6 +126,7 @@ export class ProdutoDetComponent implements OnInit {
       this.produto_form.get("Cad_Produto_Tipo_Material")?.disable();
       this.produto_form.get("Cad_Produto_Preco_Venda")?.disable();
       this.produto_form.get("Cad_Produto_Quantidade_Atual")?.disable();
+      this.produto_form.get("Cad_Produto_Localizacao")?.disable();
 
       this.PageTitle = "Visualizando produto";
     }
@@ -303,7 +308,7 @@ export class ProdutoDetComponent implements OnInit {
 
           //console.log("vai executar o this.produtoApiService.postProduto");
 
-          this.produtoApiService.criarNovoProduto(this.produto)
+          this.produtoApiService.criarNovoProduto(this.produto, this.foto)
             .subscribe({
               //next: (response) => console.log(response),
               next: response => {},
@@ -323,7 +328,7 @@ export class ProdutoDetComponent implements OnInit {
 
           //console.log("vai executar o this.produtoApiService.editarProduto");
 
-          this.produtoApiService.editarProduto(this.produto, this.id)
+          this.produtoApiService.editarProduto(this.produto, this.foto, this.id)
             .subscribe( {
 
               next: response => {},
@@ -349,5 +354,17 @@ export class ProdutoDetComponent implements OnInit {
   voltar(): void {
     this.location.back();
   } // voltar()
+
+  onFileSelected(event: any) {
+    this.foto = event.target.files[0];
+    this.fotoUrl = this.foto && URL.createObjectURL(this.foto);
+    this.produto = {...this.produto, foto: null}
+  }
+
+  cleanFoto() {
+    this.foto = null
+    this.fotoUrl = null
+    this.produto = {...this.produto, foto: null}
+  }
 
 } // class

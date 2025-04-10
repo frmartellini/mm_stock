@@ -7,16 +7,19 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common'
 import { CookieService } from 'ngx-cookie-service';
 import Utils from '../utils';
+import { MatTableDataSource } from '@angular/material/table';
+import * as iconv from 'iconv-lite';
+
 
 @Component({
   selector: 'app-movimentacao-graf',
   templateUrl: './movimentacao-graf.component.html',
   styleUrl: './movimentacao-graf.component.scss'
-  
+
 })
 
 export class MovimentacaoGrafComponent implements OnInit {
-  
+
   data: any; // dados para o chart
 
   options: any; // opcoes e configuracoes do chart
@@ -39,6 +42,12 @@ export class MovimentacaoGrafComponent implements OnInit {
   val_dhini_picker : any; // Date
   val_dhfim_picker : any;  // Date
 
+  // Variáveis para criação da tabela
+  tableData: { mes: string, entrada: number, saida: number }[] = [];
+  displayedColumns: string[] = ['mes', 'entrada', 'saida'];
+  dataSource = new MatTableDataSource<{ mes: string, entrada: number, saida: number }>();
+
+
   @ViewChild('chart') chart: any;
 
   periodo_range = new FormGroup({
@@ -51,7 +60,7 @@ export class MovimentacaoGrafComponent implements OnInit {
               ,private cookieService: CookieService
               )
   {
-    
+
   }
 
   ngOnInit() {
@@ -59,7 +68,7 @@ export class MovimentacaoGrafComponent implements OnInit {
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-    
+
     // obter as datas dos cookies
     this.dhinicio_str = this.cookieService.get('movimentacao-graf-dhinicio');
     this.dhfim_str = this.cookieService.get('movimentacao-graf-dhfim');
@@ -144,7 +153,7 @@ export class MovimentacaoGrafComponent implements OnInit {
   // adicionar valores manualmente nos datasets do grafico
   //this.data.datasets[0].data[7] = 45;
   //this.data.datasets[1].data[7] = 90;
-    
+
   /*
     let newobj = null;
 
@@ -200,8 +209,9 @@ export class MovimentacaoGrafComponent implements OnInit {
   */
 
     this.fetchData();
-  
+
   } // ngOnInit
+
 
   fetchData(): void {
 
@@ -240,7 +250,7 @@ export class MovimentacaoGrafComponent implements OnInit {
     //var qtde_months = (dini.getFullYear()*12 + dfim.getMonth()) - (dini.getFullYear()*12 + dini.getMonth());
     var qtde_months = Math.round(dfim.diff(dini, 'months', true));
     //console.log("qtde_months=" + qtde_months);
-    
+
     // limpar o array dos labels do eixo X
     this.data.labels = [] ;
     // limpar os arrays que contem os valores das duas series de dados
@@ -272,7 +282,7 @@ export class MovimentacaoGrafComponent implements OnInit {
 
       // passar pelos registros obtidos do BD
       for (let i = 0; i < this.graf_data.length; i++) {
-        
+
         // obter o indice do mes do registro no grafico
         char_x_idx = this.graf_labels_internal_array.indexOf(this.graf_data[i].mes);
 
@@ -283,14 +293,59 @@ export class MovimentacaoGrafComponent implements OnInit {
         else { // se o tipo eh "saida"
           this.data.datasets[1].data[char_x_idx] = this.graf_data[i].qtde;
         }
-        
+
       } // for
 
       // atualizar o grafico
       this.chart.refresh();
 
     } // if
+
+    //Inserção de dados na tabela
+    this.tableData = this.data.labels.map((mes: string, index: number) => ({
+      mes,
+      entrada: this.data.datasets[0].data[index] || 0,
+      saida: this.data.datasets[1].data[index] || 0
+    }));
+
+    this.dataSource.data = this.tableData;
+
+
+
   } // MontarGrafico
+
+   //exportar a tabela para csv
+   exportToCSV() {
+    if (!this.tableData.length) {
+      return;
+    }
+
+    // Define o nome do arquivo com data e hora
+    const now = new Date();
+    const fileName = `movimentacao-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}.txt`;
+
+    // Cabeçalho da tabela
+    const headers = ['Mês', 'Qtde Entrada', 'Qtde Saída'];
+
+    // Converte os dados em linhas separadas por TAB e com quebras de linha CRLF
+    const csvContent = [
+      headers.join('\t'), // Linha do cabeçalho
+      ...this.tableData.map(row => `${row.mes}\t${row.entrada}\t${row.saida}`) // Dados da tabela
+    ].join('\r\n');
+
+  // Converte para Windows-1252 usando iconv-lite
+  const win1252Content = iconv.encode(csvContent, 'win1252');
+
+  // Criando um Blob com encoding Windows-1252
+  const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
+
+    // Criando link para download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+
 
   // atualizar as vars do tipo Date e string que sao usados no filtro por periodo
   Update_vars_dh_filtro() {
@@ -334,7 +389,7 @@ export class MovimentacaoGrafComponent implements OnInit {
       alert("A Data Inicial deve ser o primeiro dia do mês.");
       return;
     }
-    
+
     // a data final deve ser o ultimo dia do mes
     const endOfEndMonthStr = moment(this.val_dhfim_picker).endOf('month').format('YYYY-MM-DD');
     //console.log("endOfEndMonthStr=" + endOfEndMonthStr);

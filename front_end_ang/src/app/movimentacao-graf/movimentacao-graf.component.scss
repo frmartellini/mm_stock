@@ -1,0 +1,50 @@
+/* Garante que a div da tabela tenha largura fixa */
+.table-container {
+  width: 400px;
+  max-width: 400px;
+  margin: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ajusta a tabela dentro da div */
+.mat-table {
+  width: 100%;
+  table-layout: fixed; /* Evita expansão das colunas */
+  border-collapse: collapse;
+}
+
+/* Ajusta largura das colunas para não ultrapassar 400px */
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  white-space: nowrap; /* Mantém conteúdo em uma linha */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Define largura específica para cada coluna */
+th:nth-child(1), td:nth-child(1) { width: 30%; } /* Mês */
+th:nth-child(2), td:nth-child(2) { width: 35%; } /* Entrada */
+th:nth-child(3), td:nth-child(3) { width: 35%; } /* Saída */
+
+/* Alinha números à direita */
+.right-text {
+  text-align: right;
+}
+
+/* Remove borda da última coluna */
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+/* Define largura fixa para o paginador */
+mat-paginator {
+  width: 400px !important;
+  max-width: 400px;
+  margin: auto;
+}
+
+

@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const json_2_csv = require('json-2-csv');
 var iconv = require('iconv-lite');
-
+const jwt = require('jsonwebtoken');
   
 const app = express();
 var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
@@ -304,9 +304,12 @@ app.delete('/produto/:id', (req, res) => {
 });
 
 // api para retornar os produtos em formato texto com os campos separados por TAB
-// exemplo para testar: http://localhost:3001/produto_lista
-app.get('/produto_lista', (req, res) => {
+// exemplo para testar: http://localhost:3001/produto_lista/zzzzzzzzzz
+// onde zzzzzzzzzz eh o token de seguranca
+
+app.get('/produto_lista/:token' , verifyJWT , (req, res) => {
   console.log('get /produto_lista inicio da execucao');
+  console.log('get /produto_lista token recebido na url=' + req.params.token);
   db.query(`SELECT id_produto , descricao , cor , tamanho , tipo_material , preco_venda , quantidade_atual
                    , IFNULL(localizacao,"") as localizacao , (foto IS NOT NULL) as tem_foto FROM produto`, (err, results) => {
     if (err) {
@@ -314,7 +317,6 @@ app.get('/produto_lista', (req, res) => {
       res.status(500).send('Erro ao retornar a lista de produtos: ' + err);
       return;
     }
-    //res.json(results);
 
     // array com os campos (nome do campo na tabela e titulo para o campo)
     const fields = [
@@ -1202,6 +1204,14 @@ app.post('/config/login', (req, res) => {
             // se a senha atual enviada pelo usuario bate com a senha gravada no campo senha do usuario
             console.log("/config/login - senha informada pelo usuario bate com senha gravada no campo senha do usuario");
             res.status(200).json('{ "Status":"OK" }');
+
+/*
+            const token = jwt.sign({ login }, process.env.SECRET, {
+              expiresIn: 300 // expires in 5min
+            });
+
+            res.status(200).json('{ "Status":"OK" , auth: true , token: ' + token +' }');
+*/            
     
           } // if bcrypt.compareSync
           // se a senha atual enviada pelo usuario NAO bate com a senha gravada no campo senha do usuario
@@ -1320,6 +1330,103 @@ app.put('/config/alter', (req, res) => {
   
 }); // function
 
+//
+// verificar o usuario e senha recebidos e retorna um token de seguranca de acesso a API
+//
+// para testar com o postman, usar o body raw json :    { "login":"admin","senha":"123", "minutos":5 }
+//
+app.post('/config/get_api_token', (req, res) => {
+
+  console.log('post /config/get_api_token - inicio');
+  
+  var { login, senha, minutos } = req.body;
+  login = login.toLowerCase();
+  console.log('login=' + login);
+  console.log('senha=' + senha);
+  console.log('minutos=' + minutos);
+
+  var senha_atual_do_bd = "";
+
+  // obter o usuario da tabela do BD
+  db.query('SELECT senha FROM usuario WHERE lower(login) = ?', [login], (err, results) => {
+
+    if (err) {
+      console.log('/config/get_api_token - Erro no select da tabela USUARIO');
+      res.status(500).send('Erro no select da tabela USUARIO. ' + err.message);
+    }
+    else {
+
+      // se existe no BD um usuario com o login recebido
+      if ( results.length > 0) {
+      
+        console.log('results=' + JSON.stringify(results));
+
+        senha_atual_do_bd = results[0].senha;
+        console.log('/config/get_api_token - senha_atual_do_bd=' +senha_atual_do_bd);
+
+        if ( senha_atual_do_bd != "" ) {
+
+          console.log("/config/get_api_token - senha_atual_do_bd NAO estah vazia");
+      
+          // verificar se a senha recebida pro login bate com a senha gravada no campo senha do usuario
+          // compareSync eh executado de forma sincrona (nao usa funcoes callback)
+          if ( bcrypt.compareSync(senha, senha_atual_do_bd) ) {
+            
+            // se a senha atual enviada pelo usuario bate com a senha gravada no campo senha do usuario
+            console.log("/config/get_api_token - senha informada pelo usuario bate com senha gravada no campo senha do usuario");
+
+            const token = jwt.sign({ login }, process.env.SECRET, {
+              expiresIn: minutos * 60 // expires in x minutos
+            });
+
+            res.status(200).json('{ "auth": true , "token": "' + token +'" }');
+    
+          } // if bcrypt.compareSync
+          // se a senha atual enviada pelo usuario NAO bate com a senha gravada no campo senha do usuario
+          else {
+            console.log("/config/get_api_token - senha informada pelo usuario NAO bate com senha gravada no campo senha do usuario");
+            res.status(401).json('{ "auth": false , "token": "" }');
+          } // else
+
+        } // if ( senha_atual_do_bd != "" )
+        
+      } // if ( results.length > 0)
+      // se nao achou no BD um usuario com o login recebido
+      else {
+        console.log("/config/get_api_token - login informado pelo usuario NAO existe");
+        res.status(401).json('{ "auth": false , "token": "" }');
+      } // else
+
+    } // else
+  
+    console.log('post /config/get_api_token - fim');
+
+  }); // db.query select
+
+}); // post /config/get_api_token
+
+// verifica se o token recebido no request eh valido e, se for valido, continua a execucao do endpoint que chamou esta funcao
+function verifyJWT(req, res, next){
+  
+  //const token = req.headers['authorization'];
+  const token = req.params.token;
+  
+  //console.log("token=" + token);
+
+  if (!token) return res.status(401).json({ auth: false, message: 'token de seguranca nao foi recebido.' });
+  
+  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+    //console.log("decoded=" + JSON.stringify( decoded) );
+    
+    if (err) {
+      return res.status(500).json({ auth: false, message: 'falha na autenticacao do token de seguranca.' });
+    }
+    
+    // se tudo estiver ok, salva no request para uso posterior
+    req.userId = decoded.id;
+    next();
+  });
+} // function verifyJWT
 
 //
   

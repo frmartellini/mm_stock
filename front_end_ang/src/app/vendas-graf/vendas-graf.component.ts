@@ -111,7 +111,12 @@ export class VendasGrafComponent implements OnInit {
         ,tooltip: {
           callbacks: {
               // formatar o numero como moeda R$ quando for exibir o tooltip dos pontos do grafico
-              label: (tooltipItem : any) => Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(tooltipItem.raw))
+              //label: (tooltipItem : any) => Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parseFloat(tooltipItem.raw))
+              label: function(tooltipItem : any) {
+                // formatar o numero como moeda R$ quando for exibir o tooltip dos pontos do grafico
+                let value = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(tooltipItem.raw);
+                return value;
+              }
           }
         }
       },

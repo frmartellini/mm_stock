@@ -231,17 +231,30 @@ export class VendasGrafComponent implements OnInit {
 
         this.data.datasets[0].data[char_x_idx] = this.graf_data[i].valor_total;
 
-        const tabelaData = this.data.labels.map((mes: string, index: number) => ({
-          mes: mes,
-          valor: this.data.datasets[0].data[index]
-        }));
-
-        // Atribuir os dados à tabela
-        this.tabelaVendas.data = tabelaData;
-
-
-
       } // for
+
+      //console.log("this.graf_data=" + JSON.stringify(this.graf_data) );
+      
+      //console.log("this.data.datasets[0].data=" + JSON.stringify( this.data.datasets[0].data) );
+
+      // passar pelo this.data.datasets[0].data e colocar zero onde tiver null, considerando a qtde de meses do grafico
+      // (fica null nos meses que nao teve venda)
+      for (let i = 0; i < qtde_months; i++) {
+        if ( this.data.datasets[0].data[i] == null) {
+          this.data.datasets[0].data[i] = 0;
+        }
+      } // for
+
+      //console.log("this.data.datasets[0].data=" + JSON.stringify( this.data.datasets[0].data) );
+
+      // montar "tableData" que serah o datasource para a tabela
+      const tabelaData = this.data.labels.map((mes: string, index: number) => ({
+        mes: mes,
+        valor: this.data.datasets[0].data[index]
+      }));
+
+      // Atribuir os dados à tabela
+      this.tabelaVendas.data = tabelaData;
 
       // atualizar o grafico
       this.chart.refresh();

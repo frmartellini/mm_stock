@@ -844,11 +844,23 @@ app.get('/movimentacao', (req, res) => {
 app.get('/movimentacao_por_periodo', (req, res) => {
   console.log("/movimentacao_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
   console.log("/movimentacao_por_periodo - req.query.dhfim=" + req.query.dhfim);
-  const query = 'SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m '+
-                'LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) ' +
-                'INNER JOIN produto p ON (m.id_produto = p.id_produto)' +
-                'WHERE ( m.data_hora BETWEEN ? AND ? ) ';
-  const values = [ req.query.dhinicio , req.query.dhfim ];
+
+  let query = 'SELECT m.*, c.nome_completo AS nome_completo, p.descricao AS descricao FROM movimentacao m ' +
+              'LEFT OUTER JOIN cliente c ON (m.id_cliente = c.id_cliente) ' +
+              'INNER JOIN produto p ON (m.id_produto = p.id_produto) ' +
+              'WHERE ( m.data_hora BETWEEN ? AND ? )';
+  const values = [ req.query.dhinicio, req.query.dhfim ];
+
+  if (req.query.id_cliente) {
+    query += ' AND m.id_cliente = ?';
+    values.push(req.query.id_cliente);
+  }
+
+  if (req.query.id_produto) {
+    query += ' AND m.id_produto = ?';
+    values.push(req.query.id_produto);
+  }
+
   db.query(query, values, (err, results) => {
     if (err) {
       res.status(500).send('Erro retornando movimentações por periodo: ' + err);
@@ -856,6 +868,7 @@ app.get('/movimentacao_por_periodo', (req, res) => {
     }
     res.json(results);
   });
+
   console.log('get /movimentacao_por_periodo executado. Movimentações retornadas com sucesso!');
 });
 

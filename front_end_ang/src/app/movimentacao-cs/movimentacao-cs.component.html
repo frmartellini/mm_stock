@@ -11,6 +11,7 @@
       <mat-date-range-picker #periodo_filtro_daterangepicker></mat-date-range-picker>
     </mat-form-field>
 
+
     <!-- Botão de Filtrar -->
     <button type="button" mat-raised-button color="basic" (click)="BtnFiltroPeriodoClick($event)" style="margin-left: 10px;" aria-label="Filtrar período">Filtrar</button>
   </div>
@@ -23,10 +24,16 @@
   <div style="min-width: 200px;"></div> <!-- Espaço flexível -->
 
   <!-- Campo de Filtro -->
-  <mat-form-field class="TopTable_filtro" subscriptSizing="dynamic">
-    <mat-label>Filtro</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input aria-label="Filtrar movimentações do estoque">
-  </mat-form-field>
+    <!-- Campo de Filtro -->
+    <mat-form-field class="TopTable_filtro" subscriptSizing="dynamic">
+      <mat-label>Filtro</mat-label>
+      <input type="text" matInput [formControl]="filtroControl" [matAutocomplete]="auto" (keyup)="applyFilter($event)" #input aria-label="Filtrar movimentações do estoque">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value">
+          {{ option.type }}: {{ option.value }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 </div>
 
 <!-- Tabela de Movimentações -->

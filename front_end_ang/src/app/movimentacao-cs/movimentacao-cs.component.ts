@@ -9,12 +9,15 @@ import Utils from '../utils';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common'
 import { CookieService } from 'ngx-cookie-service';
+import { Observable, of } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 export interface movimentacaoData{
 
   id_movimentacao: number;
   data_hora: string;
-  id_produtor: number;
+  id_produto: number;
   tipo_mov: string;
   quantidade: number;
   num_pedido: number;
@@ -32,6 +35,11 @@ let MOVIMENTACAO_DATA: movimentacaoData[]=[];
   styleUrl: './movimentacao-cs.component.scss'
 })
 export class MovimentacaoCsComponent implements OnInit {
+
+  filtroControl = new FormControl('');
+  filteredOptions: Observable<{ type: string; value: string; }[]> | undefined;
+  clientesOptions: {id: number, nome: string}[] = [];
+  produtosOptions: {id: number, descricao: string}[] = [];
 
   public dataSource : any; // apenas declarar aqui porque este obj vai ser criado soh depois quando os regs forem obtidos do bd
   // colunas que serao exibidas pelo table
@@ -93,6 +101,12 @@ export class MovimentacaoCsComponent implements OnInit {
     }
 
     this.fetchData();
+
+    // Configura o filtro de autocomplete
+    this.filteredOptions = this.filtroControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterOptions(value || ''))
+  );
   } // ngOnInit
 
   // Obtenção dos Dados da API
@@ -107,18 +121,68 @@ export class MovimentacaoCsComponent implements OnInit {
     // chamar a api que recebe a data inicial e a data final para retornar apenas as movimentacoes do periodo
     // precisa passar a hora23:59:59 no param dhfim para considerar o dia final todo
     this.http.get(ENV.REST_API_URL+'/movimentacao_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + ' 23:59:59/').subscribe(
-        (response: any) =>
-          {
-            MOVIMENTACAO_DATA = response;
-            this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
-            this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
+      (response: any) => {
+        MOVIMENTACAO_DATA = response;
+        this.dataSource = new MatTableDataSource(MOVIMENTACAO_DATA);
+        this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+
+        // Extrair opções únicas para autocomplete dos dados recebidos
+        this.extrairOpcoesAutocomplete(response);
             //console.log("subscribe do fetchData executou");
           }
     )
   } // fetchData
 
+  // Método para extrair opções únicas dos dados recebidos
+extrairOpcoesAutocomplete(data: movimentacaoData[]) {
+  const clientesMap = new Map<number, string>();
+  const produtosMap = new Map<number, string>();
+
+  data.forEach(item => {
+    // Extrair clientes únicos
+    if (item.id_cliente && item.nome_completo) {
+      clientesMap.set(item.id_cliente, item.nome_completo);
+    }
+
+    // Extrair produtos únicos
+    if (item.id_produto && item.descricao) {
+      produtosMap.set(item.id_produto, item.id_produto + " - " + item.descricao);
+    }
+  });
+
+  // Converter Map para array de objetos
+  this.clientesOptions = Array.from(clientesMap).map(([id, nome]) => ({ id, nome }));
+  this.produtosOptions = Array.from(produtosMap).map(([id, descricao]) => ({ id, descricao }));
+}
+
+// Filtro para as opções de autocomplete
+private _filterOptions(value: string): {type: string, value: string}[] {
+  const filterValue = value.toLowerCase();
+
+  const clientesFiltrados = this.clientesOptions
+    .filter(option => option.nome.toLowerCase().includes(filterValue))
+    .map(option => ({ type: 'Cliente', value: option.nome }));
+
+  const produtosFiltrados = this.produtosOptions
+    .filter(option => option.descricao.toLowerCase().includes(filterValue))
+    .map(option => ({ type: 'Produto', value: option.descricao }));
+
+  return [...clientesFiltrados, ...produtosFiltrados];
+}
+
+// Método que é chamado quando uma opção é selecionada
+onOptionSelected(event: MatAutocompleteSelectedEvent) {
+  const selectedValue = event.option.value;
+  this.filtroControl.setValue(selectedValue);
+
+  // Aplica o filtro quando uma opção é selecionada
+  this.dataSource.filter = selectedValue.toLowerCase();
+  if (this.dataSource.paginator) {
+    this.dataSource.paginator.firstPage();
+  }
+}
   // Funcao para customizar a ordenacao do table e configurar a ordenacao de algumas colunas especificas.
   // Esta funcao eh executada uma vez para cada linha da tabela quando a ordenacao eh alterada.
   // "property" contem uma string com o nome da coluan clicada

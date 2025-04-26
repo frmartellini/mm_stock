@@ -889,9 +889,11 @@ app.get('/vendas_graf_por_periodo', (req, res) => {
   const query = "select DATE_FORMAT(t.data_hora, '%Y/%m') as \"mes\", sum(t.quantidade * p.preco_venda) valor_total " +
                 "from movimentacao t " +
                 "join produto p on (p.id_produto = t.id_produto) " +
-                "where ( t.tipo_mov = 'E' ) " +
+                "where ( t.tipo_mov = 'S' )" + // considerar apenas saidas de estoque
+                "AND ( t.data_hora BETWEEN ? AND ? ) " + // pegar as movimentacoes de saida apenas que tiverem data_hora dentro do periodo
                 "group by mes, t.tipo_mov " +
                 "order by mes asc " ;
+  //console.log("query=" + query);
   const values = [ req.query.dhinicio , req.query.dhfim ];
   db.query(query, values, (err, results) => {
     if (err) {

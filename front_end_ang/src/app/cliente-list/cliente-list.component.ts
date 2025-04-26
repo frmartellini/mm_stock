@@ -79,9 +79,13 @@ public GetEditarLink = Utils.GetEditarLink;
         this.fetchData(); // Recarregar os itens após a exclusão
       },
       (error) => {
-        console.error('Erro ao deletar post:', error.error);
+        console.error('Erro ao deletar cliente:', error.error);
         // error.error contém a mensagem de erro enviada pelo servidor
-        alert(error.error);
+        //alert(error.error);
+        this.toastr.error(error.error , 'Erro', {
+          disableTimeOut: true
+          ,positionClass: 'toast-top-center'
+        });
       }); // subscribe
     } // confirm
   } // excluirCliente

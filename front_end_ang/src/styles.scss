@@ -226,3 +226,8 @@ li  a[disabled=true] {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* aumentar a largura das msgs de erro exibidas com o package "toastr" */
+.toast-error {
+  width: 500px !important;
+}

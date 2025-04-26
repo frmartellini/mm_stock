@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { ToastrService } from 'ngx-toastr';
-import Utils from '../utils';
 
 @Component({
   selector: 'app-config',
@@ -14,70 +12,63 @@ import Utils from '../utils';
 
 export class ConfigComponent {
 
-  ConfigForm: FormGroup;
+  public username: string;
+  public password: string;
+  public minutos: number | null;
+  public token: string;
 
-  constructor(fb: FormBuilder
-              ,private authService: AuthenticationService
+  constructor(private authService: AuthenticationService
               ,private toastr: ToastrService
               ,private router: Router
               )
   {
-    this.ConfigForm = fb.group({
-      'oldPwd': ['',Validators.required],
-      'newPwd': ['',Validators.required],
-      'confirmPwd': ['',Validators.required]
-    },
-    );
-  }
 
-  get oldPwd() {
-    return this.ConfigForm.get('oldPwd');
-  }
+    this.username = "";
+    this.password = "";
+    this.minutos = null;
+    this.token = "";
 
-  get newPwd() {
-    return this.ConfigForm.get('newPwd');
-  }
+  } // constructor
 
-  get confirmPwd() {
-    return this.ConfigForm.get('confirmPwd');
-  }
+  // funcao executada quando ha sucesso na obtencao do token de seguranca
+  On_get_api_token_Success_CallBackFunction(pToken : string) {
 
-  OnPwChangeSuccess() {
+    //console.log(Utils.getDateTimeString() + " On_get_api_token_Success_CallBackFunction foi executada");
 
-    console.log(Utils.getDateTimeString() + " OnPwChangeSuccess foi executada");
-
-    this.toastr.success('Nova senha gravada com sucesso!' , '', {
+    this.toastr.success('Token obtido com sucesso!' , '', {
       timeOut: 3000
       ,positionClass: 'toast-top-center'
     });
 
-    // redirecionar para a home
-    this.router.navigate(['/']);
+    // Se deu certo, guardar o token de seguranca nesta var qeu serah exibida na tela para o usuario utiliza-lo onde quiser
+    this.token = pToken;
 
-  }
+  } // On_get_api_token_Success_CallBackFunction
 
-  OnPwChangeError() {
+  // funcao executada quando ha falha
+  On_get_api_token_Fail_CallBackFunction() {
 
-    console.log(Utils.getDateTimeString() + " OnPwChangeError foi executada");
+    //console.log(Utils.getDateTimeString() + " On_get_api_token_Fail_CallBackFunction foi executada");
 
-    this.toastr.error('Erro ao gravar a nova senha.' , '', {
+    //console.error("login nao foi realizado");
+    this.toastr.error('Usuário ou senha inválidos!' , '', {
       timeOut: 5000
       ,positionClass: 'toast-top-center'
     });
 
-  }
+  } // On_get_api_token_Fail_CallBackFunction
 
-  onSubmit() {
+  onSegAPISubmit() {
 
     //console.log(this.confirmPwd?.value);
 
-    // chamar a rotina que altera a senha
-    this.authService.updatePassword(this.confirmPwd?.value
-                                    ,this.oldPwd?.value
-                                    ,this.OnPwChangeSuccess.bind(this)
-                                    ,this.OnPwChangeError.bind(this)
-                                    );
+    this.authService.get_api_token(this.username.toLowerCase()
+                           ,this.password
+                           ,this.minutos as number
+                           ,this.On_get_api_token_Success_CallBackFunction.bind(this)
+                           ,this.On_get_api_token_Fail_CallBackFunction.bind(this)
+                          );
 
-  }
+  } // onSegAPISubmit
 
 } // class

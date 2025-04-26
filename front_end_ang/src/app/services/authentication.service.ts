@@ -450,4 +450,58 @@ export class AuthenticationService {
     return CodPriv;
   } // GetCodPrivForRoute
 
+  // chama a api post do back-end para validar o login/senha informado pelo usuario e obter o token de seguranca da api
+  get_api_token_http(pLogin: string
+                      ,pSenha : string
+                      ,pMinutos : number
+                      ): Observable<any> {
+
+    console.log(Utils.getDateTimeString() + " get_api_token_http - pLogin=" + pLogin);
+
+    // Estas props devem ter estes nomes mesmo porque sao os nomes que a rotina do back-end espera.
+    const obj = JSON.parse('{ "login":"' + pLogin  + '", "senha":"' + pSenha +'", "minutos": ' +  pMinutos +' }');
+
+    // montar a chamada POIST para enviar o obj com as infos necessarias
+    return this.http.post(ENV.REST_API_URL+'/config/get_api_token', JSON.stringify(obj), this.httpOptions).pipe();
+  } // get_api_token_http
+
+  // alterar a senha do usuario admin no bd
+  get_api_token(pLogin: string
+    ,pSenha : string
+    ,pMinutos : number
+    ,pOn_get_api_token_Success_CallBackFunction: (pToken : string) => void
+    ,pOn_get_api_token_Fail_CallBackFunction: () => void
+    ) : void {
+
+    //console.log(Utils.getDateTimeString() + " login - pLogin=" + pLogin);
+    //console.log(Utils.getDateTimeString() + " senha - pSenha=" + pSenha);
+
+    // executar a rotina que vai realmente chamar a api do back-end para obter o token de seguranca passando as tres callback functions 
+    // que serao executadas conforme necessario
+    this.get_api_token_http(pLogin, pSenha, pMinutos).subscribe( {
+
+      next: response => {
+        //console.log(Utils.getDateTimeString() + " get_api_token_http - response recebido=" + JSON.stringify( response ));
+        console.log(Utils.getDateTimeString() + " get_api_token_http - antes de chamar a pOn_get_api_token_Success_CallBackFunction");
+
+
+        const resp_obj = JSON.parse(response);
+        console.log(Utils.getDateTimeString() + " get_api_token_http - resp_oj=" + resp_obj);
+        pOn_get_api_token_Success_CallBackFunction(resp_obj.token);
+      },
+
+      error: error => {
+        console.log(Utils.getDateTimeString() + " get_api_token_http - falha no login. " + JSON.stringify(error) );
+        console.log(Utils.getDateTimeString() + " get_api_token_http - antes de chamar a pOn_get_api_token_Fail_CallBackFunction");
+        pOn_get_api_token_Fail_CallBackFunction();
+      },
+
+      complete: () => {
+        
+      }, // complete
+
+    }); // this.get_api_token_http
+
+  } // get_api_token
+
 } // class

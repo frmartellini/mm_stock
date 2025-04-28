@@ -1,72 +1,33 @@
-<div class="col-md-6 mx-auto">
-    <h3 class="text-center" id="password-change-title">Alteração da senha do usuário</h3>
-  
-    <form [formGroup]="ConfigForm" (ngSubmit)="onSubmit()" aria-labelledby="password-change-title">
-      <div class="col-md-4 mx-auto">
-        <!-- Campo Senha Atual -->
-        <div class="form-group">
-          <label for="oldPwd" id="oldPwd-label">Senha atual</label>
-          <input
-            formControlName="oldPwd"
-            id="oldPwd"
-            type="password" 
-            class="form-control"
-            aria-labelledby="oldPwd-label"
-            aria-required="true"
-            aria-describedby="oldPwd-error" />
-          <div class="alert alert-danger" *ngIf="oldPwd?.touched && oldPwd?.invalid" id="oldPwd-error" aria-live="polite">
-            <div *ngIf="oldPwd?.errors?.['required']">Senha atual é obrigatória</div>
-          </div>
-        </div>
-  
-        <!-- Campo Nova Senha -->
-        <div class="form-group">
-          <label for="newPwd" id="newPwd-label">Nova senha</label>
-          <input 
-            formControlName="newPwd" 
-            id="newPwd"
-            type="password"  
-            class="form-control"
-            aria-labelledby="newPwd-label"
-            aria-required="true"
-            aria-describedby="newPwd-error" />
-          <div class="alert alert-danger" *ngIf="newPwd?.touched && newPwd?.invalid" id="newPwd-error" aria-live="polite">
-            <div *ngIf="newPwd?.errors?.['required']">Nova senha é obrigatória</div>
-          </div>
-        </div>
-  
-        <!-- Campo Confirmar Nova Senha -->
-        <div class="form-group">
-          <label for="confirmPwd" id="confirmPwd-label">Confirme a nova senha</label>
-          <input 
-            formControlName="confirmPwd" 
-            id="confirmPwd"
-            type="password"  
-            class="form-control"
-            aria-labelledby="confirmPwd-label"
-            aria-required="true"
-            aria-describedby="confirmPwd-error" />
-          
-          <div class="alert alert-danger" *ngIf="confirmPwd?.touched && confirmPwd?.invalid && !confirmPwd?.value" id="confirmPwd-error" aria-live="polite">
-            <div *ngIf="!confirmPwd?.value">Confirmação da nova senha é obrigatória</div>
-          </div>
-  
-          <!-- Mensagem de erro de confirmação de senha -->
-          <div class="alert alert-danger" *ngIf="newPwd?.value != '' && confirmPwd?.value != '' && confirmPwd?.value != newPwd?.value" aria-live="polite">
-            As senhas não coincidem
-          </div>
-        </div>
-  
-        <!-- Botão de Alterar Senha -->
-        <div class="row mt-2">
-          <div class="col text-center">
-            <button type="submit" class="btn btn-primary" [disabled]="!ConfigForm.valid" aria-label="Alterar senha">
-              Alterar senha
-            </button>
-          </div>
-        </div>
-  
-      </div>
-    </form>
-  </div>
- 
+<form [formGroup]="ConfigForm" (ngSubmit)="onSubmit()" aria-labelledby="password-change-title" class="d-flex flex-column align-items-start gap-3">
+  <h3 class="text-center" id="password-change-title">Alteração da senha do usuário</h3>
+    <!-- Campo Senha Atual -->
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Senha atual</mat-label>
+      <input matInput type="password" id="oldPwd" name="token" formControlName="oldPwd"
+            aria-labelledby="password-label" aria-required="true" aria-describedby="oldPwd-error" />
+      <mat-error *ngIf="oldPwd?.touched && oldPwd?.invalid && oldPwd?.errors?.['required']" id="oldPwd-error" aria-live="polite">
+        Senha atual é obrigatória
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Campo Nova Senha -->
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Nova senha</mat-label>
+      <input matInput type="password" formControlName="newPwd" id="newPwd"
+            aria-labelledby="password-label" aria-required="true" aria-describedby="newPwd-error" />
+      <mat-error id="newPwd-error" aria-live="polite" *ngIf="newPwd?.touched && newPwd?.invalid && newPwd?.errors?.['required']">Nova senha é obrigatória</mat-error>
+    </mat-form-field>
+    <!-- Campo Confirmar Nova Senha -->
+    <mat-form-field appearance="fill" style="width: 100%" class="mb-1">
+      <mat-label>Confirme a nova senha</mat-label>
+      <input matInput type="password" formControlName="confirmPwd" id="confirmPwd"
+            aria-labelledby="password-label" aria-required="true" aria-describedby="confirmPwd-error" />
+      <mat-error *ngIf="confirmPwd?.touched && confirmPwd?.invalid && !confirmPwd?.value" id="confirmPwd-error" aria-live="polite">Confirmação da nova senha é obrigatória</mat-error>
+      <!-- Mensagem de erro de confirmação de senha -->
+      <mat-error *ngIf="newPwd?.value != '' && confirmPwd?.value != '' && confirmPwd?.value != newPwd?.value" aria-live="polite">As senhas não coincidem</mat-error>
+    </mat-form-field>
+    <!-- Botão de Alterar Senha -->
+    <button type="submit" class="btn btn-primary" [disabled]="!ConfigForm.valid" aria-label="Alterar senha">
+      Alterar senha
+    </button>
+</form>

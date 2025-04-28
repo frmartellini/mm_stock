@@ -60,6 +60,7 @@ import { DateAdapterPT } from './pt-date-adapter';
 
 //import de mascáras de entrada
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ConfigScreenComponent } from './config-screen/config-screen.component';
 
 // configuracoes pre-definidas para o input "currencyMask" (ng2-currency-mask)
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -95,7 +96,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ,AlterSenhaComponent
     ,SortingDirective
     ,PersistPaginatorDirective
-    ,ToggleHighContrast
+    ,ToggleHighContrast, ConfigScreenComponent
   ],
   imports: [
     BrowserModule

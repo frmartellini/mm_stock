@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-config-screen',
   template: `
-  <div class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-column align-items-center config-screen-style">
     <!-- Título do formulário para ajudar leitores de tela -->
     <h1 id="login-form-title" class="sr-only">Configurações do sistema</h1>
 

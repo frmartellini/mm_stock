@@ -231,3 +231,13 @@ li  a[disabled=true] {
 .toast-error {
   width: 500px !important;
 }
+
+/* borda dos paineis da tela de configuracoes */
+.config-screen-style  form {
+
+  border-style: solid !important;
+  border-color: silver;
+  border-width: thin;
+  padding: 10px 5px 10px 5px;
+  border-radius: 10px;
+}

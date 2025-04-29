@@ -1,25 +1,13 @@
 
-<form (ngSubmit)="onSegAPISubmit()" aria-labelledby="login-form-title">
-  
-  <div class="form-group col-md-6 LoginDiv mx-auto">
-    
-
-    <!-- Título do formulário para ajudar leitores de tela -->
-    <h1 id="login-form-title" class="sr-only">Configurações do sistema</h1>
-
-    <h2 id="PageTitle">Configurações do sistema</h2>
-
-    <br />
-    <br />
-    
+<form (ngSubmit)="onSegAPISubmit()" aria-labelledby="login-form-title" class="d-flex flex-column align-items-start LoginDiv">
     <h3>Geração do Token de segurança para acesso à API</h3>
 
     <p>
-      Este token de segurança é uma sequencia de letras e/ou números que precisa ser adicionada na URL para acessar as APIs do sistema.
+      Este token de segurança é uma sequencia de letras e/ou números <br> que precisa ser adicionada na URL para acessar as APIs do sistema.
     </p>
 
     <!-- Campo nome de usuário com rótulo claro e aria-required -->
-    <mat-form-field appearance="fill" style="width: 50%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Nome de usuário</mat-label>
       <input matInput type="text" id="username" name="username" [(ngModel)]="username" 
              aria-labelledby="username-label" aria-required="true" required />
@@ -28,7 +16,7 @@
     <br />
 
     <!-- Campo senha com rótulo claro e aria-required -->
-    <mat-form-field appearance="fill" style="width: 50%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Senha</mat-label>
       <input matInput type="password" id="password" name="password" [(ngModel)]="password" 
              aria-labelledby="password-label" aria-required="true" required />
@@ -36,25 +24,26 @@
 
     <br />
 
-    <mat-form-field appearance="fill" style="width: 50%">
+    <mat-form-field appearance="fill" style="width: 100%">
       <mat-label>Validade do token (em minutos)</mat-label>
       <input matInput type="text" id="minutos" name="minutos" [(ngModel)]="minutos" 
              aria-labelledby="minutos-label" aria-required="true" required />
     </mat-form-field>
 
     <!-- Botão com acesso via teclado -->
-    <div class="row mt-2">
-      <div class="col text-center">
+    <div class="row" style="width: 100%">
+      <div class=" text-center">
         <button class="btn btn-primary" type="submit" aria-label="Gerar token">
           Gerar token de segurança
         </button>
       </div>
     </div>
 
-    <br />
-    <br />
-    
     <div id="TokenDiv" name="TokenDiv" [hidden] = "this.token == ''">
+
+      <br />
+      <br />
+
       <!-- Campo para exibir o token de seguranca  -->
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Token de segurança gerado</mat-label>
@@ -71,7 +60,4 @@
       onde <strong>servidor</strong> deve ser o nome ou ip do servidor, <strong>porta</strong> deve ser o número da porta usada pelo sistema e <strong>fffffffffffffffffffff</strong> é o token de segurança gerado pelo sistema.
       </p>
     </div>
-
-  </div>
-
 </form>

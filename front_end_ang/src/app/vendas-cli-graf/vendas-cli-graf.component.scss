@@ -1,0 +1,46 @@
+/* Garante que a div da tabela tenha largura fixa e alinhamento à esquerda */
+.table-container {
+  width: 400px;
+  max-width: 400px;
+  margin-left: 0; /* Alinha à esquerda */
+  display: flex;
+  flex-direction: column;
+
+}
+
+/* Ajusta a tabela dentro da div */
+.mat-table {
+  width: 100%;
+  table-layout: fixed; /* Evita expansão das colunas */
+  border-collapse: collapse;
+}
+
+/* Ajusta largura das colunas para não ultrapassar 400px */
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  white-space: nowrap; /* Mantém conteúdo em uma linha */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Define largura específica para cada coluna */
+th:nth-child(1), td:nth-child(1) { width: 30%; } /* cliente */
+th:nth-child(2), td:nth-child(2) { width: 35%; } /* valor */
+th:nth-child(3), td:nth-child(3) { width: 35%; } /* perc */
+
+/* Alinha números à direita */
+.right-text {
+  text-align: right;
+}
+
+/* Alinhar aesquerda */
+.left-text {
+  text-align: left;
+}
+
+/* Remove borda da última coluna */
+th:last-child, td:last-child {
+  border-right: none;
+}

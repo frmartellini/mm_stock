@@ -405,6 +405,10 @@ export class AuthenticationService {
         CodPriv = "AnVendas";
         break; 
       }
+      case "/vendas-cli-graf": { 
+        CodPriv = "AnVendas";
+        break; 
+      }
       
       default: { 
          //statements; 

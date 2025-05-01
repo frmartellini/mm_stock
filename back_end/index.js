@@ -907,6 +907,60 @@ app.get('/vendas_graf_por_periodo', (req, res) => {
   });
 });
 
+// Retorna os dados de vendas (com base nas movimentacoes) para o grafico de vendas por cliente.
+// Precisa passar os params como o exemplo abaixo:
+//     /vendas_cli_graf_por_periodo?dhinicio=2024/05/15&dhfim=2024/12/31
+app.get('/vendas_cli_graf_por_periodo', (req, res) => {
+  console.log("/vendas_cli_graf_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
+  console.log("/vendas_cli_graf_por_periodo - req.query.dhfim=" + req.query.dhfim);
+
+const query = `select 
+                c.nome_completo cliente
+                ,sum(t.quantidade * p.preco_venda) valor_total
+                ,( sum(t.quantidade * p.preco_venda) / t_total.total *100 ) perc
+                /* ,c.id_cliente */
+                /* ,t_total.total */
+                from
+                  movimentacao t 
+                  join produto p on (p.id_produto = t.id_produto)
+                  join cliente c on (c.id_cliente = t.id_cliente) 
+                  join ( select 
+                            sum(mov.quantidade * prod.preco_venda) total 
+                          from 
+                            movimentacao mov 
+                            join produto prod on (prod.id_produto = mov.id_produto) 
+                          where 
+                            ( mov.tipo_mov = 'S' )
+                            and
+                            (mov.data_hora between ? and ?) 
+                        ) t_total
+                where
+                  ( t.tipo_mov = 'S' ) 
+                  and
+                  (t.data_hora between ? and ?)
+                group by
+                  /* t.id_cliente, */
+                  c.nome_completo
+                  ,t_total.total
+                order by valor_total desc
+                `;
+
+  //console.log("query=" + query);
+  const values = [ req.query.dhinicio , req.query.dhfim , req.query.dhinicio , req.query.dhfim ];
+  //const values = { dhinicio: req.query.dhinicio , dhfim: req.query.dhfim };
+  //console.log('values=' + JSON.stringify(values));
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.log('erro=' + err);
+      res.status(500).send('Erro retornando dados de vendas por cliente para o gráfico: ' + err);
+      return;
+    }
+    res.json(results);
+    //console.log('results=' + JSON.stringify(results));
+    console.log('get /vendas_cli_graf_por_periodo executado. Registros retornados com sucesso!');
+  });
+});
+
 /* Create a new post */
 app.post('/movimentacao/create', async (req, res) => {
   const { data_hora, id_produto, tipo_mov, quantidade, num_pedido, id_cliente, obs } = req.body;

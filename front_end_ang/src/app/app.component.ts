@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 import { environment } from '../environments/environment';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',

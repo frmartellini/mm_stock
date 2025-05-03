@@ -170,7 +170,7 @@ app.get('/close_mysql_connection', (req, res) => {
 //
 
 app.get('/produto', (req, res) => {
-  db.query('SELECT * FROM produto', (err, results) => {
+  db.query('SELECT id_produto, descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao FROM produto', (err, results) => {
     if (err) {
       res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;

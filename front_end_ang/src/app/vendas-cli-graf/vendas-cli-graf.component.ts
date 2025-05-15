@@ -78,7 +78,7 @@ export class VendasCliGrafComponent implements OnInit {
       datasets: [
         {
           order: 2,
-          label: 'Vendas (R$)',
+          label: 'Vendas em R$',
           yAxisID: 'y',
           type: 'bar',
           backgroundColor: '#208104', // verde
@@ -88,7 +88,7 @@ export class VendasCliGrafComponent implements OnInit {
         ,
         {
           order: 1,
-          label: '%',
+          label: '% de Vendas',
           yAxisID: 'y1',
           type: 'line',
           tension: 0.4,

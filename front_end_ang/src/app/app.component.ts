@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 import { environment } from '../environments/environment';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,7 @@ export class AppComponent implements OnInit {
   isBrowser: boolean;
   platformId: Object;  // Declare platformId as a property
   IsInProduction: Boolean; // indica se o sistema estah rodando em producao (true)
+  currentYear: number; // Ano corrente no footer da pagina
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -31,6 +34,7 @@ export class AppComponent implements OnInit {
     this.isServer = isPlatformServer(platformId);
     this.isBrowser = isPlatformBrowser(platformId);
     this.IsInProduction = environment.production;
+    this.currentYear = new Date().getFullYear();
   }
 
   ngOnInit() {

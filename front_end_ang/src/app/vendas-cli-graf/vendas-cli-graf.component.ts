@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import moment from 'moment';
-import { MovimentacaoGrafDATA } from '../MovimentacaoGraf_DATA';
+import { VendasCliGrafDATA } from '../VendasCliGraf_DATA';
 import { ENV } from '../env';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common'
@@ -10,26 +10,23 @@ import Utils from '../utils';
 import { MatTableDataSource } from '@angular/material/table';
 import * as iconv from 'iconv-lite';
 
-
 @Component({
-  selector: 'app-movimentacao-graf',
-  templateUrl: './movimentacao-graf.component.html',
-  styleUrl: './movimentacao-graf.component.scss'
-
+  selector: 'app-vendas-cli-graf',
+  templateUrl: './vendas-cli-graf.component.html',
+  styleUrl: './vendas-cli-graf.component.scss'
 })
 
-export class MovimentacaoGrafComponent implements OnInit {
+export class VendasCliGrafComponent implements OnInit {
 
   data: any; // dados para o chart
 
   options: any; // opcoes e configuracoes do chart
 
-  // contem os objetos MovimentacaoGrafRecord retornados do BD
-  graf_data: MovimentacaoGrafDATA[] = [];
+  // contem os objetos VendasCliGrafDATA retornados do BD
+  graf_data: VendasCliGrafDATA[] = [];
 
-  // vai conter uma string com o mes em cada posicao e o formato eh YYYY/MM
-  // eh usado na montagem do grafico para achar a posicao do ponto do grafico mais facilmente a partir do mes retornado do BD
-  graf_labels_internal_array : string[] = [];
+  // Array para a tabela
+  tabelaVendas = new MatTableDataSource<any>([]);  // Inicializa com um array vazio
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -41,12 +38,6 @@ export class MovimentacaoGrafComponent implements OnInit {
   // guarda as datas do filtro por periodo em obj tipo Date
   val_dhini_picker : any; // Date
   val_dhfim_picker : any;  // Date
-
-  // Variáveis para criação da tabela
-  tableData: { mes: string, entrada: number, saida: number }[] = [];
-  displayedColumns: string[] = ['mes', 'entrada', 'saida'];
-  dataSource = new MatTableDataSource<{ mes: string, entrada: number, saida: number }>();
-
 
   @ViewChild('chart') chart: any;
 
@@ -70,8 +61,8 @@ export class MovimentacaoGrafComponent implements OnInit {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     // obter as datas dos cookies
-    this.dhinicio_str = this.cookieService.get('movimentacao-graf-dhinicio');
-    this.dhfim_str = this.cookieService.get('movimentacao-graf-dhfim');
+    this.dhinicio_str = this.cookieService.get('vendas-graf-dhinicio');
+    this.dhfim_str = this.cookieService.get('vendas-graf-dhfim');
 
     // setar as datas do "periodo_filtro_daterangepicker" com as datas obtidas dos cookies
     try {
@@ -83,22 +74,27 @@ export class MovimentacaoGrafComponent implements OnInit {
     this.Update_vars_dh_filtro();
 
     this.data = {
-      //labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Movembro', 'Dezembro'],
       labels: [],
       datasets: [
         {
-          label: 'Entradas',
-          backgroundColor: '#7AB2E7', // azul claro
-          borderColor: documentStyle.getPropertyValue('--blue-500'),
-          //data: [65, 59, 80, 81, 56, 55, 40]
-          data: []
-        },
+          order: 2,
+          label: 'Vendas em R$',
+          yAxisID: 'y',
+          type: 'bar',
+          backgroundColor: '#208104', // verde
+          borderColor: '#0',
+          data: [] // array que eh preenchido em run-time
+        }
+        ,
         {
-          label: 'Saídas',
-          backgroundColor: '#66D7D7', // verde claro
-          borderColor: documentStyle.getPropertyValue('--pink-500'),
-          //data: [28, 48, 40, 19, 86, 27, 90]
-          data: []
+          order: 1,
+          label: '% de Vendas',
+          yAxisID: 'y1',
+          type: 'line',
+          tension: 0.4,
+          backgroundColor: '#fd7e14', // laranja
+          borderColor: '#fd7e14',
+          data: [] // array que eh preenchido em run-time
         }
       ]
     }; // this.data
@@ -108,8 +104,10 @@ export class MovimentacaoGrafComponent implements OnInit {
       aspectRatio: 0.8,
       plugins: {
         legend: {
+          display: true,
           labels: {
             color: textColor
+            
             ,font: {
               size: 18
             }
@@ -118,6 +116,29 @@ export class MovimentacaoGrafComponent implements OnInit {
         ,title: {
           display: false,
           text: 'Gráfico'
+        }
+        ,tooltip: {
+          callbacks: {
+              label: function(tooltipItem : any) {
+                let value = "";
+                if ( tooltipItem.datasetIndex == 0 ) {
+                  // formatar o numero como moeda R$ quando for exibir o tooltip dos pontos do grafico
+                  value = Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(tooltipItem.raw);
+                }
+                else if ( tooltipItem.datasetIndex == 1 ) {
+                  // formatar o numero normalmente e adicionando o % no final
+                  value = Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(tooltipItem.raw) + " %";
+                }
+                return value;
+              }
+          }
+        }
+      },
+      elements: {
+        point: {
+          radius: 8
+          ,hoverRadius: 10
+
         }
       },
       scales: {
@@ -135,7 +156,9 @@ export class MovimentacaoGrafComponent implements OnInit {
           }
         },
         y: {
-          ticks: {
+          display: true
+          ,position: 'left'
+          ,ticks: {
             color: textColorSecondary
             ,font: {
               size: 18
@@ -146,82 +169,58 @@ export class MovimentacaoGrafComponent implements OnInit {
             drawBorder: false
           }
         }
-
+        ,y1: {
+          //display: true
+          position: 'right'
+          ,min: 0
+          ,max: 100
+          ,ticks: {
+            color: textColorSecondary
+            ,font: {
+              size: 18
+            }
+            ,
+            // Include a dollar sign in the ticks
+            callback: function(value : number, index :number, ticks : any) {
+              return  value + "%";
+            }
+          }, // ticks
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
       }
     }; // this.options
-
-  // adicionar valores manualmente nos datasets do grafico
-  //this.data.datasets[0].data[7] = 45;
-  //this.data.datasets[1].data[7] = 90;
-
-  /*
-    let newobj = null;
-
-    newobj = new MovimentacaoGrafRecord();
-    newobj.Mes = "2024/11";
-    newobj.Tipo = "E";
-    newobj.Qtde = 20;
-    this.mov_data.push(newobj);
-
-    newobj = new MovimentacaoGrafRecord();
-    newobj.Mes = "2024/11";
-    newobj.Tipo = "S";
-    newobj.Qtde = 25;
-    this.mov_data.push(newobj);
-
-    newobj = new MovimentacaoGrafRecord();
-    newobj.Mes = "2024/12";
-    newobj.Tipo = "E";
-    newobj.Qtde = 35;
-    this.mov_data.push(newobj);
-
-    newobj = new MovimentacaoGrafRecord();
-    newobj.Mes = "2024/12";
-    newobj.Tipo = "S";
-    newobj.Qtde = 15;
-    this.mov_data.push(newobj);
-  */
-
-  /*
-  // limpar o array de registros
-  this.graf_data = [
-    {
-        "Mes": "2024/05",
-        "Tipo": "E",
-        "Qtde": 46
-    },
-    {
-        "Mes": "2024/05",
-        "Tipo": "S",
-        "Qtde": 37
-    },
-    {
-        "Mes": "2024/10",
-        "Tipo": "E",
-        "Qtde": 12
-    },
-    {
-        "Mes": "2024/10",
-        "Tipo": "S",
-        "Qtde": 5
-    }
-  ];
-  */
 
     this.fetchData();
 
   } // ngOnInit
 
-
   fetchData(): void {
 
-    this.http.get<MovimentacaoGrafDATA>(ENV.REST_API_URL+'/movimentacao_graf_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + ' 23:59:59/').subscribe(
+    this.http.get<VendasCliGrafDATA>(ENV.REST_API_URL+'/vendas_cli_graf_por_periodo?dhinicio='+ this.dhinicio_str +'&dhfim='+ this.dhfim_str + ' 23:59:59/').subscribe(
         (response: any) =>
           {
             this.graf_data = response;
+
+            /*
+            // dados para testes
+            this.graf_data = [
+              { cliente: "zeh", valor_total: 30, perc: 10 }
+              ,{ cliente: "jose", valor_total: 60, perc: 20 }
+              ,{ cliente: "carlos", valor_total: 50, perc: 30 }
+              ,{ cliente: "ana", valor_total: 50, perc: 10 }
+              ,{ cliente: "paula", valor_total: 7, perc: 30 }
+              ,{ cliente: "maria", valor_total: 50, perc: 50 }
+              ,{ cliente: "joao", valor_total: 80, perc: 30 }
+            ];
+            */
+
             this.MontarGrafico();
           }
     );
+
   }
 
   MontarGrafico() : void {
@@ -244,37 +243,12 @@ export class MovimentacaoGrafComponent implements OnInit {
     //console.log("dini=" + dini.toISOString());
     //console.log("dfim=" + dfim.toISOString());
 
-    //dfim.setMonth(dfim.getMonth()+2);
-    //console.log("dfim=" + dfim.toISOString());
-
-    //var qtde_months = (dini.getFullYear()*12 + dfim.getMonth()) - (dini.getFullYear()*12 + dini.getMonth());
-    var qtde_months = Math.round(dfim.diff(dini, 'months', true));
-    //console.log("qtde_months=" + qtde_months);
-
     // limpar o array dos labels do eixo X
     this.data.labels = [] ;
     // limpar os arrays que contem os valores das duas series de dados
-    this.data.datasets[0].data = []; // entradas
-    this.data.datasets[1].data = []; // saidas
-
-    // inicia com a data inicial e dentro do for vai avancando o mes
-    var curr_date = dini;
-
-    // setar os labels dos pontos do eixo X
-    for ( let i = 0; i < qtde_months; i++) {
-
-      //console.log("curr_date=" + curr_date.toISOString());
-
-      this.data.labels[i] = curr_date.format('MM/YYYY');
-      this.graf_labels_internal_array[i] = curr_date.format('YYYY/MM');
-
-      //curr_date.setMonth(curr_date.getMonth()+1);
-      // aumentar um mes na var curr_date
-      curr_date.add(1,'month');
-
-    } // for
-
-    let char_x_idx = -1;
+    this.data.datasets[0].data = []; // valor_total
+    this.data.datasets[1].data = []; // perc
+    
 
     if ( this.graf_data ) {
       //console.log("this.graf_data.length=" + this.graf_data.length);
@@ -283,67 +257,63 @@ export class MovimentacaoGrafComponent implements OnInit {
       // passar pelos registros obtidos do BD
       for (let i = 0; i < this.graf_data.length; i++) {
 
-        // obter o indice do mes do registro no grafico
-        char_x_idx = this.graf_labels_internal_array.indexOf(this.graf_data[i].mes);
-
-        // se o tipo eh "entrada"
-        if ( this.graf_data[i].tipo_mov == "E" ) {
-          this.data.datasets[0].data[char_x_idx] = this.graf_data[i].qtde;
-        }
-        else { // se o tipo eh "saida"
-          this.data.datasets[1].data[char_x_idx] = this.graf_data[i].qtde;
-        }
+        this.data.labels[i] = this.graf_data[i].cliente;
+        this.data.datasets[0].data[i] = this.graf_data[i].valor_total;
+        this.data.datasets[1].data[i] = this.graf_data[i].perc;
 
       } // for
+
+      // montar "tableData" que serah o datasource para a tabela
+      const tabelaData = this.data.labels.map((cliente: string, index: number) => ({
+        cliente: cliente
+        ,valor_total: this.data.datasets[0].data[index]
+        ,perc: this.data.datasets[1].data[index]
+      }));
+      
+      //console.log("tabelaData=" + JSON.stringify(tabelaData) );
+
+      // Atribuir os dados à tabela
+      this.tabelaVendas.data = tabelaData;
 
       // atualizar o grafico
       this.chart.refresh();
 
     } // if
-
-    //Inserção de dados na tabela
-    this.tableData = this.data.labels.map((mes: string, index: number) => ({
-      mes,
-      entrada: this.data.datasets[0].data[index] || 0,
-      saida: this.data.datasets[1].data[index] || 0
-    }));
-
-    this.dataSource.data = this.tableData;
-
-
-
   } // MontarGrafico
 
-   //exportar a tabela para csv
-   exportToCSV() {
-    if (!this.tableData.length) {
+  exportToCSV() {
+    if (!this.data || !this.data.labels || !this.data.datasets[0].data) {
+      alert("Nenhum dado disponível para exportação.");
       return;
     }
 
-    // Define o nome do arquivo com data e hora
+    // Construir o conteúdo do arquivo
+    let csvContent = "Cliente\tValor Total (R$)\t%\r\n"; // Cabeçalho com TAB e CRLF
+    for (let i = 0; i < this.data.labels.length; i++) {
+      const cliente = this.data.labels[i]; // Mês
+      const valor_total = this.data.datasets[0].data[i] || 0; // Valor total
+      const perc = this.data.datasets[1].data[i] || 0; // percentual
+      const perc_str = Number(perc).toFixed(2);
+      csvContent += `${cliente}\t${valor_total}\t${perc_str}\r\n`; // CRLF no final de cada linha
+    }
+
+    // Criar o nome do arquivo no formato vendas-por-cliente-aaaa-mm-dd-hh-nn-ss.txt
     const now = new Date();
-    const fileName = `movimentacao-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}.txt`;
+    const timestamp = now.toISOString().replace(/[-T:]/g, "").split(".")[0]; // yyyyMMddHHmmss
+    const fileName = `vendas-por-cliente-${timestamp}.txt`;
 
-    // Cabeçalho da tabela
-    const headers = ['Mês', 'Qtde Entrada', 'Qtde Saída'];
+    const win1252Content = iconv.encode(csvContent, 'win1252');
 
-    // Converte os dados em linhas separadas por TAB e com quebras de linha CRLF
-    const csvContent = [
-      headers.join('\t'), // Linha do cabeçalho
-      ...this.tableData.map(row => `${row.mes}\t${row.entrada}\t${row.saida}`) // Dados da tabela
-    ].join('\r\n');
+    // Criando um Blob com encoding Windows-1252
+    const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
 
-  // Converte para Windows-1252 usando iconv-lite
-  const win1252Content = iconv.encode(csvContent, 'win1252');
-
-  // Criando um Blob com encoding Windows-1252
-  const blob = new Blob([win1252Content], { type: 'text/plain;charset=windows-1252' });
-
-    // Criando link para download
-    const link = document.createElement('a');
+    // Criar link para download
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   }
 
 
@@ -404,11 +374,11 @@ export class MovimentacaoGrafComponent implements OnInit {
     }
 
     // gravar os cookies com as datas do periodo do filtro
-    this.cookieService.set( 'movimentacao-graf-dhinicio', this.dhinicio_str ?? "" );
-    this.cookieService.set( 'movimentacao-graf-dhfim', this.dhfim_str ?? "" );
+    this.cookieService.set( 'vendas-graf-dhinicio', this.dhinicio_str ?? "" );
+    this.cookieService.set( 'vendas-graf-dhfim', this.dhfim_str ?? "" );
 
     this.fetchData();
   } // BtnAtualizarPeriodoClick
 
-} // class MovimentacaoGrafComponent
+} // class VendasGrafComponent
 

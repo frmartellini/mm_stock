@@ -61,7 +61,8 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
       <li><a routerLink="/produto-saida" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('Saida')">Saída de Produto</a></li>
       <li><a routerLink="/movimentacao-cs" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('CsMovEstq')">Movimentação de Estoque</a></li>
       <li><a routerLink="/movimentacao-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnEstoque')">Análise de Estoque</a></li>
-      <li><a routerLink="/vendas-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Análise de Vendas</a></li>
+      <li><a routerLink="/vendas-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Vendas por Mês</a></li>
+      <li><a routerLink="/vendas-cli-graf" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="!authenticationService.CheckPrivilegio('AnVendas')">Vendas Por Cliente</a></li>
       </ul>
     </nav>
   </div>
@@ -73,7 +74,7 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
       <mat-icon aria-hidden="true">exit_to_app</mat-icon>
     </button>
     
-    <button mat-icon-button routerLink="/altersenha"  matTooltip="Alterar senha" aria-label="Alterar Senha">
+    <button mat-icon-button routerLink="/config"  matTooltip="Configurações" aria-label="Configurações">
       <mat-icon aria-hidden="true">settings</mat-icon>
     </button>
     <!-- &todo& exibicao temporaria do usuario logado, cor yellow; -->
@@ -101,7 +102,7 @@ ng-click="setActive('movimentacao-cs')" ng-class="{ 'active': activeTab === 'mov
   <p class="p">
     <span *ngIf="this.IsInProduction"  class="TEXTO_PROD_CSS">[ PRODUÇÃO ]</span>
     <span *ngIf="!this.IsInProduction" class="TEXTO_DEV_CSS">[ DESENVOLVIMENTO ]</span>
-    &copy; 2024 MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.
+    &copy; {{ currentYear }} MM Stock. Todos os direitos reservados. Desenvolvido por Molduvidro Machado.
   </p>
 </footer>
 

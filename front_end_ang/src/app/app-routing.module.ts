@@ -21,6 +21,8 @@ import { MovimentacaoCsComponent } from './movimentacao-cs/movimentacao-cs.compo
 import { AlterSenhaComponent } from './altersenha/altersenha.component';
 import { MovimentacaoGrafComponent } from './movimentacao-graf/movimentacao-graf.component';
 import { VendasGrafComponent } from './vendas-graf/vendas-graf.component';
+import { ConfigScreenComponent } from './config-screen/config-screen.component';
+import { VendasCliGrafComponent } from './vendas-cli-graf/vendas-cli-graf.component';
 
 const routes: Routes = [
 
@@ -48,10 +50,8 @@ const routes: Routes = [
   ,{ path: 'movimentacao-cs', component: MovimentacaoCsComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'movimentacao-graf', component: MovimentacaoGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
   ,{ path: 'vendas-graf', component: VendasGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
-  ,{ path: 'config', component: ConfigComponent , canActivate: [UsuarioAutenticadoGuard] }
-  ,{ path: 'altersenha', component: AlterSenhaComponent , canActivate: [UsuarioAutenticadoGuard] }
-
-
+  ,{ path: 'vendas-cli-graf', component: VendasCliGrafComponent , canActivate: [UsuarioAutenticadoGuard] }
+  ,{ path: 'config', component: ConfigScreenComponent , canActivate: [UsuarioAutenticadoGuard] }
 ];
 
 @NgModule({

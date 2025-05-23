@@ -6,6 +6,10 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const json_2_csv = require('json-2-csv');
+var iconv = require('iconv-lite');
+const jwt = require('jsonwebtoken');
   
 const app = express();
 var port = 3000; // 4200 padrão do Angular e 3000 é a padrão do Node
@@ -120,7 +124,33 @@ db.on('release', function (connection) {
 /* Middleware */
 app.use(bodyParser.json());
 app.use(cors());
-  
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB in bytes
+  fileFilter: (_, file, cb) => {
+    if (file.mimetype.startsWith('image/png') || file.mimetype.startsWith('image/jpeg')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas imagens são suportadas'), false);
+    }
+  }
+});
+
+const produtoResponse = row => ({...row, foto: !!row.foto? `data:image/png;base64,${row.foto.toString('base64')}` : null})
+
+function parseBase64Image(dataURL) {
+  const matches = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error('Invalid base64 image string');
+  }
+
+  return {
+    mime: matches[1],
+    buffer: Buffer.from(matches[2], 'base64'),
+  };
+}
+
 /*
 // fechar a conexao com o mysql (deve ser usado apenas para testes)
 app.get('/close_mysql_connection', (req, res) => {
@@ -140,12 +170,12 @@ app.get('/close_mysql_connection', (req, res) => {
 //
 
 app.get('/produto', (req, res) => {
-  db.query('SELECT * FROM produto', (err, results) => {
+  db.query('SELECT id_produto, descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao FROM produto', (err, results) => {
     if (err) {
       res.status(500).send('Erro ao retornar os produtos: ' + err);
       return;
     }
-    res.json(results);
+    res.json(results.map(produtoResponse));
   });
   console.log('get /produto executado. Produtos retornados com sucesso!');
 });
@@ -186,11 +216,13 @@ app.get('/produto/tipos_material', (req, res) => {
   console.log('get /produto/tipos_material executado. "tipo_material" distintos dos produtos retornados com sucesso!');
 });
 
-/* Create a new post */
-app.post('/produto/create', (req, res) => {
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual) VALUES (?, ?, ?, ?, ?, ?)`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual];
+
+/* adicionar um produto */
+app.post('/produto/create', upload.single('foto'), (req, res) => {
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao} = JSON.parse(req.body.data);
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, req.file?.buffer];
+  const query = `INSERT INTO produto (descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto) VALUES (${values.map(() => "?").join(", ")})`;
+
   db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).send('Erro criando produto: ' + err);
@@ -202,13 +234,13 @@ app.post('/produto/create', (req, res) => {
         res.status(500).send('Erro recuperando produto criado: ' + err);
         return;
       }
-      res.status(201).json(result[0]);
+      res.status(201).json(produtoResponse(result[0]));
     });
   });
   console.log('post executado, produto criado com sucesso! ');
 });
   
-/* Get a specific post */
+/* obter um produto pelo ID do produto */
 app.get('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('SELECT * FROM produto WHERE id_produto = ?', produtoId, (err, result) => {
@@ -220,17 +252,19 @@ app.get('/produto/:id', (req, res) => {
       res.status(404).send('Produto não encontrado: ' + err);
       return;
     }
-    res.json(result[0]);
+    res.json(produtoResponse(result[0]));
   });
   console.log('get /produto/' + produtoId + ' executado. Produto retornado com sucesso!');
 });
   
-/* Update a post */
-app.put('/produto/:id', (req, res) => {
+
+/* alterar um produto */
+app.put('/produto/:id', upload.single("foto"), (req, res) => {
+
   const produtoId = req.params.id;
-  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual } = req.body;
-  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ? WHERE id_produto = ?`;
-  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, produtoId];
+  const { descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, foto } = JSON.parse(req.body.data);
+  const query = `UPDATE produto SET descricao = ?, cor = ?, tamanho = ?, tipo_material = ?, preco_venda = ?, quantidade_atual = ?, localizacao = ?, foto = ? WHERE id_produto = ?`;
+  const values = [descricao, cor, tamanho, tipo_material, preco_venda, quantidade_atual, localizacao, !!foto? parseBase64Image(foto).buffer : req.file?.buffer, produtoId];
 
   db.query(query, values, err => {
     if (err) {
@@ -246,13 +280,13 @@ app.put('/produto/:id', (req, res) => {
         res.status(500).send('Erro recuperando o produto alterado: ' + err);
         return;
       }
-      res.json(result[0]);
+      res.json(produtoResponse(result[0]));
     });
   });
   console.log('put /produto/' + produtoId + ' executado. Produto atualizado com sucesso!');
 });
   
-/* Delete a post */
+/* Deletar um produto */
 app.delete('/produto/:id', (req, res) => {
   const produtoId = req.params.id;
   db.query('DELETE FROM produto WHERE id_produto = ?', produtoId, err => {
@@ -268,6 +302,136 @@ app.delete('/produto/:id', (req, res) => {
   });
   console.log('delete /produto/' + produtoId + ' executado. Produto deletado com sucesso!');
 });
+
+// api para retornar os produtos em formato texto com os campos separados por TAB
+// exemplo para testar: http://localhost:3001/produto_lista/zzzzzzzzzz
+// onde zzzzzzzzzz eh o token de seguranca
+
+app.get('/produto_lista/:token' , verifyJWT , (req, res) => {
+  console.log('get /produto_lista inicio da execucao');
+  console.log('get /produto_lista token recebido na url=' + req.params.token);
+  db.query(`SELECT id_produto , descricao , cor , tamanho , tipo_material , preco_venda , quantidade_atual
+                   , IFNULL(localizacao,"") as localizacao , (foto IS NOT NULL) as tem_foto FROM produto`, (err, results) => {
+    if (err) {
+      console.log('Erro ao retornar a lista de produtos: ' + err);
+      res.status(500).send('Erro ao retornar a lista de produtos: ' + err);
+      return;
+    }
+
+    // array com os campos (nome do campo na tabela e titulo para o campo)
+    const fields = [
+      {
+        title: 'ID',
+        field: 'id_produto'
+      },
+      {
+        title: 'Descrição',
+        field: 'descricao'
+      },
+      {
+        title: 'Cor',
+        field: 'cor'
+      },
+      {
+        title: 'Tamanho',
+        field: 'tamanho'
+      },
+      {
+        title: 'Tipo material',
+        field: 'tipo_material'
+      },
+      {
+        title: 'Preço Venda',
+        field: 'preco_venda'
+      },
+      {
+        title: 'Qtde Atual',
+        field: 'quantidade_atual'
+      },
+      {
+        title: 'Localização',
+        field: 'localizacao'
+      },
+      {
+        title: 'Foto',
+        field: 'tem_foto'
+      },
+    ]; // fields
+    
+    var options = {
+      keys : fields,
+      prependHeader : true,
+      delimiter : {
+          field : '\t', // TAB for field delimiter
+          eol   : '\r\n' // Newline delimiter = CRLF
+      }
+    };
+
+    // converter os pontos para virgula do campo preco_venda (acertar o separador decimal)
+    results.forEach(reg =>  {
+      reg.preco_venda = reg.preco_venda.replace(".",",");
+      //console.log(reg.preco_venda);
+    }
+    );
+
+    // alterar o campo "tem_foto" colocando a URL da foto de cada produto, se o produto tem foto
+    // se o produto nao temfoto, este campo tem_foto vai ficar vazio (string vazia)
+    results.forEach(reg =>  {
+      if ( reg.tem_foto == "1" ) {
+        reg.tem_foto = req.protocol + "://" + req.get("host") + "/produto_foto/" + reg.id_produto;
+      }
+      else if ( reg.tem_foto == "0" ) {
+        reg.tem_foto = "";
+      }
+      // a url vai ficar como este exemplo:  http://localhost:3001/produto_foto/45
+    }
+    );
+
+    // obter o texto completo com os dados dos produtos
+    var csv_text = json_2_csv.json2csv(results , options );
+
+    // precisa converter o texto para WIN1252 ( ANSI )
+    var csv_text_ansi = iconv.encode( csv_text , 'win1252' );
+
+    // com esta parte, faz o browser receber um arquivo para ser baixado
+    // sem esta parte, o browser exibe o texto direto (plain-text) no browser sem qualquer formatacao
+    //res.setHeader("Content-Type", "text/csv");
+
+    //console.log("req.get('host')=" + req.get('host'));
+
+    res.status(200).end(csv_text_ansi);
+
+    console.log('get /produto_lista executado. Produtos retornados com sucesso!');
+
+  });
+});
+
+// api para retornar a foto de um produto a partir do ID do produto ( vai retornar direto a imagem )
+// exemplo para testar: http://localhost:3001/produto_foto/45    (45 eh o ID do produto)
+app.get('/produto_foto/:id', (req, res) => {
+  const produtoId = req.params.id;
+  const queryString = 'SELECT foto FROM produto WHERE id_produto = ? ';
+  console.log('get /produto_foto/' + produtoId + ' - inicio');
+  db.query( queryString, produtoId , (err, results) => {
+    if (err) {
+      res.status(500).end();
+      console.log('erro:' + err);
+    }
+    else if (results.length === 0) {
+      res.status(404).end();
+    }
+    else { // nao houve erro
+      // montar o retorno com a imagem da foto do produto
+      res.set('Content-Type', 'image/png');
+      res.end(results[0].foto, 'binary');
+      console.log('foto do produto serah retornada');
+    }
+    console.log('get /produto_foto/' + produtoId + ' executado.');
+  })
+  
+});
+
+
 
 //
 // cliente table
@@ -727,9 +891,11 @@ app.get('/vendas_graf_por_periodo', (req, res) => {
   const query = "select DATE_FORMAT(t.data_hora, '%Y/%m') as \"mes\", sum(t.quantidade * p.preco_venda) valor_total " +
                 "from movimentacao t " +
                 "join produto p on (p.id_produto = t.id_produto) " +
-                "where ( t.tipo_mov = 'E' ) " +
+                "where ( t.tipo_mov = 'S' )" + // considerar apenas saidas de estoque
+                "AND ( t.data_hora BETWEEN ? AND ? ) " + // pegar as movimentacoes de saida apenas que tiverem data_hora dentro do periodo
                 "group by mes, t.tipo_mov " +
                 "order by mes asc " ;
+  //console.log("query=" + query);
   const values = [ req.query.dhinicio , req.query.dhfim ];
   db.query(query, values, (err, results) => {
     if (err) {
@@ -738,6 +904,60 @@ app.get('/vendas_graf_por_periodo', (req, res) => {
     }
     res.json(results);
     console.log('get /vendas_graf_por_periodo executado. Registros retornados com sucesso!');
+  });
+});
+
+// Retorna os dados de vendas (com base nas movimentacoes) para o grafico de vendas por cliente.
+// Precisa passar os params como o exemplo abaixo:
+//     /vendas_cli_graf_por_periodo?dhinicio=2024/05/15&dhfim=2024/12/31
+app.get('/vendas_cli_graf_por_periodo', (req, res) => {
+  console.log("/vendas_cli_graf_por_periodo - req.query.dhinicio=" + req.query.dhinicio);
+  console.log("/vendas_cli_graf_por_periodo - req.query.dhfim=" + req.query.dhfim);
+
+const query = `select 
+                c.nome_completo cliente
+                ,sum(t.quantidade * p.preco_venda) valor_total
+                ,( sum(t.quantidade * p.preco_venda) / t_total.total *100 ) perc
+                /* ,c.id_cliente */
+                /* ,t_total.total */
+                from
+                  movimentacao t 
+                  join produto p on (p.id_produto = t.id_produto)
+                  join cliente c on (c.id_cliente = t.id_cliente) 
+                  join ( select 
+                            sum(mov.quantidade * prod.preco_venda) total 
+                          from 
+                            movimentacao mov 
+                            join produto prod on (prod.id_produto = mov.id_produto) 
+                          where 
+                            ( mov.tipo_mov = 'S' )
+                            and
+                            (mov.data_hora between ? and ?) 
+                        ) t_total
+                where
+                  ( t.tipo_mov = 'S' ) 
+                  and
+                  (t.data_hora between ? and ?)
+                group by
+                  /* t.id_cliente, */
+                  c.nome_completo
+                  ,t_total.total
+                order by valor_total desc
+                `;
+
+  //console.log("query=" + query);
+  const values = [ req.query.dhinicio , req.query.dhfim , req.query.dhinicio , req.query.dhfim ];
+  //const values = { dhinicio: req.query.dhinicio , dhfim: req.query.dhfim };
+  //console.log('values=' + JSON.stringify(values));
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.log('erro=' + err);
+      res.status(500).send('Erro retornando dados de vendas por cliente para o gráfico: ' + err);
+      return;
+    }
+    res.json(results);
+    //console.log('results=' + JSON.stringify(results));
+    console.log('get /vendas_cli_graf_por_periodo executado. Registros retornados com sucesso!');
   });
 });
 
@@ -1040,6 +1260,14 @@ app.post('/config/login', (req, res) => {
             // se a senha atual enviada pelo usuario bate com a senha gravada no campo senha do usuario
             console.log("/config/login - senha informada pelo usuario bate com senha gravada no campo senha do usuario");
             res.status(200).json('{ "Status":"OK" }');
+
+/*
+            const token = jwt.sign({ login }, process.env.SECRET, {
+              expiresIn: 300 // expires in 5min
+            });
+
+            res.status(200).json('{ "Status":"OK" , auth: true , token: ' + token +' }');
+*/            
     
           } // if bcrypt.compareSync
           // se a senha atual enviada pelo usuario NAO bate com a senha gravada no campo senha do usuario
@@ -1158,6 +1386,103 @@ app.put('/config/alter', (req, res) => {
   
 }); // function
 
+//
+// verificar o usuario e senha recebidos e retorna um token de seguranca de acesso a API
+//
+// para testar com o postman, usar o body raw json :    { "login":"admin","senha":"123", "minutos":5 }
+//
+app.post('/config/get_api_token', (req, res) => {
+
+  console.log('post /config/get_api_token - inicio');
+  
+  var { login, senha, minutos } = req.body;
+  login = login.toLowerCase();
+  console.log('login=' + login);
+  console.log('senha=' + senha);
+  console.log('minutos=' + minutos);
+
+  var senha_atual_do_bd = "";
+
+  // obter o usuario da tabela do BD
+  db.query('SELECT senha FROM usuario WHERE lower(login) = ?', [login], (err, results) => {
+
+    if (err) {
+      console.log('/config/get_api_token - Erro no select da tabela USUARIO');
+      res.status(500).send('Erro no select da tabela USUARIO. ' + err.message);
+    }
+    else {
+
+      // se existe no BD um usuario com o login recebido
+      if ( results.length > 0) {
+      
+        console.log('results=' + JSON.stringify(results));
+
+        senha_atual_do_bd = results[0].senha;
+        console.log('/config/get_api_token - senha_atual_do_bd=' +senha_atual_do_bd);
+
+        if ( senha_atual_do_bd != "" ) {
+
+          console.log("/config/get_api_token - senha_atual_do_bd NAO estah vazia");
+      
+          // verificar se a senha recebida pro login bate com a senha gravada no campo senha do usuario
+          // compareSync eh executado de forma sincrona (nao usa funcoes callback)
+          if ( bcrypt.compareSync(senha, senha_atual_do_bd) ) {
+            
+            // se a senha atual enviada pelo usuario bate com a senha gravada no campo senha do usuario
+            console.log("/config/get_api_token - senha informada pelo usuario bate com senha gravada no campo senha do usuario");
+
+            const token = jwt.sign({ login }, process.env.SECRET, {
+              expiresIn: minutos * 60 // expires in x minutos
+            });
+
+            res.status(200).json('{ "auth": true , "token": "' + token +'" }');
+    
+          } // if bcrypt.compareSync
+          // se a senha atual enviada pelo usuario NAO bate com a senha gravada no campo senha do usuario
+          else {
+            console.log("/config/get_api_token - senha informada pelo usuario NAO bate com senha gravada no campo senha do usuario");
+            res.status(401).json('{ "auth": false , "token": "" }');
+          } // else
+
+        } // if ( senha_atual_do_bd != "" )
+        
+      } // if ( results.length > 0)
+      // se nao achou no BD um usuario com o login recebido
+      else {
+        console.log("/config/get_api_token - login informado pelo usuario NAO existe");
+        res.status(401).json('{ "auth": false , "token": "" }');
+      } // else
+
+    } // else
+  
+    console.log('post /config/get_api_token - fim');
+
+  }); // db.query select
+
+}); // post /config/get_api_token
+
+// verifica se o token recebido no request eh valido e, se for valido, continua a execucao do endpoint que chamou esta funcao
+function verifyJWT(req, res, next){
+  
+  //const token = req.headers['authorization'];
+  const token = req.params.token;
+  
+  //console.log("token=" + token);
+
+  if (!token) return res.status(401).json({ auth: false, message: 'token de seguranca nao foi recebido.' });
+  
+  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+    //console.log("decoded=" + JSON.stringify( decoded) );
+    
+    if (err) {
+      return res.status(500).json({ auth: false, message: 'falha na autenticacao do token de seguranca.' });
+    }
+    
+    // se tudo estiver ok, salva no request para uso posterior
+    req.userId = decoded.id;
+    next();
+  });
+} // function verifyJWT
 
 //
   

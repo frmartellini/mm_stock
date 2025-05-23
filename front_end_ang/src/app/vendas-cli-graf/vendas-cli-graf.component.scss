@@ -26,23 +26,21 @@ th, td {
 }
 
 /* Define largura específica para cada coluna */
-th:nth-child(1), td:nth-child(1) { width: 30%; } /* Mês */
-th:nth-child(2), td:nth-child(2) { width: 35%; } /* Entrada */
-th:nth-child(3), td:nth-child(3) { width: 35%; } /* Saída */
+th:nth-child(1), td:nth-child(1) { width: 30%; } /* cliente */
+th:nth-child(2), td:nth-child(2) { width: 35%; } /* valor */
+th:nth-child(3), td:nth-child(3) { width: 35%; } /* perc */
 
 /* Alinha números à direita */
 .right-text {
   text-align: right;
 }
 
+/* Alinhar aesquerda */
+.left-text {
+  text-align: left;
+}
+
 /* Remove borda da última coluna */
 th:last-child, td:last-child {
   border-right: none;
-}
-
-/* Define largura fixa para o paginador */
-mat-paginator {
-  width: 400px !important;
-  max-width: 400px;
-  margin: auto;
 }

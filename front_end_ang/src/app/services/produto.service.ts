@@ -14,8 +14,11 @@ import { PRODUTO_TIPOMATERIAL } from '../PRODUTO_TIPOMATERIAL';
 
 export class ProdutoService {
 
-  httpOptions = {
+  jsonHttpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+  fileSupportHttpOtions = {
+    headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
   };
 
   constructor(private http: HttpClient
@@ -60,12 +63,18 @@ export class ProdutoService {
     return this.http.delete(ENV.REST_API_URL + '/produto/'+id_produto);
   }
 
-  public criarNovoProduto(produto: PRODUTO): Observable<any> {
-    return this.http.post<any>(ENV.REST_API_URL + '/produto/create', produto, this.httpOptions);
+  public criarNovoProduto(produto: PRODUTO, foto: File | null | undefined): Observable<any> {
+    const formData = new FormData();
+    !!foto && formData.append("foto", foto);
+    formData.append("data", JSON.stringify(produto))
+    return this.http.post<any>(ENV.REST_API_URL + '/produto/create', formData);
   }
 
-  public editarProduto(produto: PRODUTO, id_produto: number): Observable<any> {
-    return this.http.put<any>(ENV.REST_API_URL + '/produto/'+id_produto, produto, this.httpOptions);
+  public editarProduto(produto: PRODUTO, foto: File | null | undefined, id_produto: number): Observable<any> {
+    const formData = new FormData();
+    !!foto && formData.append("foto", foto);
+    formData.append("data", JSON.stringify(produto))
+    return this.http.put<any>(ENV.REST_API_URL + '/produto/'+id_produto, formData);
   }
 
 }
